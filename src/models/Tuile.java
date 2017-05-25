@@ -5,7 +5,7 @@ import util.*;
 
 public class Tuile {
 
-	ArrayList<Aventurier> aventuriers = new ArrayList();
+	private ArrayList<Aventurier> aventuriers = new ArrayList();
 	private int inonde;
 	private int ligne;
 	private int colonne;
@@ -54,7 +54,7 @@ public class Tuile {
 	 * @param a
 	 */
 	public void ajouterAv(Aventurier a) {
-		aventuriers.add(a);
+		getAventuriers().add(a);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class Tuile {
 	 * @param a
 	 */
 	public void retirerAv(Aventurier a) {
-		aventuriers.remove(a);
+		getAventuriers().remove(a);
 	}
 
         @Override
@@ -93,6 +93,13 @@ public class Tuile {
         */
         public void setTresor(Tresor tresor) {
            this.tresor = tresor;
+        }
+
+        /**
+         * @return the aventuriers
+         */
+        public ArrayList<Aventurier> getAventuriers() {
+            return aventuriers;
         }
 
 }

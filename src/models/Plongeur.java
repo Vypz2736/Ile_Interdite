@@ -1,6 +1,7 @@
 package models;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Plongeur extends Aventurier {
 
@@ -8,9 +9,46 @@ public class Plongeur extends Aventurier {
 	 * 
 	 * @param g
 	 */
+        @Override
 	public void seDeplacer(Grille g) {
-		// TODO - implement Plongeur.seDeplacer
-		throw new UnsupportedOperationException();
+            boolean continuer = false;
+            Scanner st = new Scanner(System.in);
+            for (Tuile t : getTuilesAcc(g,1).values()) {
+                System.out.println("- " + t.getNom());
+            }
+            String nom = st.nextLine();
+            if (getTuilesAcc(g,1).get(nom) != null) {
+                getPos().retirerAv(this);
+                getTuilesAcc(g,1).get(nom).ajouterAv(this);
+                setPos(getTuilesAcc(g,1).get(nom));
+                setNbactions(getNbactions()+1);
+                if (!getPos().estSeche()) {
+                    if (!getPos().estMorte())
+                        System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? o/n");
+                        if (st.nextLine() == "o")
+                            continuer = true;
+                    while ((!getPos().estSeche() && continuer) || getPos().estMorte()) {
+                        for (Tuile t : getTuilesAcc(g,1).values()) {
+                            System.out.println("- " + t.getNom());
+                        }
+                        nom = st.nextLine();
+                        if (getTuilesAcc(g,1).get(nom) != null) {
+                            getPos().retirerAv(this);
+                            getTuilesAcc(g,1).get(nom).ajouterAv(this);
+                            setPos(getTuilesAcc(g,1).get(nom));
+                            setNbactions(getNbactions()+1);
+                            if (!getPos().estSeche()) {
+                                if (!getPos().estMorte())
+                                    System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? o/n");
+                                    if (st.nextLine() == "o")
+                                        continuer = true;
+                                    else
+                                        continuer = false;
+                            }
+                        }
+                    }
+                }
+            }
 	}
 
 	/**

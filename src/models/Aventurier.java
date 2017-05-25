@@ -7,6 +7,7 @@ public abstract class Aventurier {
 
 	ArrayList<CarteTresor> cartes = new ArrayList();
 	Tuile emplacement;
+        Tuile empPrec;
 	private int nbactions = 0;
         
 	/**
@@ -53,12 +54,17 @@ public abstract class Aventurier {
 	public Tuile getPos() {
 		return emplacement;
 	}
+        
+        public Tuile getPosPrec() {
+		return empPrec;
+	}
 
 	/**
 	 * 
 	 * @param t
 	 */
 	public void setPos(Tuile t) {
+                empPrec = getPos();
 		emplacement = t;
 	}
 
@@ -67,8 +73,17 @@ public abstract class Aventurier {
 	 * @param g
 	 */
 	public void seDeplacer(Grille g) {
-		// TODO - implement Aventurier.seDeplacer
-		throw new UnsupportedOperationException();
+            Scanner st = new Scanner(System.in);
+            for (Tuile t : getTuilesAcc(g,1).values()) {
+                System.out.println("- " + t.getNom());
+            }
+            String nom = st.nextLine();
+            if (getTuilesAcc(g,1).get(nom) != null) {
+                getPos().retirerAv(this);
+                getTuilesAcc(g,1).get(nom).ajouterAv(this);
+                setPos(getTuilesAcc(g,1).get(nom));
+                setNbactions(getNbactions()+1);
+            }
 	}
 
 	/**
@@ -120,7 +135,7 @@ public abstract class Aventurier {
                     if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1] != null && !g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1].estMorte()) {
                         ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1]);
                     }
-                if (emplacement.getColonne() !=0)
+                if (emplacement.getColonne() !=5)
                     if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1] != null && !g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1].estMorte()) {
                         ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1]);
                     }

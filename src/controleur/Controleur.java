@@ -149,17 +149,17 @@ public class Controleur {
             for (Joueur j : joueurs) {
                 j.setAventurier(aventuriers.get(i));
                 if (j.getAventurier() instanceof Pilote)
-                    System.out.println(j.getNom() + " aura le pilote.");
+                    System.out.println(j.getNom() + " jouera le pilote.");
                 if (j.getAventurier() instanceof Navigateur)
-                    System.out.println(j.getNom() + " aura le navigateur.");
+                    System.out.println(j.getNom() + " jouera le navigateur.");
                 if (j.getAventurier() instanceof Plongeur)
-                    System.out.println(j.getNom() + " aura le plongeur.");
+                    System.out.println(j.getNom() + " jouera le plongeur.");
                 if (j.getAventurier() instanceof Explorateur)
-                    System.out.println(j.getNom() + " aura l'explorateur.");
+                    System.out.println(j.getNom() + " jouera l'explorateur.");
                 if (j.getAventurier() instanceof Ingenieur)
-                    System.out.println(j.getNom() + " aura l'ingénieur.");
+                    System.out.println(j.getNom() + " jouera l'ingénieur.");
                 if (j.getAventurier() instanceof Messager)
-                    System.out.println(j.getNom() + " aura le messager.");
+                    System.out.println(j.getNom() + " jouera le messager.");
                 i++;
             }
             System.out.println("");

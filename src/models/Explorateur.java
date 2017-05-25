@@ -17,19 +17,19 @@ public class Explorateur extends Aventurier {
             for (Tuile t : super.getTuilesAcc(g, type).values()) {
                 ta.put(t.getNom(),t);
             }
-            if (emplacement.getLigne() !=0)
+            if (emplacement.getLigne() !=0 && emplacement.getColonne() !=0)
                 if (g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()-1] != null && !g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()-1].estMorte()) {
                     ta.put(g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()-1].getNom(),g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()-1]);
                 }
-            if (emplacement.getLigne() !=5)
+            if (emplacement.getLigne() !=5 && emplacement.getColonne() !=5)
                 if (g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()+1] != null && !g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()+1].estMorte()) {
                     ta.put(g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()+1].getNom(),g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()+1]);
                 }
-            if (emplacement.getColonne() !=0)
+            if (emplacement.getLigne() !=5 && emplacement.getColonne() !=0)
                 if (g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()-1] != null && !g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()-1].estMorte()) {
                     ta.put(g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()-1].getNom(),g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()-1]);
                 }
-            if (emplacement.getColonne() !=0)
+            if (emplacement.getLigne() !=0 && emplacement.getColonne() !=5)
                 if (g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()+1] != null && !g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()+1].estMorte()) {
                     ta.put(g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()+1].getNom(),g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()+1]);
                 }

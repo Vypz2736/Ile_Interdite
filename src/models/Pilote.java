@@ -11,8 +11,10 @@ public class Pilote extends Aventurier {
 	 * @param g
 	 */
 	public void seDeplacer(Grille g) {
-		// TODO - implement Pilote.seDeplacer
-		throw new UnsupportedOperationException();
+            super.seDeplacer(g);
+            if (!getTuilesAcc(g,1).values().contains(getPosPrec())) {
+                setHelico(true);
+            }
 	}
         
         @Override
@@ -42,7 +44,7 @@ public class Pilote extends Aventurier {
                     if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1] != null && !g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1].estMorte()) {
                         ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1]);
                     }
-                if (emplacement.getColonne() !=0)
+                if (emplacement.getColonne() !=5)
                     if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1] != null && !g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1].estMorte()) {
                         ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1]);
                     }
