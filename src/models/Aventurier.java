@@ -5,7 +5,7 @@ import util.*;
 
 public abstract class Aventurier {
 
-	Collection<CarteTresor> cartes;
+	ArrayList<CarteTresor> cartes;
 	Tuile emplacement;
 	private int nbactions;
 	private boolean helicoUtilise;
@@ -40,7 +40,7 @@ public abstract class Aventurier {
 		throw new UnsupportedOperationException();
 	}
 
-	public Collection<Carte> getCartes() {
+	public ArrayList<Carte> getCartes() {
 		// TODO - implement Aventurier.getCartes
 		throw new UnsupportedOperationException();
 	}
@@ -122,7 +122,7 @@ public abstract class Aventurier {
 	 * @param g
 	 * @param type
 	 */
-	public Collection<Tuile> getTuilesAcc(Grille g, int type) {
+	public ArrayList<Tuile> getTuilesAcc(Grille g, int type) {
 		// TODO - implement Aventurier.getTuilesAcc
 		throw new UnsupportedOperationException();
 	}
