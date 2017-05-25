@@ -5,7 +5,7 @@ import util.*;
 
 public abstract class Aventurier {
 
-	ArrayList<CarteTresor> cartes;
+	ArrayList<CarteTresor> cartes = new ArrayList();
 	Tuile emplacement;
 	private int nbactions = 0;
 	private boolean helicoUtilise;

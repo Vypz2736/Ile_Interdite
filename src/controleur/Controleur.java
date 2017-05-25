@@ -11,12 +11,12 @@ public class Controleur {
 	private Grille grille;
 	private VueAventurier vueAventurier;
 	private VueGrille vueGrille;
-	private ArrayList<Joueur> joueurs;
-	private ArrayList<Aventurier> aventuriers;
-	private ArrayList<CarteTresor> deft;
-	private ArrayList<CarteTresor> pilet;
-	private ArrayList<CarteInondation> defi;
-	private ArrayList<CarteInondation> pilei;
+	private ArrayList<Joueur> joueurs = new ArrayList();
+	private ArrayList<Aventurier> aventuriers = new ArrayList();
+	private ArrayList<CarteTresor> deft = new ArrayList();
+	private ArrayList<CarteTresor> pilet = new ArrayList();
+	private ArrayList<CarteInondation> defi = new ArrayList();
+	private ArrayList<CarteInondation> pilei = new ArrayList();
 	private ArrayList<Tresor> tresors;
 
         public Controleur() {
@@ -47,36 +47,48 @@ public class Controleur {
             at.add(new Tuile("Le Pont des abimes",0));
             at.add(new Tuile("La Porte de bronze",1));
             i = at.size()-1;
-            //Rouge
-            //at.get(i).ajouterAv(a);
+            for (Joueur j : joueurs) {
+                if (j.getAventurier() instanceof Ingenieur)
+                    at.get(i).ajouterAv(j.getAventurier());
+            }
             at.add(new Tuile("La Caverne des ombres",0));
             i = at.size()-1;
             at.get(i).setTresor(Tresor.Cristal);
             at.add(new Tuile("La Porte de fer",0));
             i = at.size()-1;
-            //Violet
-            //at.get(i).ajouterAv(a);
+            for (Joueur j : joueurs) {
+                if (j.getAventurier() instanceof Plongeur)
+                    at.get(i).ajouterAv(j.getAventurier());
+            }
             at.add(new Tuile("La Porte d'or",0));
             i = at.size()-1;
-            //Jaune
-            //at.get(i).ajouterAv(a);
+            for (Joueur j : joueurs) {
+                if (j.getAventurier() instanceof Navigateur)
+                    at.get(i).ajouterAv(j.getAventurier());
+            }
             at.add(new Tuile("Les Falaises de l'oubli",0));
             at.add(new Tuile("Le Palais de corail",0));
             i = at.size()-1;
             at.get(i).setTresor(Tresor.Calice);
             at.add(new Tuile("La Porte d'argent",0));
             i = at.size()-1;
-            //Orange
-            //at.get(i).ajouterAv(a);
+            for (Joueur j : joueurs) {
+                if (j.getAventurier() instanceof Messager)
+                    at.get(i).ajouterAv(j.getAventurier());
+            }
             at.add(new Tuile("Les Dunes de l'illusion",2));
             at.add(new Tuile("Heliport",0));
             i = at.size()-1;
-            //Bleu
-            //at.get(i).ajouterAv(a);
+            for (Joueur j : joueurs) {
+                if (j.getAventurier() instanceof Pilote)
+                    at.get(i).ajouterAv(j.getAventurier());
+            }
             at.add(new Tuile("La Porte de cuivre",0));
             i = at.size()-1;
-            //Vert
-            //at.get(i).ajouterAv(a);
+            for (Joueur j : joueurs) {
+                if (j.getAventurier() instanceof Explorateur)
+                    at.get(i).ajouterAv(j.getAventurier());
+            }
             at.add(new Tuile("Le Jardin des hurlements",0));
             i = at.size()-1;
             at.get(i).setTresor(Tresor.Statue);
@@ -124,9 +136,21 @@ public class Controleur {
             int i = 0;
             for (Joueur j : joueurs) {
                 j.setAventurier(aventuriers.get(i));
-                System.out.println(j.getNom() + "aura l'aventurier ");
+                if (j.getAventurier() instanceof Pilote)
+                    System.out.println(j.getNom() + " aura le pilote.");
+                if (j.getAventurier() instanceof Navigateur)
+                    System.out.println(j.getNom() + " aura le navigateur.");
+                if (j.getAventurier() instanceof Plongeur)
+                    System.out.println(j.getNom() + " aura le plongeur.");
+                if (j.getAventurier() instanceof Explorateur)
+                    System.out.println(j.getNom() + " aura l'explorateur.");
+                if (j.getAventurier() instanceof Ingenieur)
+                    System.out.println(j.getNom() + " aura l'ingénieur.");
+                if (j.getAventurier() instanceof Messager)
+                    System.out.println(j.getNom() + " aura le messager.");
                 i++;
             }
+            System.out.println("");
         }
         
         public void init() {

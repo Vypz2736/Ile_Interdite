@@ -5,7 +5,7 @@ import util.*;
 
 public class Tuile {
 
-	ArrayList<Aventurier> aventuriers;
+	ArrayList<Aventurier> aventuriers = new ArrayList();
 	private int inonde;
 	private int ligne;
 	private int colonne;
