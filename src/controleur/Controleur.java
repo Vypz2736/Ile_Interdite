@@ -170,5 +170,25 @@ public class Controleur {
             initJoueurs();
             initGrille();
         }
+        
+        public void tourJoueur(Joueur j) {
+            Scanner sa = new Scanner(System.in);
+            System.out.println("Au tour de" + j.getNom() + "de jouer.");
+            while(j.getAventurier().getNbactions()<3) {
+                if (j.getAventurier() instanceof Navigateur)
+                    System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile \n- 3 : deplacer un joueur");
+                else
+                    System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n-  2 : assecher une tuile");
+                if (sa.nextInt() == 1) {
+                    j.getAventurier().seDeplacer(grille);
+                }
+                else if (sa.nextInt() == 2) {
+                    j.getAventurier().assecher(grille);
+                }
+                else if (j.getAventurier() instanceof Navigateur && sa.nextInt() == 3) {
+                    //j.getAventurier().deplacer();
+                }
+            }
+        }
 
 }

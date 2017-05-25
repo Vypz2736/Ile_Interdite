@@ -91,8 +91,15 @@ public abstract class Aventurier {
 	 * @param g
 	 */
 	public void assecher(Grille g) {
-		// TODO - implement Aventurier.assecher
-		throw new UnsupportedOperationException();
+            Scanner st = new Scanner(System.in);
+            for (Tuile t : getTuilesAcc(g,1).values()) {
+                System.out.println("- " + t.getNom());
+            }
+            String nom = st.nextLine();
+            if (getTuilesAcc(g,1).get(nom) != null) {
+                getTuilesAcc(g,1).get(nom).secher();
+                setNbactions(getNbactions()+1);
+            }
 	}
 
 	/**
