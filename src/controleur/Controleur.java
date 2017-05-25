@@ -48,8 +48,10 @@ public class Controleur {
             at.add(new Tuile("La Porte de bronze",1));
             i = at.size()-1;
             for (Joueur j : joueurs) {
-                if (j.getAventurier() instanceof Ingenieur)
+                if (j.getAventurier() instanceof Ingenieur) {
                     at.get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(at.get(i));
+                }
             }
             at.add(new Tuile("La Caverne des ombres",0));
             i = at.size()-1;
@@ -57,14 +59,18 @@ public class Controleur {
             at.add(new Tuile("La Porte de fer",0));
             i = at.size()-1;
             for (Joueur j : joueurs) {
-                if (j.getAventurier() instanceof Plongeur)
+                if (j.getAventurier() instanceof Plongeur) {
                     at.get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(at.get(i));
+                }
             }
             at.add(new Tuile("La Porte d'or",0));
             i = at.size()-1;
             for (Joueur j : joueurs) {
-                if (j.getAventurier() instanceof Navigateur)
+                if (j.getAventurier() instanceof Navigateur) {
                     at.get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(at.get(i));
+                }
             }
             at.add(new Tuile("Les Falaises de l'oubli",0));
             at.add(new Tuile("Le Palais de corail",0));
@@ -73,21 +79,27 @@ public class Controleur {
             at.add(new Tuile("La Porte d'argent",0));
             i = at.size()-1;
             for (Joueur j : joueurs) {
-                if (j.getAventurier() instanceof Messager)
+                if (j.getAventurier() instanceof Messager) {
                     at.get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(at.get(i));
+                }
             }
             at.add(new Tuile("Les Dunes de l'illusion",2));
             at.add(new Tuile("Heliport",0));
             i = at.size()-1;
             for (Joueur j : joueurs) {
-                if (j.getAventurier() instanceof Pilote)
+                if (j.getAventurier() instanceof Pilote) {
                     at.get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(at.get(i));
+                }
             }
             at.add(new Tuile("La Porte de cuivre",0));
             i = at.size()-1;
             for (Joueur j : joueurs) {
-                if (j.getAventurier() instanceof Explorateur)
+                if (j.getAventurier() instanceof Explorateur) {
                     at.get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(at.get(i));
+                }
             }
             at.add(new Tuile("Le Jardin des hurlements",0));
             i = at.size()-1;
