@@ -5,13 +5,18 @@ import util.*;
 
 public class Tuile {
 
-	Collection<Aventurier> aventuriers;
+	ArrayList<Aventurier> aventuriers;
 	private int inonde;
 	private int ligne;
 	private int colonne;
 	private String nom;
 	private Tresor tresor;
 
+        public Tuile(String nom) {
+            this.nom = nom;
+            inonde = 0;
+        }
+        
 	public int getLigne() {
 		return this.ligne;
 	}
@@ -66,5 +71,31 @@ public class Tuile {
 		// TODO - implement Tuile.retirerAv
 		throw new UnsupportedOperationException();
 	}
+
+        @Override
+        public String toString() {
+            return getNom();
+        }
+
+        /**
+        * @param ligne the ligne to set
+        */
+        public void setLigne(int ligne) {
+           this.ligne = ligne;
+        }
+
+        /**
+        * @param colonne the colonne to set
+        */
+        public void setColonne(int colonne) {
+           this.colonne = colonne;
+        }
+
+        /**
+        * @param tresor the tresor to set
+        */
+        public void setTresor(Tresor tresor) {
+           this.tresor = tresor;
+        }
 
 }

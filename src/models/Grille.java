@@ -20,8 +20,11 @@ public class Grille {
                     this.tuiles[j][i] = null;
                     n = n - 1;
                 }
-                else
+                else {
                     this.tuiles[j][i] = at.get(n);
+                    at.get(n).setLigne(j);
+                    at.get(n).setColonne(i);
+                }
             }  
         }
 
