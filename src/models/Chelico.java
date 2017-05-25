@@ -1,3 +1,5 @@
+package models;
+
 public class Chelico extends CarteTresor {
 
 	/**

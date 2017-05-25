@@ -1,3 +1,5 @@
+package models;
+
 public class Ingenieur extends Aventurier {
 
 	private int seche;

@@ -1,3 +1,5 @@
+package models;
+
 public class CarteInondation extends Carte {
 
 	private Tuile zone;

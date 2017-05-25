@@ -1,10 +1,10 @@
+package models;
+
 public abstract class Carte {
 
-	private string nom;
+	private String nom;
 
-	public abstract Tuile getTuile();
-
-	public string getNom() {
+	public String getNom() {
 		return this.nom;
 	}
 

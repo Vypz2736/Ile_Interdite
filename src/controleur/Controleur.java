@@ -1,4 +1,9 @@
+package controleur;
+
 import java.util.*;
+import models.*;
+import util.*;
+import view.*;
 
 public class Controleur {
 
@@ -17,7 +22,7 @@ public class Controleur {
 	 * 
 	 * @param nomr
 	 */
-	public Aventurier getAventurier(string nomr) {
+	public Aventurier getAventurier(String nomr) {
 		// TODO - implement Controleur.getAventurier
 		throw new UnsupportedOperationException();
 	}

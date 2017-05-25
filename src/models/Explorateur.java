@@ -1,3 +1,7 @@
+package models;
+
+import java.util.ArrayList;
+
 public class Explorateur extends Aventurier {
 
 	/**
@@ -23,7 +27,7 @@ public class Explorateur extends Aventurier {
 	 * @param g
 	 * @param type
 	 */
-	public Collection<Tuiles> getTuilesAcc(Grille g, int type) {
+	public ArrayList<Tuile> getTuilesAcc(Grille g, int type) {
 		// TODO - implement Explorateur.getTuilesAcc
 		throw new UnsupportedOperationException();
 	}

@@ -1,6 +1,8 @@
+package models;
+
 public class Joueur {
 
 	Aventurier aventurier;
-	private string nom;
+	private String nom;
 
 }

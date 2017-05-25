@@ -1,4 +1,7 @@
+package models;
+
 import java.util.*;
+import util.*;
 
 public class Tuile {
 
@@ -6,7 +9,7 @@ public class Tuile {
 	private int inonde;
 	private int ligne;
 	private int colonne;
-	private string nom;
+	private String nom;
 	private Tresor tresor;
 
 	public int getLigne() {
@@ -17,7 +20,7 @@ public class Tuile {
 		return this.colonne;
 	}
 
-	public string getNom() {
+	public String getNom() {
 		return this.nom;
 	}
 

@@ -1,3 +1,5 @@
+package models;
+
 public class Messager extends Aventurier {
 
 	public void donnerCarte() {

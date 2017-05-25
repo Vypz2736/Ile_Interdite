@@ -1,16 +1,14 @@
+package models;
+
 import java.util.*;
+import util.*;
 
 public abstract class Aventurier {
 
 	Collection<CarteTresor> cartes;
 	Tuile emplacement;
-	private Couleur couleur;
 	private int nbactions;
 	private boolean helicoUtilise;
-
-	public Couleur getCouleur() {
-		return this.couleur;
-	}
 
 	/**
 	 * 
@@ -42,7 +40,7 @@ public abstract class Aventurier {
 		throw new UnsupportedOperationException();
 	}
 
-	public Collection<Cartes> getCartes() {
+	public Collection<Carte> getCartes() {
 		// TODO - implement Aventurier.getCartes
 		throw new UnsupportedOperationException();
 	}
@@ -118,14 +116,13 @@ public abstract class Aventurier {
 	 * 
 	 * @param t
 	 */
-	public abstract void deplacer(Tuile t);
 
 	/**
 	 * 
 	 * @param g
 	 * @param type
 	 */
-	public Collection<Tuiles> getTuilesAcc(Grille g, int type) {
+	public Collection<Tuile> getTuilesAcc(Grille g, int type) {
 		// TODO - implement Aventurier.getTuilesAcc
 		throw new UnsupportedOperationException();
 	}

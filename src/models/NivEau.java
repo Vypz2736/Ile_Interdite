@@ -1,3 +1,5 @@
+package models;
+
 public class NivEau {
 
 	private int grad = 1;

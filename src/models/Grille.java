@@ -1,3 +1,5 @@
+package models;
+
 import java.util.*;
 
 public class Grille {
@@ -19,7 +21,7 @@ public class Grille {
 		throw new UnsupportedOperationException();
 	}
 
-	public Tuiles[][] getGrille() {
+	public Tuile[][] getGrille() {
 		// TODO - implement Grille.getGrille
 		throw new UnsupportedOperationException();
 	}
@@ -28,7 +30,7 @@ public class Grille {
 	 * 
 	 * @param nom
 	 */
-	public Tuile getTuile(string nom) {
+	public Tuile getTuile(String nom) {
 		// TODO - implement Grille.getTuile
 		throw new UnsupportedOperationException();
 	}
