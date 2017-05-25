@@ -8,7 +8,6 @@ public abstract class Aventurier {
 	ArrayList<CarteTresor> cartes = new ArrayList();
 	Tuile emplacement;
 	private int nbactions = 0;
-	private boolean helicoUtilise;
         
 	/**
 	 * 
@@ -61,18 +60,6 @@ public abstract class Aventurier {
 	 */
 	public void setPos(Tuile t) {
 		emplacement = t;
-	}
-
-	public boolean getHelicoUtilise() {
-		return this.helicoUtilise;
-	}
-
-	/**
-	 * 
-	 * @param h
-	 */
-	public void setHelicoUtilise(boolean h) {
-		this.helicoUtilise = h;
 	}
 
 	/**
