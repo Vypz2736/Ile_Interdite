@@ -38,7 +38,7 @@ public class Controleur {
 	}
         
         public void nouveauJoueur(String nom) {
-            joueurs.add(new Joueur(nom));
+            getJoueurs().add(new Joueur(nom));
         }
         
         public void initGrille() {
@@ -47,7 +47,7 @@ public class Controleur {
             at.add(new Tuile("Le Pont des abimes",0));
             at.add(new Tuile("La Porte de bronze",1));
             i = at.size()-1;
-            for (Joueur j : joueurs) {
+            for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Ingenieur) {
                     at.get(i).ajouterAv(j.getAventurier());
                     j.getAventurier().setPos(at.get(i));
@@ -58,7 +58,7 @@ public class Controleur {
             at.get(i).setTresor(Tresor.Cristal);
             at.add(new Tuile("La Porte de fer",0));
             i = at.size()-1;
-            for (Joueur j : joueurs) {
+            for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Plongeur) {
                     at.get(i).ajouterAv(j.getAventurier());
                     j.getAventurier().setPos(at.get(i));
@@ -66,7 +66,7 @@ public class Controleur {
             }
             at.add(new Tuile("La Porte d'or",0));
             i = at.size()-1;
-            for (Joueur j : joueurs) {
+            for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Navigateur) {
                     at.get(i).ajouterAv(j.getAventurier());
                     j.getAventurier().setPos(at.get(i));
@@ -78,7 +78,7 @@ public class Controleur {
             at.get(i).setTresor(Tresor.Calice);
             at.add(new Tuile("La Porte d'argent",0));
             i = at.size()-1;
-            for (Joueur j : joueurs) {
+            for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Messager) {
                     at.get(i).ajouterAv(j.getAventurier());
                     j.getAventurier().setPos(at.get(i));
@@ -87,7 +87,7 @@ public class Controleur {
             at.add(new Tuile("Les Dunes de l'illusion",2));
             at.add(new Tuile("Heliport",0));
             i = at.size()-1;
-            for (Joueur j : joueurs) {
+            for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Pilote) {
                     at.get(i).ajouterAv(j.getAventurier());
                     j.getAventurier().setPos(at.get(i));
@@ -95,7 +95,7 @@ public class Controleur {
             }
             at.add(new Tuile("La Porte de cuivre",0));
             i = at.size()-1;
-            for (Joueur j : joueurs) {
+            for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Explorateur) {
                     at.get(i).ajouterAv(j.getAventurier());
                     j.getAventurier().setPos(at.get(i));
@@ -146,7 +146,7 @@ public class Controleur {
         
         public void initJoueurs() {
             int i = 0;
-            for (Joueur j : joueurs) {
+            for (Joueur j : getJoueurs()) {
                 j.setAventurier(aventuriers.get(i));
                 if (j.getAventurier() instanceof Pilote)
                     System.out.println(j.getNom() + " jouera le pilote.");
@@ -173,22 +173,43 @@ public class Controleur {
         
         public void tourJoueur(Joueur j) {
             Scanner sa = new Scanner(System.in);
-            System.out.println("Au tour de" + j.getNom() + "de jouer.");
+            if (j.getAventurier() instanceof Pilote)
+                System.out.println("Au tour de " + j.getNom() + " (Pilote) de jouer.");
+            if (j.getAventurier() instanceof Navigateur)
+                System.out.println("Au tour de " + j.getNom() + " (Navigateur) de jouer.");
+            if (j.getAventurier() instanceof Plongeur)
+                System.out.println("Au tour de " + j.getNom() + " (Plongeur) de jouer.");
+            if (j.getAventurier() instanceof Explorateur)
+                System.out.println("Au tour de " + j.getNom() + " (Explorateur) de jouer.");
+            if (j.getAventurier() instanceof Ingenieur)
+                System.out.println("Au tour de " + j.getNom() + " (Ingénieur) de jouer.");
+            if (j.getAventurier() instanceof Messager)
+                System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
             while(j.getAventurier().getNbactions()<3) {
                 if (j.getAventurier() instanceof Navigateur)
                     System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile \n- 3 : deplacer un joueur");
                 else
-                    System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n-  2 : assecher une tuile");
-                if (sa.nextInt() == 1) {
+                    System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile");
+                int action = sa.nextInt(); 
+                if (action == 1) {
                     j.getAventurier().seDeplacer(grille);
                 }
-                else if (sa.nextInt() == 2) {
+                else if (action == 2) {
                     j.getAventurier().assecher(grille);
                 }
-                else if (j.getAventurier() instanceof Navigateur && sa.nextInt() == 3) {
+                else if (j.getAventurier() instanceof Navigateur && action == 3) {
                     j.getAventurier().deplacer(grille);
                 }
             }
+            if (j.getAventurier() instanceof Pilote)
+                j.getAventurier().setHelico(false);
+        }
+
+        /**
+         * @return the joueurs
+         */
+        public ArrayList<Joueur> getJoueurs() {
+            return joueurs;
         }
 
 }

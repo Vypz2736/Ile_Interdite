@@ -80,4 +80,17 @@ public class Ingenieur extends Aventurier {
             // TODO - implement Aventurier.recupTresor
             throw new UnsupportedOperationException();
         }
+        
+        public boolean getHelico() {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @param helico the helico to set
+         */
+        public void setHelico(boolean helico) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
 }

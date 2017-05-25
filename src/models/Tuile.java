@@ -102,4 +102,11 @@ public class Tuile {
             return aventuriers;
         }
 
+        /**
+         * @return the tresor
+         */
+        public Tresor getTresor() {
+            return tresor;
+        }
+
 }

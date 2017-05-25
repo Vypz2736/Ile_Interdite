@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package controleur;
+import models.*;
+import util.*;
 
 /**
  *
@@ -22,6 +24,11 @@ public class Ile_Interdite {
         c.nouveauJoueur("Hughes");
         c.init();
         System.out.println(c.getGrille());
+        while (1 == 1) {
+            for (Joueur j : c.getJoueurs()) {
+                c.tourJoueur(j);
+            }
+        }
     }
     
 }
