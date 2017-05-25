@@ -65,5 +65,10 @@ public class Pilote extends Aventurier {
         public void setHelico(boolean helico) {
             this.helico = helico;
         }
+        
+        public void deplacer(Grille g) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
 
 }

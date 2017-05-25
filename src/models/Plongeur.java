@@ -83,5 +83,10 @@ public class Plongeur extends Aventurier {
             }
             return ta;
 	}
+        
+        public void deplacer(Grille g) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
 
 }

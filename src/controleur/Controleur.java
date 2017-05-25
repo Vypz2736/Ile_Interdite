@@ -186,7 +186,7 @@ public class Controleur {
                     j.getAventurier().assecher(grille);
                 }
                 else if (j.getAventurier() instanceof Navigateur && sa.nextInt() == 3) {
-                    //j.getAventurier().deplacer();
+                    j.getAventurier().deplacer(grille);
                 }
             }
         }

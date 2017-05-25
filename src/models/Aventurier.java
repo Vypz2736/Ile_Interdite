@@ -148,5 +148,7 @@ public abstract class Aventurier {
                     }
                 return ta;
 	}
+        
+        public abstract void deplacer(Grille g);
 
 }
