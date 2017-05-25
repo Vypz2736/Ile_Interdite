@@ -67,7 +67,11 @@ public class Tuile {
 
         @Override
         public String toString() {
-            return getNom();
+            if (estSeche())
+                return getNom() + " : sèche  ";
+            if (estInonde())
+                return getNom() + " : inondée";
+            return getNom() + " : coulée ";
         }
 
         /**

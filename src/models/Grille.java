@@ -74,7 +74,7 @@ public class Grille {
             for (int j = 0; j < 6; j++) {
                 for (int i = 0; i < 6; i++) {
                 if (this.tuiles[j][i] == null) {
-                    grille = grille + " " + j + i + " :     Tuile vide    ";
+                    grille = grille + " " + j + i + " :           Tuile vide          ";
                 }
                 else
                     grille = grille + " " + j + i + " : " + this.tuiles[j][i];
