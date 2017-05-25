@@ -12,9 +12,9 @@ public class Tuile {
 	private String nom;
 	private Tresor tresor;
 
-        public Tuile(String nom) {
+        public Tuile(String nom, int etat) {
             this.nom = nom;
-            inonde = 0;
+            inonde = etat;
         }
         
 	public int getLigne() {
@@ -30,28 +30,23 @@ public class Tuile {
 	}
 
 	public boolean estMorte() {
-		// TODO - implement Tuile.estMorte
-		throw new UnsupportedOperationException();
+		return inonde == 2;
 	}
 
 	public boolean estInonde() {
-		// TODO - implement Tuile.estInonde
-		throw new UnsupportedOperationException();
+		return inonde == 1;
 	}
 
 	public boolean estSeche() {
-		// TODO - implement Tuile.estSeche
-		throw new UnsupportedOperationException();
+		return inonde == 0;
 	}
 
 	public void inonder() {
-		// TODO - implement Tuile.inonder
-		throw new UnsupportedOperationException();
+		inonde++;
 	}
 
 	public void secher() {
-		// TODO - implement Tuile.secher
-		throw new UnsupportedOperationException();
+		inonde--;
 	}
 
 	/**
@@ -59,8 +54,7 @@ public class Tuile {
 	 * @param a
 	 */
 	public void ajouterAv(Aventurier a) {
-		// TODO - implement Tuile.ajouterAv
-		throw new UnsupportedOperationException();
+		aventuriers.add(a);
 	}
 
 	/**
@@ -68,8 +62,7 @@ public class Tuile {
 	 * @param a
 	 */
 	public void retirerAv(Aventurier a) {
-		// TODO - implement Tuile.retirerAv
-		throw new UnsupportedOperationException();
+		aventuriers.remove(a);
 	}
 
         @Override
