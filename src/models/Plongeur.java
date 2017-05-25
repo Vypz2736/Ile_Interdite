@@ -1,5 +1,6 @@
 package models;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Plongeur extends Aventurier {
 
@@ -18,28 +19,28 @@ public class Plongeur extends Aventurier {
 	 * @param type
 	 */
 	@Override
-	public ArrayList<Tuile> getTuilesAcc(Grille g, int type) {
-            ArrayList<Tuile> ta = new ArrayList();
+	public HashMap<String,Tuile> getTuilesAcc(Grille g, int type) {
+            HashMap<String,Tuile> ta = new HashMap();
             if (type == 2)
-                for (Tuile t : super.getTuilesAcc(g, type)) {
-                    ta.add(t);
+                for (Tuile t : super.getTuilesAcc(g, type).values()) {
+                    ta.put(t.getNom(),t);
                 }
             else {
                 if (emplacement.getLigne() !=0)
                     if (g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()] != null) {
-                        ta.add(g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()]);
+                        ta.put(g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()].getNom(),g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()]);
                     }
                 if (emplacement.getLigne() !=5)
                     if (g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()] != null) {
-                        ta.add(g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()]);
+                        ta.put(g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()].getNom(),g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()]);
                     }
                 if (emplacement.getColonne() !=0)
                     if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1] != null) {
-                        ta.add(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1]);
+                        ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1]);
                     }
                 if (emplacement.getColonne() !=0)
                     if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1] != null) {
-                        ta.add(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1]);
+                        ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1]);
                     }
             }
             return ta;
