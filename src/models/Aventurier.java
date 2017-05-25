@@ -7,9 +7,9 @@ public abstract class Aventurier {
 
 	ArrayList<CarteTresor> cartes;
 	Tuile emplacement;
-	private int nbactions;
+	private int nbactions = 0;
 	private boolean helicoUtilise;
-
+        
 	/**
 	 * 
 	 * @param c
@@ -36,27 +36,23 @@ public abstract class Aventurier {
 	 * @param c
 	 */
 	public void jetercarte(CarteTresor c) {
-		// TODO - implement Aventurier.jetercarte
-		throw new UnsupportedOperationException();
+		cartes.remove(c);
 	}
 
-	public ArrayList<Carte> getCartes() {
-		// TODO - implement Aventurier.getCartes
-		throw new UnsupportedOperationException();
+	public ArrayList<CarteTresor> getCartes() {
+		return cartes;
 	}
 
 	/**
 	 * 
 	 * @param c
 	 */
-	public void ajouterCarte(Carte c) {
-		// TODO - implement Aventurier.ajouterCarte
-		throw new UnsupportedOperationException();
+	public void ajouterCarte(CarteTresor c) {
+		cartes.add(c);
 	}
 
 	public Tuile getPos() {
-		// TODO - implement Aventurier.getPos
-		throw new UnsupportedOperationException();
+		return emplacement;
 	}
 
 	/**
@@ -64,8 +60,7 @@ public abstract class Aventurier {
 	 * @param t
 	 */
 	public void setPos(Tuile t) {
-		// TODO - implement Aventurier.setPos
-		throw new UnsupportedOperationException();
+		emplacement = t;
 	}
 
 	public boolean getHelicoUtilise() {
@@ -107,7 +102,7 @@ public abstract class Aventurier {
 		throw new UnsupportedOperationException();
 	}
 
-	public Tresor recupTresor() {
+	public void recupTresor() {
 		// TODO - implement Aventurier.recupTresor
 		throw new UnsupportedOperationException();
 	}
@@ -123,8 +118,26 @@ public abstract class Aventurier {
 	 * @param type
 	 */
 	public ArrayList<Tuile> getTuilesAcc(Grille g, int type) {
-		// TODO - implement Aventurier.getTuilesAcc
-		throw new UnsupportedOperationException();
+		ArrayList<Tuile> ta = new ArrayList();
+                if (type == 2)
+                    ta.add(emplacement);
+                if (emplacement.getLigne() !=0)
+                    if (g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()] != null && !g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()].estMorte()) {
+                        ta.add(g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()]);
+                    }
+                if (emplacement.getLigne() !=5)
+                    if (g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()] != null && !g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()].estMorte()) {
+                        ta.add(g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()]);
+                    }
+                if (emplacement.getColonne() !=0)
+                    if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1] != null && !g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1].estMorte()) {
+                        ta.add(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1]);
+                    }
+                if (emplacement.getColonne() !=0)
+                    if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1] != null && !g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1].estMorte()) {
+                        ta.add(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1]);
+                    }
+                return ta;
 	}
 
 }

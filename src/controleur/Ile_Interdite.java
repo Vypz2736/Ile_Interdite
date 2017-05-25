@@ -16,6 +16,11 @@ public class Ile_Interdite {
      */
     public static void main(String[] args) {
         Controleur c = new Controleur();
+        c.nouveauJoueur("Philippe");
+        c.nouveauJoueur("André");
+        c.nouveauJoueur("Gérard");
+        c.nouveauJoueur("Hughes");
+        c.init();
         System.out.println(c.getGrille());
     }
     

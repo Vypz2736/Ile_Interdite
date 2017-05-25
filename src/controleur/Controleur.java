@@ -11,7 +11,8 @@ public class Controleur {
 	private Grille grille;
 	private VueAventurier vueAventurier;
 	private VueGrille vueGrille;
-	ArrayList<Joueur> joueurs;
+	private ArrayList<Joueur> joueurs;
+	private ArrayList<Aventurier> aventuriers;
 	private ArrayList<CarteTresor> deft;
 	private ArrayList<CarteTresor> pilet;
 	private ArrayList<CarteInondation> defi;
@@ -19,17 +20,7 @@ public class Controleur {
 	private ArrayList<Tresor> tresors;
 
         public Controleur() {
-            initGrille();
         }
-        
-	/**
-	 * 
-	 * @param nomr
-	 */
-	public Aventurier getAventurier(String nomr) {
-		// TODO - implement Controleur.getAventurier
-		throw new UnsupportedOperationException();
-	}
 
 	public CarteTresor tirerCT() {
 		// TODO - implement Controleur.tirerCT
@@ -45,6 +36,10 @@ public class Controleur {
 		// TODO - implement Controleur.getNiv
 		throw new UnsupportedOperationException();
 	}
+        
+        public void nouveauJoueur(String nom) {
+            joueurs.add(new Joueur(nom));
+        }
         
         public void initGrille() {
             int i;
@@ -110,12 +105,34 @@ public class Controleur {
             //Collections.shuffle(at);
             grille = new Grille(at);
         }
-
-    /**
-     * @return the grille
-     */
-    public Grille getGrille() {
-        return grille;
-    }
+        
+        public Grille getGrille() {
+            return grille;
+        }
+        
+        public void initAventuriers() {
+            aventuriers.add(new Pilote());
+            aventuriers.add(new Navigateur());
+            aventuriers.add(new Plongeur());
+            aventuriers.add(new Explorateur());
+            aventuriers.add(new Ingenieur());
+            aventuriers.add(new Messager());
+            Collections.shuffle(aventuriers);
+        }
+        
+        public void initJoueurs() {
+            int i = 0;
+            for (Joueur j : joueurs) {
+                j.setAventurier(aventuriers.get(i));
+                System.out.println(j.getNom() + "aura l'aventurier ");
+                i++;
+            }
+        }
+        
+        public void init() {
+            initAventuriers();
+            initJoueurs();
+            initGrille();
+        }
 
 }
