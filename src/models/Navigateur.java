@@ -12,12 +12,12 @@ public class Navigateur extends Aventurier {
 	public void deplacer(Grille g) {
             Scanner st = new Scanner(System.in);
             for (Tuile t : getTuilesAv(g).values()) {
-                System.out.println("- " + t.getNom());
+                System.out.println("- " + t);
             }
             String nom = st.nextLine();
             Tuile t1 = getTuilesAv(g).get(nom);
             for (Tuile t : getTuilesAccDeplacer(g,t1).values()) {
-                System.out.println("- " + t.getNom());
+                System.out.println("- " + t);
             }
             nom = st.nextLine();
             if (getTuilesAccDeplacer(g,t1).get(nom) != null) {
@@ -34,7 +34,7 @@ public class Navigateur extends Aventurier {
             HashMap<String,Tuile> ta = new HashMap();
             for (int j = 0; j < 6; j++) {
                 for (int i = 0; i < 6; i++) {
-                    if (g.getGrille()[j][i].getAventuriers().size() != 0) {
+                    if (g.getGrille()[j][i] != null && g.getGrille()[j][i].getAventuriers().size() != 0) {
                         ta.put(g.getGrille()[j][i].getNom(),g.getGrille()[j][i]);
                     }
                 }

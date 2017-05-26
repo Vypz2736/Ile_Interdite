@@ -14,7 +14,7 @@ public class Plongeur extends Aventurier {
             boolean continuer = false;
             Scanner st = new Scanner(System.in);
             for (Tuile t : getTuilesAcc(g,1).values()) {
-                System.out.println("- " + t.getNom());
+                System.out.println("- " + t);
             }
             String nom = st.nextLine();
             if (getTuilesAcc(g,1).get(nom) != null) {
@@ -23,27 +23,29 @@ public class Plongeur extends Aventurier {
                 setPos(getTuilesAcc(g,1).get(nom));
                 setNbactions(getNbactions()+1);
                 if (!getPos().estSeche()) {
-                    if (!getPos().estMorte())
-                        System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? o/n");
-                        if (st.nextLine() == "o")
+                    if (!getPos().estMorte()) {
+                        System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? oui : 1/non : 2");
+                        if (st.nextInt() == 1)
                             continuer = true;
+                    }
                     while ((!getPos().estSeche() && continuer) || getPos().estMorte()) {
                         for (Tuile t : getTuilesAcc(g,1).values()) {
-                            System.out.println("- " + t.getNom());
+                            System.out.println("- " + t);
                         }
                         nom = st.nextLine();
                         if (getTuilesAcc(g,1).get(nom) != null) {
                             getPos().retirerAv(this);
                             getTuilesAcc(g,1).get(nom).ajouterAv(this);
                             setPos(getTuilesAcc(g,1).get(nom));
-                            setNbactions(getNbactions()+1);
                             if (!getPos().estSeche()) {
-                                if (!getPos().estMorte())
-                                    System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? o/n");
-                                    if (st.nextLine() == "o")
+                                if (!getPos().estMorte()) {
+                                    System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? oui : 1/non : 2");
+                                    if (st.nextInt() == 1)
                                         continuer = true;
                                     else
                                         continuer = false;
+                                    st.nextLine();
+                                }
                             }
                         }
                     }

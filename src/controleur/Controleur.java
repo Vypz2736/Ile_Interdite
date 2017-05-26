@@ -200,6 +200,7 @@ public class Controleur {
                 else if (j.getAventurier() instanceof Navigateur && action == 3) {
                     j.getAventurier().deplacer(grille);
                 }
+                System.out.println(grille);
             }
             if (j.getAventurier() instanceof Pilote)
                 j.getAventurier().setHelico(false);

@@ -14,18 +14,24 @@ public class Ingenieur extends Aventurier {
 	 */
 	public void assecher(Grille g) {
             Scanner st = new Scanner(System.in);
+            HashMap<String, Tuile> tuiles = new HashMap();
+            for (Tuile t : getTuilesAcc(g, 1).values()) {
+                if (!t.estSeche())
+                    tuiles.put(t.getNom(), t);
+            }
             boolean abandonner = false;
             String nom;
             while (getSeche() < 2 && abandonner == false) {
-                for (Tuile t : getTuilesAcc(g,1).values()) {
+                for (Tuile t : tuiles.values()) {
                     System.out.println("- " + t.getNom());
                 }
                 nom = st.nextLine();
-                if (getTuilesAcc(g,1).get(nom) != null) {
-                    getTuilesAcc(g,1).get(nom).secher();
+                if (tuiles.get(nom) != null) {
+                    tuiles.get(nom).secher();
                     if (getSeche() == 1)
                         setNbactions(getNbactions()+1);
                     setSeche(getSeche()+1);
+                    System.out.println("Tuile " + getTuilesAcc(g, 1).get(nom) + " asséchée.");
                 }    
             }
             setSeche(0);

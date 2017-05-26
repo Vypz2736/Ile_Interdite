@@ -71,7 +71,9 @@ public class Tuile {
                 return getNom() + " : sèche  ";
             if (estInonde())
                 return getNom() + " : inondée";
-            return getNom() + " : coulée ";
+            if (estMorte())
+                return getNom() + " : coulée ";
+            return "ERREUR";
         }
 
         /**

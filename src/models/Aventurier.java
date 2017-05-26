@@ -76,7 +76,7 @@ public abstract class Aventurier {
     public void seDeplacer(Grille g) {
         Scanner st = new Scanner(System.in);
         for (Tuile t : getTuilesAcc(g, 1).values()) {
-            System.out.println("- " + t.getNom());
+            System.out.println("- " + t);
         }
         String nom = st.nextLine();
         if (getTuilesAcc(g, 1).get(nom) != null) {
@@ -93,13 +93,19 @@ public abstract class Aventurier {
      */
     public void assecher(Grille g) {
         Scanner st = new Scanner(System.in);
+        HashMap<String, Tuile> tuiles = new HashMap();
         for (Tuile t : getTuilesAcc(g, 1).values()) {
+            if (!t.estSeche())
+                tuiles.put(t.getNom(), t);
+        }
+        for (Tuile t : tuiles.values()) {
             System.out.println("- " + t.getNom());
         }
         String nom = st.nextLine();
-        if (getTuilesAcc(g, 1).get(nom) != null) {
-            getTuilesAcc(g, 1).get(nom).secher();
+        if (tuiles.get(nom) != null) {
+            tuiles.get(nom).secher();
             setNbactions(getNbactions() + 1);
+            System.out.println("Tuile " + getTuilesAcc(g, 1).get(nom) + " asséchée.");
         }
     }
 
