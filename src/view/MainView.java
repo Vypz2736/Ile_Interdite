@@ -5,17 +5,37 @@
  */
 package view;
 
+import controleur.*;
+import java.awt.*;
+import javax.swing.*;
+
 /**
  *
  * @author Vypz
  */
 public class MainView {
 
-    /**
-     * @param args the command line arguments
-     */
+    private final JFrame window;
+    private VueGrille v;
+    private Controleur c = new Controleur();
+    JPanel mainpanel;
+    
+    public MainView() {
+        window = new JFrame();
+        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        window.setTitle("L'Île Interdite");
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        c.nouveauJoueur("Philippe");
+        c.nouveauJoueur("André");
+        c.nouveauJoueur("Gérard");
+        c.nouveauJoueur("Hughes");
+        c.init();
+        v = new VueGrille(c.getGrille());
+        window.setVisible(true);
+    }
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        MainView m = new MainView();
     }
     
 }

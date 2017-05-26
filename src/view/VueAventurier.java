@@ -17,7 +17,7 @@ import javax.swing.border.MatteBorder;
 import util.Utils.Pion;
 
  
-public class VueAventurier  {
+public class VueAventurier {
      
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
