@@ -7,7 +7,9 @@ package view;
 
 import controleur.Controleur;
 import java.awt.*;
+import java.io.File;
 import java.util.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import models.*;
 import util.*;
@@ -18,10 +20,11 @@ import util.*;
  */
 public class VueGrille extends JPanel {
     private final JPanel[][] tuiles = new JPanel[6][6];
+    private final JLabel[][] labels = new JLabel[6][6];
     private JPanel panelGrille;
     private final JFrame window;
-    private ImageIcon img;
-    ArrayList<Aventurier> aventuriers;
+    private ArrayList<Aventurier> aventuriers;
+//    private ImageIcon image = new ImageIcon();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public VueGrille(Grille grille) {
@@ -38,7 +41,7 @@ public class VueGrille extends JPanel {
     }
     
     public void couleur(Grille grille) {
-        JLabel label;
+        
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
                 if (grille.getGrille()[j][i] != null && !grille.getGrille()[j][i].estMorte()) {
@@ -46,71 +49,58 @@ public class VueGrille extends JPanel {
                     for (Aventurier a : grille.getGrille()[j][i].getAventuriers()) {
                         aventuriers.add(a);
                     }
-                    img(grille.getGrille()[j][i]);
-                    tuiles[j][i] = new JPanel() {
-                        @Override
-                        public void paintComponent(Graphics g) {
-                            g.drawImage(img.getImage(), 3, 3, null);
-                            int i = 1;
-                            for (Aventurier a : aventuriers) {
-                                if (a instanceof Pilote)
-                                    g.setColor(Color.blue);
-                                if (a instanceof Navigateur)
-                                    g.setColor(Color.yellow);
-                                if (a instanceof Plongeur)
-                                    g.setColor(Color.black);
-                                if (a instanceof Explorateur)
-                                    g.setColor(Color.green);
-                                if (a instanceof Ingenieur)
-                                    g.setColor(Color.red);
-                                if (a instanceof Messager)
-                                    g.setColor(Color.orange);
-                                g.fillOval(i*15+(i-1)*15, 15, 20, 20);
-                                i++;
-                            }
-                            for (int j = 1; j < 5; j++) {
-                                g.fillOval(j*15+(j-2)*15, 10, 20, 20);
-                            }
-                        }
-                    };
-                    label = new JLabel(grille.getGrille()[j][i].getNom());;
-                    if (grille.getGrille()[j][i].estInonde()) {
-                        //tuiles[j][i].setBackground(new Color(231, 177, 39));
-                        //label.setForeground(Color.black);
-                    }
-                    else {
-                        //tuiles[j][i].setBackground(new Color(123, 50, 0));
-                        //label.setForeground(Color.white);
-                    }
-                    //tuiles[j][i].add((label), BorderLayout.CENTER);
+//                    image = img(grille.getGrille()[j][i]);
+//                    tuiles[j][i] = new JPanel() {
+//                        @Override
+//                        public void paintComponent(Graphics g) {;
+//                            int i = 1;
+//                            g.drawImage(image.getImage(), 0, 0, null);
+//                            for (Aventurier a : aventuriers) {
+//                                if (a instanceof Pilote)
+//                                    g.setColor(Color.blue);
+//                                if (a instanceof Navigateur)
+//                                    g.setColor(Color.yellow);
+//                                if (a instanceof Plongeur)
+//                                    g.setColor(Color.black);
+//                                if (a instanceof Explorateur)
+//                                    g.setColor(Color.green);
+//                                if (a instanceof Ingenieur)
+//                                    g.setColor(Color.red);
+//                                if (a instanceof Messager)
+//                                    g.setColor(Color.orange);
+//                                g.fillOval(i*15+(i-1)*15, 15, 20, 20);
+//                                i++;
+//                            }
+//                            for (int j = 1; j < 5; j++) {
+//                                //g.fillOval(j*15+(j-2)*15, 10, 20, 20);
+//                            }
+//                        }
+//                    };
+                    tuiles[j][i] = new JPanel();
+                    labels[j][i] = new JLabel();
+                    labels[j][i].setIcon(img(grille.getGrille()[j][i]));
+                    tuiles[j][i].add(labels[j][i]);
                 }
                 else {
                     tuiles[j][i] = new JPanel();
-                    tuiles[j][i].removeAll();
                     tuiles[j][i].setBackground(new Color(108, 197, 255));
                 }
-            //if (grille.getGrille()[j][i] !=null)
-                //panelGrille.getGraphics().fillOval(10, 10, 10, 10);
             panelGrille.add(tuiles[j][i]);
             }
         }
     }
     
-    public void img(Tuile t) {
+    public ImageIcon img(Tuile t) {
         String nmimg = "/img/tuiles/";
         if (t.estSeche())
             nmimg += t.getNom() + ".png";
         if (t.estInonde())
             nmimg += t.getNom() + "i.png";
-        img = new ImageIcon(nmimg);
-        img = new ImageIcon(new ImageIcon(getClass().getResource(nmimg))
-                .getImage().getScaledInstance(dim.height / 6 - 32, dim.height / 6 - 32, Image.SCALE_SMOOTH));
-        System.out.println(img.getDescription());
+        //ImageIcon img = new ImageIcon(nmimg);
+        ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource(nmimg))
+                .getImage().getScaledInstance(dim.height / 6 - 90, dim.height / 6 - 90, Image.SCALE_SMOOTH));
+        return img;
     }
-    
-//    public void paintComponent(Graphics gra) {
-//        gra.drawImage(img.getImage(), 0, 0, panelGrille);
-//    }
     
     public static void main(String[] args) {
         Controleur c = new Controleur();
@@ -122,9 +112,4 @@ public class VueGrille extends JPanel {
         System.out.println(c.getGrille());
         VueGrille v = new VueGrille(c.getGrille());
     }
-        
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        g.drawImage(img.getImage(), 0, 0, null);
-//    }
 }
