@@ -5,17 +5,35 @@
  */
 package view;
 
+import java.awt.*;
+import javax.swing.JPanel;
+import models.*;
+import util.*;
+
 /**
  *
  * @author Vypz
  */
 public class VueGrille {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    private final JPanel panelGrille;
+    private final JPanel[][] tuiles = new JPanel[6][6];
+    
+    public VueGrille(Grille g) {
+        panelGrille = new JPanel(new GridLayout(6,6));
+        JPanel panelTuile;
+        for (int j = 0; j < 6; j++) {
+            for (int i = 0; i < 6; i++) {
+                panelTuile = new JPanel();
+                if (g.getGrille()[j][i] == null) {
+                    
+                }
+                else {
+                    
+                }
+            panelGrille.add(panelTuile);
+            }
+        }
     }
     
 }

@@ -21,7 +21,7 @@ public class VueAventurier  {
      
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
-    private final JFrame window;
+    private final JPanel window;
     private final JPanel panelAventurier;
     private final JPanel mainPanel;
     private final JButton btnAller  ;
@@ -32,10 +32,9 @@ public class VueAventurier  {
     
     public VueAventurier (String nomJoueur, String nomAventurier, Color couleur){
 
-        this.window = new JFrame();
+        this.window = new JPanel();
         window.setSize(350, 200);
 
-        window.setTitle(nomJoueur);
         mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
 
@@ -69,7 +68,7 @@ public class VueAventurier  {
         this.panelBoutons.setOpaque(false);
         mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
 
-        this.btnAller = new JButton("Aller") ;
+        this.btnAller = new JButton("Se déplacer") ;
         this.btnAssecher = new JButton( "Assecher");
         this.btnAutreAction = new JButton("AutreAction") ;
         this.btnTerminerTour = new JButton("Terminer Tour") ;
@@ -105,10 +104,10 @@ public class VueAventurier  {
  
 
     
-     public static void main(String [] args) {
-        // Instanciation de la fenêtre 
-        VueAventurier vueAventurier = new VueAventurier ("Maël", "Chèvre",Pion.ORANGE.getCouleur() );
-    }
+//     public static void main(String [] args) {
+//        // Instanciation de la fenêtre 
+//        VueAventurier vueAventurier = new VueAventurier ("Maël", "Chèvre",Pion.ORANGE.getCouleur() );
+//    }
 }
 
  
