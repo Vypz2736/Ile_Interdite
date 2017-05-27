@@ -13,9 +13,6 @@ public class Plongeur extends Aventurier {
 	@Override
 	public HashMap<String,Tuile> getTuilesAcc(Grille g, int type) {
             HashMap<String,Tuile> ta = new HashMap();
-            for (Tuile t : super.getTuilesAcc(g, type).values()) {
-                ta.put(t.getNom(),t);
-            }
             if (type == 1) {
                 ArrayList<Tuile> tuiles = new ArrayList();
                 tuiles.add(emplacement);
@@ -30,6 +27,8 @@ public class Plongeur extends Aventurier {
                         ta.put(t.getNom(), t);
                 }
             }
+            else
+                return super.getTuilesAcc(g, type);
             return ta;
 	}
         

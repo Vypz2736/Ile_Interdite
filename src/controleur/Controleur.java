@@ -18,6 +18,7 @@ public class Controleur {
 	private ArrayList<CarteInondation> defi = new ArrayList();
 	private ArrayList<CarteInondation> pilei = new ArrayList();
 	private ArrayList<Tresor> tresors;
+        private ArrayList<Tuile> at;
 
         public Controleur() {
         }
@@ -43,91 +44,91 @@ public class Controleur {
         
         public void initGrille() {
             int i;
-            ArrayList<Tuile> at = new ArrayList();
-            at.add(new Tuile("LePontdesabimes",0));
-            at.add(new Tuile("LaPortedebronze",1));
-            i = at.size()-1;
+            at = new ArrayList();
+            getAt().add(new Tuile("LePontdesabimes",0));
+            getAt().add(new Tuile("LaPortedebronze",1));
+            i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Ingenieur) {
-                    at.get(i).ajouterAv(j.getAventurier());
-                    j.getAventurier().setPos(at.get(i));
+                    getAt().get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            at.add(new Tuile("LaCavernedesombres",0));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Cristal);
-            at.add(new Tuile("LaPortedefer",0));
-            i = at.size()-1;
+            getAt().add(new Tuile("LaCavernedesombres",0));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Cristal);
+            getAt().add(new Tuile("LaPortedefer",0));
+            i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Plongeur) {
-                    at.get(i).ajouterAv(j.getAventurier());
-                    j.getAventurier().setPos(at.get(i));
+                    getAt().get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            at.add(new Tuile("LaPortedor",0));
-            i = at.size()-1;
+            getAt().add(new Tuile("LaPortedor",0));
+            i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Navigateur) {
-                    at.get(i).ajouterAv(j.getAventurier());
-                    j.getAventurier().setPos(at.get(i));
+                    getAt().get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            at.add(new Tuile("LesFalaisesdeloubli",0));
-            at.add(new Tuile("LePalaisdecorail",0));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Calice);
-            at.add(new Tuile("LaPortedargent",0));
-            i = at.size()-1;
+            getAt().add(new Tuile("LesFalaisesdeloubli",0));
+            getAt().add(new Tuile("LePalaisdecorail",0));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Calice);
+            getAt().add(new Tuile("LaPortedargent",0));
+            i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Messager) {
-                    at.get(i).ajouterAv(j.getAventurier());
-                    j.getAventurier().setPos(at.get(i));
+                    getAt().get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            at.add(new Tuile("LesDunesdelillusion",2));
-            at.add(new Tuile("Heliport",0));
-            i = at.size()-1;
+            getAt().add(new Tuile("LesDunesdelillusion",2));
+            getAt().add(new Tuile("Heliport",0));
+            i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Pilote) {
-                    at.get(i).ajouterAv(j.getAventurier());
-                    j.getAventurier().setPos(at.get(i));
+                    getAt().get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            at.add(new Tuile("LaPortedecuivre",0));
-            i = at.size()-1;
+            getAt().add(new Tuile("LaPortedecuivre",0));
+            i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Explorateur) {
-                    at.get(i).ajouterAv(j.getAventurier());
-                    j.getAventurier().setPos(at.get(i));
+                    getAt().get(i).ajouterAv(j.getAventurier());
+                    j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            at.add(new Tuile("LeJardindeshurlements",0));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Statue);
-            at.add(new Tuile("LaForetpourpre",0));
-            at.add(new Tuile("LeLagonperdu",1));
-            at.add(new Tuile("LeMaraisbrumeux",2));
-            at.add(new Tuile("Observatoire",1));
-            at.add(new Tuile("LeRocherfantome",2));
-            at.add(new Tuile("LaCavernedubrasier",1));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Cristal);
-            at.add(new Tuile("LeTempledusoleil",0));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Pierre);
-            at.add(new Tuile("LeTempledelalune",2));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Pierre);
-            at.add(new Tuile("LePalaisdesmarees",0));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Calice);
-            at.add(new Tuile("LeValducrepuscule",0));
-            at.add(new Tuile("LaTourdeguet",0));
-            at.add(new Tuile("LeJardindesmurmures",1));
-            i = at.size()-1;
-            at.get(i).setTresor(Tresor.Statue);
+            getAt().add(new Tuile("LeJardindeshurlements",0));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Statue);
+            getAt().add(new Tuile("LaForetpourpre",0));
+            getAt().add(new Tuile("LeLagonperdu",1));
+            getAt().add(new Tuile("LeMaraisbrumeux",2));
+            getAt().add(new Tuile("Observatoire",1));
+            getAt().add(new Tuile("LeRocherfantome",2));
+            getAt().add(new Tuile("LaCavernedubrasier",1));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Cristal);
+            getAt().add(new Tuile("LeTempledusoleil",0));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Pierre);
+            getAt().add(new Tuile("LeTempledelalune",2));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Pierre);
+            getAt().add(new Tuile("LePalaisdesmarees",0));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Calice);
+            getAt().add(new Tuile("LeValducrepuscule",0));
+            getAt().add(new Tuile("LaTourdeguet",0));
+            getAt().add(new Tuile("LeJardindesmurmures",1));
+            i = getAt().size()-1;
+            getAt().get(i).setTresor(Tresor.Statue);
             //Collections.shuffle(at);
-            grille = new Grille(at);
+            grille = new Grille(getAt());
         }
         
         public Grille getGrille() {
@@ -192,8 +193,6 @@ public class Controleur {
                 j.getAventurier().deplacer(grille);
             }
             System.out.println(grille);
-            if (j.getAventurier() instanceof Pilote)
-                j.getAventurier().setHelico(false);
         }
 
         /**
@@ -202,5 +201,12 @@ public class Controleur {
         public ArrayList<Joueur> getJoueurs() {
             return joueurs;
         }
+
+    /**
+     * @return the at
+     */
+    public ArrayList<Tuile> getAt() {
+        return at;
+    }
 
 }

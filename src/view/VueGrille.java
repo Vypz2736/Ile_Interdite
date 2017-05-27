@@ -80,6 +80,12 @@ public class VueGrille extends JPanel {
         c.init();
         //System.out.println(c.getGrille());
         VueGrille v = new VueGrille(c.getGrille());
+        int nbi = 0;
+        for (Tuile t : c.getAt()) {
+            if (t.estInonde()) {
+                nbi++;
+            }
+        }
         while (1 == 1) {
             for (Joueur j : c.getJoueurs()) {
                 if (j.getAventurier() instanceof Pilote)
@@ -96,7 +102,7 @@ public class VueGrille extends JPanel {
                     System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
                 while(j.getAventurier().getNbactions()<3) {
                     ArrayList<Tuile> tuiles = new ArrayList();
-                    for (Tuile t : j.getAventurier().getTuilesAcc(c.getGrille(), 1).values()) {
+                    for (Tuile t : j.getAventurier().getTuilesAcc(c.getGrille(), 2).values()) {
                         tuiles.add(t);
                     }
                     v.setTuilesSurbrillance(tuiles, true);
@@ -104,7 +110,15 @@ public class VueGrille extends JPanel {
                     v.setTuilesSurbrillance(tuiles, false);
                     v.couleur(c.getGrille());
                 }
+                if (j.getAventurier() instanceof Pilote)
+                    j.getAventurier().setHelico(false);
                 j.getAventurier().setNbactions(0);
+            }
+            nbi = 0;
+            for (Tuile t : c.getAt()) {
+                if (t.estInonde()) {
+                    nbi++;
+                }
             }
         }
         

@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -21,10 +22,14 @@ public class Navigateur extends Aventurier {
             }
             nom = st.nextLine();
             if (getTuilesAccDeplacer(g,t1).get(nom) != null) {
-                for (Aventurier a : getTuilesAccDeplacer(g,t1).get(nom).getAventuriers()) {
-                    getPos().retirerAv(a);
+                ArrayList<Aventurier> aa = new ArrayList();
+                for (Aventurier a : t1.getAventuriers()) {
+                    aa.add(a);
+                }
+                for (Aventurier a : aa) {
+                    t1.retirerAv(a);
                     getTuilesAccDeplacer(g,t1).get(nom).ajouterAv(a);
-                    setPos(getTuilesAccDeplacer(g,t1).get(nom));
+                    a.setPos(getTuilesAccDeplacer(g,t1).get(nom));
                 }
                 setNbactions(getNbactions()+1);
             }
@@ -61,19 +66,19 @@ public class Navigateur extends Aventurier {
                     ta.put(g.getGrille()[t1.getLigne()-1][t1.getColonne()+1].getNom(),g.getGrille()[t1.getLigne()-1][t1.getColonne()+1]);
                 }
             if (t1.getLigne() >1)
-                if (g.getGrille()[t1.getLigne()-2][t1.getColonne()] != null && !g.getGrille()[t1.getLigne()-2][t1.getColonne()].estMorte()) {
+                if (g.getGrille()[t1.getLigne()-2][t1.getColonne()] != null && !g.getGrille()[t1.getLigne()-2][t1.getColonne()].estMorte()  && !g.getGrille()[t1.getLigne()-1][t1.getColonne()].estMorte()) {
                     ta.put(g.getGrille()[t1.getLigne()-2][t1.getColonne()].getNom(),g.getGrille()[t1.getLigne()-2][t1.getColonne()]);
                 }
             if (t1.getLigne() <4)
-                if (g.getGrille()[t1.getLigne()+2][t1.getColonne()] != null && !g.getGrille()[t1.getLigne()+2][t1.getColonne()].estMorte()) {
+                if (g.getGrille()[t1.getLigne()+2][t1.getColonne()] != null && !g.getGrille()[t1.getLigne()+2][t1.getColonne()].estMorte()  && !g.getGrille()[t1.getLigne()+1][t1.getColonne()].estMorte()) {
                     ta.put(g.getGrille()[t1.getLigne()+2][t1.getColonne()].getNom(),g.getGrille()[t1.getLigne()+2][t1.getColonne()]);
                 }
             if (t1.getColonne() >1)
-                if (g.getGrille()[t1.getLigne()][t1.getColonne()-2] != null && !g.getGrille()[t1.getLigne()][t1.getColonne()-2].estMorte()) {
+                if (g.getGrille()[t1.getLigne()][t1.getColonne()-2] != null && !g.getGrille()[t1.getLigne()][t1.getColonne()-2].estMorte() && !g.getGrille()[t1.getLigne()][t1.getColonne()-1].estMorte()) {
                     ta.put(g.getGrille()[t1.getLigne()][t1.getColonne()-2].getNom(),g.getGrille()[t1.getLigne()][t1.getColonne()-2]);
                 }
             if (t1.getColonne() <4)
-                if (g.getGrille()[t1.getLigne()][t1.getColonne()+2] != null && !g.getGrille()[t1.getLigne()][t1.getColonne()+2].estMorte()) {
+                if (g.getGrille()[t1.getLigne()][t1.getColonne()+2] != null && !g.getGrille()[t1.getLigne()][t1.getColonne()+2].estMorte() && !g.getGrille()[t1.getLigne()][t1.getColonne()+1].estMorte()) {
                     ta.put(g.getGrille()[t1.getLigne()][t1.getColonne()+2].getNom(),g.getGrille()[t1.getLigne()][t1.getColonne()+2]);
                 }
             if (t1.getLigne() !=0)

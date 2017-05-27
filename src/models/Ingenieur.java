@@ -56,7 +56,7 @@ public class Ingenieur extends Aventurier {
             if (type == 2) {
                 for (int j = 0; j < 6; j++) {
                     for (int i = 0; i < 6; i++) {
-                        if (g.getGrille()[j][i] != null && !g.getGrille()[j][i].estMorte()) {
+                        if (g.getGrille()[j][i] != null && g.getGrille()[j][i].estInonde()) {
                             ta.put(g.getGrille()[j][i].getNom(),g.getGrille()[j][i]);
                         }
                     }
