@@ -8,83 +8,71 @@ public class Plongeur extends Aventurier {
 	/**
 	 * 
 	 * @param g
-	 */
-        @Override
-	public void seDeplacer(Grille g) {
-            boolean continuer = false;
-            Scanner st = new Scanner(System.in);
-            for (Tuile t : getTuilesAcc(g,1).values()) {
-                System.out.println("- " + t);
-            }
-            String nom = st.nextLine();
-            if (getTuilesAcc(g,1).get(nom) != null) {
-                getPos().retirerAv(this);
-                getTuilesAcc(g,1).get(nom).ajouterAv(this);
-                setPos(getTuilesAcc(g,1).get(nom));
-                setNbactions(getNbactions()+1);
-                if (!getPos().estSeche()) {
-                    if (!getPos().estMorte()) {
-                        System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? oui : 1/non : 2");
-                        if (st.nextInt() == 1)
-                            continuer = true;
-                    }
-                    while ((!getPos().estSeche() && continuer) || getPos().estMorte()) {
-                        for (Tuile t : getTuilesAcc(g,1).values()) {
-                            System.out.println("- " + t);
-                        }
-                        nom = st.nextLine();
-                        if (getTuilesAcc(g,1).get(nom) != null) {
-                            getPos().retirerAv(this);
-                            getTuilesAcc(g,1).get(nom).ajouterAv(this);
-                            setPos(getTuilesAcc(g,1).get(nom));
-                            if (!getPos().estSeche()) {
-                                if (!getPos().estMorte()) {
-                                    System.out.println("Voulez vous continuer votre déplacement sans utiliser plus d'actions ? oui : 1/non : 2");
-                                    if (st.nextInt() == 1)
-                                        continuer = true;
-                                    else
-                                        continuer = false;
-                                    st.nextLine();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-	}
-
-	/**
-	 * 
-	 * @param g
 	 * @param type
 	 */
 	@Override
 	public HashMap<String,Tuile> getTuilesAcc(Grille g, int type) {
             HashMap<String,Tuile> ta = new HashMap();
-            if (type == 2)
-                for (Tuile t : super.getTuilesAcc(g, type).values()) {
-                    ta.put(t.getNom(),t);
+            for (Tuile t : super.getTuilesAcc(g, type).values()) {
+                ta.put(t.getNom(),t);
+            }
+            if (type == 1) {
+                ArrayList<Tuile> tuiles = new ArrayList();
+                tuiles.add(emplacement);
+                tuiles = autourTuiles(g,tuiles);
+                while (!tuiles.equals(union(tuiles,autourTuiles(g, tuiles)))) {
+                    tuiles = union(tuiles,autourTuiles(g, tuiles));
                 }
-            else {
-                if (emplacement.getLigne() !=0)
-                    if (g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()] != null) {
-                        ta.put(g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()].getNom(),g.getGrille()[emplacement.getLigne()-1][emplacement.getColonne()]);
-                    }
-                if (emplacement.getLigne() !=5)
-                    if (g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()] != null) {
-                        ta.put(g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()].getNom(),g.getGrille()[emplacement.getLigne()+1][emplacement.getColonne()]);
-                    }
-                if (emplacement.getColonne() !=0)
-                    if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1] != null) {
-                        ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()-1]);
-                    }
-                if (emplacement.getColonne() !=0)
-                    if (g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1] != null) {
-                        ta.put(g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1].getNom(),g.getGrille()[emplacement.getLigne()][emplacement.getColonne()+1]);
-                    }
+                tuiles.remove(emplacement);
+                ta = new HashMap();
+                for (Tuile t : tuiles) {
+                    if (!t.estMorte())
+                        ta.put(t.getNom(), t);
+                }
             }
             return ta;
 	}
+        
+        public ArrayList<Tuile> autourTuiles(Grille g, ArrayList<Tuile> a) {
+        ArrayList<Tuile> ta = new ArrayList();
+            for (Tuile t : a) {
+                if (!t.estSeche() || t == getPos()) {
+                    if (t.getLigne() != 0) {
+                        if (g.getGrille()[t.getLigne() - 1][t.getColonne()] != null) {
+                            ta.add(g.getGrille()[t.getLigne() - 1][t.getColonne()]);
+                        }
+                    }
+                    if (t.getLigne() != 5) {
+                        if (g.getGrille()[t.getLigne() + 1][t.getColonne()] != null) {
+                            ta.add(g.getGrille()[t.getLigne() + 1][t.getColonne()]);
+                        }
+                    }
+                    if (t.getColonne() != 0) {
+                        if (g.getGrille()[t.getLigne()][t.getColonne() - 1] != null) {
+                            ta.add(g.getGrille()[t.getLigne()][t.getColonne() - 1]);
+                        }
+                    }
+                    if (t.getColonne() != 5) {
+                        if (g.getGrille()[t.getLigne()][t.getColonne() + 1] != null) {
+                            ta.add(g.getGrille()[t.getLigne()][t.getColonne() + 1]);
+                        }
+                    }
+                }
+            }
+            return ta;
+        }
+        
+        public ArrayList<Tuile> union(ArrayList<Tuile> a1, ArrayList<Tuile> a2) {
+            ArrayList<Tuile> a = new ArrayList();
+            for (Tuile t : a1) {
+                a.add(t);
+            }
+            for (Tuile t : a2) {
+                if (!a.contains(t))
+                    a.add(t);
+            }
+            return a;
+        }
         
         public void deplacer(Grille g) {
             // TODO - implement Aventurier.recupTresor

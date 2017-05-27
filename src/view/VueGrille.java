@@ -49,7 +49,7 @@ public class VueGrille extends JPanel {
                     panelGrille.add(tuiles[j][i]);
                 }
                 else
-                    tuiles[j][i].maj(grille.getGrille()[j][i],true);
+                    tuiles[j][i].maj(grille.getGrille()[j][i],getTuilesSurbrillance().contains(tuiles[j][i]));
             }
         }
     }

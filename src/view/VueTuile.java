@@ -21,7 +21,7 @@ import util.*;
 public class VueTuile extends JPanel{
 
     private Tuile t;
-    private boolean surbrillance;
+    private boolean surbrillance = false;
     
     public VueTuile(Tuile t) {
         this.t = t;
@@ -50,9 +50,9 @@ public class VueTuile extends JPanel{
                 if (a instanceof Messager)
                     g.setColor(new Color(255, 148, 0));
                 g2.setStroke(new BasicStroke(getWidth()/60));
-                g2.fillOval(((getWidth()/10)*4/5) + (i-1)*((getWidth()/10)*50/20), (getWidth()/10)*4/5, (getWidth()/10)*6/4, (getWidth()/10)*6/4);
+                g2.fillOval(((getWidth()/10)*4/5) + (i-1)*((getHeight()/10)*50/20), (getWidth()/10)*4/5, (getWidth()/10)*6/4, (getWidth()/10)*6/4);
                 g2.setColor(new Color(0, 0, 0));
-                g2.drawOval(((getWidth()/10)*4/5) + (i-1)*((getWidth()/10)*50/20), (getWidth()/10)*4/5, (getWidth()/10)*6/4, (getWidth()/10)*6/4);
+                g2.drawOval(((getWidth()/10)*4/5) + (i-1)*((getHeight()/10)*50/20), (getWidth()/10)*4/5, (getWidth()/10)*6/4, (getWidth()/10)*6/4);
                 i++;
             }
         }
@@ -67,8 +67,10 @@ public class VueTuile extends JPanel{
         //ImageIcon img = new ImageIcon(nmimg);
         else
             nmimg += "morte";
-        if (getSurbrillance())
+        if (getSurbrillance()) {
             nmimg += "s.png";
+            System.out.println(surbrillance);
+        }
         else
             nmimg += ".png";
         ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource(nmimg)).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));

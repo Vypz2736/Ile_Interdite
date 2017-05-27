@@ -122,7 +122,7 @@ public class Controleur {
             i = at.size()-1;
             at.get(i).setTresor(Tresor.Calice);
             at.add(new Tuile("LeValducrepuscule",0));
-            at.add(new Tuile("LaTourduguet",0));
+            at.add(new Tuile("LaTourdeguet",0));
             at.add(new Tuile("LeJardindesmurmures",1));
             i = at.size()-1;
             at.get(i).setTresor(Tresor.Statue);
