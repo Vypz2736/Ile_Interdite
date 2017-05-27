@@ -97,8 +97,8 @@ public class VueGrille extends JPanel {
         if (t.estInonde())
             nmimg += t.getNom() + "i.png";
         //ImageIcon img = new ImageIcon(nmimg);
-        ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource(nmimg))
-                .getImage().getScaledInstance(dim.height / 6 - 90, dim.height / 6 - 90, Image.SCALE_SMOOTH));
+        ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource(nmimg)).getImage().getScaledInstance(dim.height / 6, dim.height / 6, Image.SCALE_SMOOTH));
+//                                                                                                                largeur          hauteur         adaptation
         return img;
     }
     
