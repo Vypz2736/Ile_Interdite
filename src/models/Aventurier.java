@@ -94,7 +94,7 @@ public abstract class Aventurier {
     public void assecher(Grille g) {
         Scanner st = new Scanner(System.in);
         HashMap<String, Tuile> tuiles = new HashMap();
-        for (Tuile t : getTuilesAcc(g, 1).values()) {
+        for (Tuile t : getTuilesAcc(g, 2).values()) {
             if (!t.estSeche())
                 tuiles.put(t.getNom(), t);
         }
@@ -105,7 +105,7 @@ public abstract class Aventurier {
         if (tuiles.get(nom) != null) {
             tuiles.get(nom).secher();
             setNbactions(getNbactions() + 1);
-            System.out.println("Tuile " + getTuilesAcc(g, 1).get(nom) + " asséchée.");
+            System.out.println("Tuile " + getTuilesAcc(g, 2).get(nom) + " asséchée.");
         }
     }
 

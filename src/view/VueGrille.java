@@ -19,8 +19,7 @@ import util.*;
  * @author Vypz
  */
 public class VueGrille extends JPanel {
-    private final JPanel[][] tuiles = new JPanel[6][6];
-    private final JLabel[][] labels = new JLabel[6][6];
+    private final VueTuile[][] tuiles = new VueTuile[6][6];
     private JPanel panelGrille;
     private final JFrame window;
     private ImageIcon image = new ImageIcon();
@@ -45,9 +44,12 @@ public class VueGrille extends JPanel {
         panelGrille = new JPanel(new GridLayout(6,6));
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
-                tuiles[j][i] = new VueTuile(grille.getGrille()[j][i]);
-                if (init)
+                if (init) {
+                    tuiles[j][i] = new VueTuile(grille.getGrille()[j][i]);
                     panelGrille.add(tuiles[j][i]);
+                }
+                else
+                    tuiles[j][i].maj(grille.getGrille()[j][i]);
             }
         }
     }

@@ -68,4 +68,10 @@ public class VueTuile extends JPanel{
         return img;
     }
     
+    public void maj(Tuile t) {
+        this.t = t;
+        repaint();
+        System.out.println(t);
+    }
+    
 }

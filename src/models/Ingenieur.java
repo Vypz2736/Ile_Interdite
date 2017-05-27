@@ -15,7 +15,7 @@ public class Ingenieur extends Aventurier {
 	public void assecher(Grille g) {
             Scanner st = new Scanner(System.in);
             HashMap<String, Tuile> tuiles = new HashMap();
-            for (Tuile t : getTuilesAcc(g, 1).values()) {
+            for (Tuile t : getTuilesAcc(g, 2).values()) {
                 if (!t.estSeche())
                     tuiles.put(t.getNom(), t);
             }
@@ -31,7 +31,8 @@ public class Ingenieur extends Aventurier {
                     if (getSeche() == 1)
                         setNbactions(getNbactions()+1);
                     setSeche(getSeche()+1);
-                    System.out.println("Tuile " + getTuilesAcc(g, 1).get(nom) + " asséchée.");
+                    tuiles.remove(getTuilesAcc(g, 2).get(nom));
+                    System.out.println("Tuile " + getTuilesAcc(g, 2).get(nom) + " asséchée.");
                 }    
             }
             setSeche(0);

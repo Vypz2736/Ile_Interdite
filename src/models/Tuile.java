@@ -67,12 +67,13 @@ public class Tuile {
 
         @Override
         public String toString() {
+            boolean e = (getAventuriers().size() != 0);
             if (estSeche())
-                return getNom() + " : sèche  ";
+                return getNom() + " : sèche   " + e;
             if (estInonde())
-                return getNom() + " : inondée";
+                return getNom() + " : inondée " + e;
             if (estMorte())
-                return getNom() + " : coulée ";
+                return getNom() + " : coulée  " + e;
             return "ERREUR";
         }
 

@@ -175,9 +175,9 @@ public class Controleur {
             Scanner sa = new Scanner(System.in);
             System.out.println(grille);
             if (j.getAventurier() instanceof Navigateur)
-                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile \n- 3 : deplacer un joueur");
+                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile\n- 3 : terminer le tour\n- 4 : deplacer un joueur");
             else
-                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile");
+                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile\n- 3 : terminer le tour");
             int action = sa.nextInt(); 
             if (action == 1) {
                 j.getAventurier().seDeplacer(grille);
@@ -185,7 +185,10 @@ public class Controleur {
             else if (action == 2) {
                 j.getAventurier().assecher(grille);
             }
-            else if (j.getAventurier() instanceof Navigateur && action == 3) {
+            else if (action == 3) {
+                j.getAventurier().setNbactions(3);
+            }
+            else if (j.getAventurier() instanceof Navigateur && action == 4) {
                 j.getAventurier().deplacer(grille);
             }
             System.out.println(grille);
