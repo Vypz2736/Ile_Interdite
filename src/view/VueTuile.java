@@ -21,6 +21,7 @@ import util.*;
 public class VueTuile extends JPanel{
 
     private Tuile t;
+    private boolean surbrillance;
     
     public VueTuile(Tuile t) {
         this.t = t;
@@ -29,7 +30,10 @@ public class VueTuile extends JPanel{
     @Override
     public void paintComponent(Graphics g) {;
         int i = 1;
-        g.drawImage(img(t).getImage(), 0, 0, getWidth(), getHeight(), this);
+        
+        g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/tuiles/morte.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, 0, getWidth(), getHeight(), this);
+        if (t != null && !t.estMorte())
+            g.drawImage(img(t).getImage(), getWidth()*1/20, getHeight()*1/20, getWidth()*9/10, getHeight()*9/10, this);
         if (t != null) {
             Graphics2D g2 = (Graphics2D) g;
             for (Aventurier a : t.getAventuriers()) {
@@ -57,21 +61,40 @@ public class VueTuile extends JPanel{
     public ImageIcon img(Tuile t) {
         String nmimg = "/img/tuiles/";
         if (t != null && t.estSeche())
-            nmimg += t.getNom() + ".png";
+            nmimg += t.getNom();
         else if (t != null && t.estInonde())
-            nmimg += t.getNom() + "i.png";
+            nmimg += t.getNom() + "i";
         //ImageIcon img = new ImageIcon(nmimg);
         else
-            nmimg += "morte.png";
+            nmimg += "morte";
+        if (getSurbrillance())
+            nmimg += "s.png";
+        else
+            nmimg += ".png";
         ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource(nmimg)).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
 //                                                                                                                largeur          hauteur         adaptation
         return img;
     }
     
-    public void maj(Tuile t) {
+    public void maj(Tuile t, boolean surbrillance) {
         this.t = t;
+        this.setSurbrillance(surbrillance);
         repaint();
         System.out.println(t);
+    }
+
+    /**
+     * @return the surbrillance
+     */
+    public boolean getSurbrillance() {
+        return surbrillance;
+    }
+
+    /**
+     * @param surbrillance the surbrillance to set
+     */
+    public void setSurbrillance(boolean surbrillance) {
+        this.surbrillance = surbrillance;
     }
     
 }

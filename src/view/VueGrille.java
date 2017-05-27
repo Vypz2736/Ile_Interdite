@@ -49,9 +49,26 @@ public class VueGrille extends JPanel {
                     panelGrille.add(tuiles[j][i]);
                 }
                 else
-                    tuiles[j][i].maj(grille.getGrille()[j][i]);
+                    tuiles[j][i].maj(grille.getGrille()[j][i],true);
             }
         }
+    }
+    
+    public void setTuilesSurbrillance(ArrayList<Tuile> tuilesacc, boolean etat) {
+        for (Tuile t : tuilesacc) {
+            tuiles[t.getLigne()][t.getColonne()].setSurbrillance(etat);
+        }
+    }
+    
+    public ArrayList<VueTuile> getTuilesSurbrillance() {
+        ArrayList<VueTuile> panels = new ArrayList();
+        for (int j = 0; j < 6; j++) {
+            for (int i = 0; i < 6; i++) {
+                if (tuiles[j][i].getSurbrillance())
+                    panels.add(tuiles[j][i]);
+            }
+        }
+        return panels;
     }
     
     public static void main(String[] args) {
