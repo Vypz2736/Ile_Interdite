@@ -69,7 +69,6 @@ public class VueTuile extends JPanel{
             nmimg += "morte";
         if (getSurbrillance()) {
             nmimg += "s.png";
-            System.out.println(surbrillance);
         }
         else
             nmimg += ".png";
@@ -82,7 +81,6 @@ public class VueTuile extends JPanel{
         this.t = t;
         this.setSurbrillance(surbrillance);
         repaint();
-        System.out.println(t);
     }
 
     /**

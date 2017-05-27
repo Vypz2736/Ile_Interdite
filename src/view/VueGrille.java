@@ -95,9 +95,16 @@ public class VueGrille extends JPanel {
                 if (j.getAventurier() instanceof Messager)
                     System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
                 while(j.getAventurier().getNbactions()<3) {
+                    ArrayList<Tuile> tuiles = new ArrayList();
+                    for (Tuile t : j.getAventurier().getTuilesAcc(c.getGrille(), 1).values()) {
+                        tuiles.add(t);
+                    }
+                    v.setTuilesSurbrillance(tuiles, true);
                     c.actionJoueur(j);
+                    v.setTuilesSurbrillance(tuiles, false);
                     v.couleur(c.getGrille());
                 }
+                j.getAventurier().setNbactions(0);
             }
         }
         
