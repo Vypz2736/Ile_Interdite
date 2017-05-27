@@ -26,7 +26,7 @@ public class Ile_Interdite {
         System.out.println(c.getGrille());
         while (1 == 1) {
             for (Joueur j : c.getJoueurs()) {
-                c.tourJoueur(j);
+                c.actionJoueur(j);
             }
         }
     }

@@ -171,37 +171,24 @@ public class Controleur {
             initGrille();
         }
         
-        public void tourJoueur(Joueur j) {
+        public void actionJoueur(Joueur j) {
             Scanner sa = new Scanner(System.in);
-            if (j.getAventurier() instanceof Pilote)
-                System.out.println("Au tour de " + j.getNom() + " (Pilote) de jouer.");
+            System.out.println(grille);
             if (j.getAventurier() instanceof Navigateur)
-                System.out.println("Au tour de " + j.getNom() + " (Navigateur) de jouer.");
-            if (j.getAventurier() instanceof Plongeur)
-                System.out.println("Au tour de " + j.getNom() + " (Plongeur) de jouer.");
-            if (j.getAventurier() instanceof Explorateur)
-                System.out.println("Au tour de " + j.getNom() + " (Explorateur) de jouer.");
-            if (j.getAventurier() instanceof Ingenieur)
-                System.out.println("Au tour de " + j.getNom() + " (Ingénieur) de jouer.");
-            if (j.getAventurier() instanceof Messager)
-                System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
-            while(j.getAventurier().getNbactions()<3) {
-                if (j.getAventurier() instanceof Navigateur)
-                    System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile \n- 3 : deplacer un joueur");
-                else
-                    System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile");
-                int action = sa.nextInt(); 
-                if (action == 1) {
-                    j.getAventurier().seDeplacer(grille);
-                }
-                else if (action == 2) {
-                    j.getAventurier().assecher(grille);
-                }
-                else if (j.getAventurier() instanceof Navigateur && action == 3) {
-                    j.getAventurier().deplacer(grille);
-                }
-                System.out.println(grille);
+                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile \n- 3 : deplacer un joueur");
+            else
+                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile");
+            int action = sa.nextInt(); 
+            if (action == 1) {
+                j.getAventurier().seDeplacer(grille);
             }
+            else if (action == 2) {
+                j.getAventurier().assecher(grille);
+            }
+            else if (j.getAventurier() instanceof Navigateur && action == 3) {
+                j.getAventurier().deplacer(grille);
+            }
+            System.out.println(grille);
             if (j.getAventurier() instanceof Pilote)
                 j.getAventurier().setHelico(false);
         }

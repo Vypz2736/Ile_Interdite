@@ -31,6 +31,7 @@ public class MainView {
         c.nouveauJoueur("Hughes");
         c.init();
         v = new VueGrille(c.getGrille());
+        window.add(v);
         window.setVisible(true);
     }
     
