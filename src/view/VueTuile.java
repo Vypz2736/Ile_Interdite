@@ -27,6 +27,7 @@ public class VueTuile extends JPanel{
         this.t = t;
         repaint();
     }
+    
     @Override
     public void paintComponent(Graphics g) {;
         int i = 1;

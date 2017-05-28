@@ -5,14 +5,10 @@
  */
 package view;
 
-import controleur.Controleur;
 import java.awt.*;
-import java.io.File;
 import java.util.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import models.*;
-import util.*;
 
 /**
  *
@@ -24,7 +20,7 @@ public class VueGrille extends JPanel {
     private final JFrame window;
     private ImageIcon image = new ImageIcon();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-    boolean init = true;
+    private boolean init = true;
     
     public VueGrille(Grille grille) {
         window = new JFrame();
@@ -69,58 +65,5 @@ public class VueGrille extends JPanel {
             }
         }
         return panels;
-    }
-    
-    public static void main(String[] args) {
-        Controleur c = new Controleur();
-        c.nouveauJoueur("Philippe");
-        c.nouveauJoueur("André");
-        c.nouveauJoueur("Gérard");
-        c.nouveauJoueur("Hughes");
-        c.init();
-        //System.out.println(c.getGrille());
-        VueGrille v = new VueGrille(c.getGrille());
-        int nbi = 0;
-        for (Tuile t : c.getAt()) {
-            if (t.estInonde()) {
-                nbi++;
-            }
-        }
-        while (1 == 1) {
-            for (Joueur j : c.getJoueurs()) {
-                if (j.getAventurier() instanceof Pilote)
-                    System.out.println("Au tour de " + j.getNom() + " (Pilote) de jouer.");
-                if (j.getAventurier() instanceof Navigateur)
-                    System.out.println("Au tour de " + j.getNom() + " (Navigateur) de jouer.");
-                if (j.getAventurier() instanceof Plongeur)
-                    System.out.println("Au tour de " + j.getNom() + " (Plongeur) de jouer.");
-                if (j.getAventurier() instanceof Explorateur)
-                    System.out.println("Au tour de " + j.getNom() + " (Explorateur) de jouer.");
-                if (j.getAventurier() instanceof Ingenieur)
-                    System.out.println("Au tour de " + j.getNom() + " (Ingénieur) de jouer.");
-                if (j.getAventurier() instanceof Messager)
-                    System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
-                while(j.getAventurier().getNbactions()<3) {
-                    ArrayList<Tuile> tuiles = new ArrayList();
-                    for (Tuile t : j.getAventurier().getTuilesAcc(c.getGrille(), 2).values()) {
-                        tuiles.add(t);
-                    }
-                    v.setTuilesSurbrillance(tuiles, true);
-                    c.actionJoueur(j);
-                    v.setTuilesSurbrillance(tuiles, false);
-                    v.couleur(c.getGrille());
-                }
-                if (j.getAventurier() instanceof Pilote)
-                    j.getAventurier().setHelico(false);
-                j.getAventurier().setNbactions(0);
-            }
-            nbi = 0;
-            for (Tuile t : c.getAt()) {
-                if (t.estInonde()) {
-                    nbi++;
-                }
-            }
-        }
-        
     }
 }
