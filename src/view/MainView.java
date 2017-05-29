@@ -63,9 +63,10 @@ public class MainView {
         window.setMaximumSize(dim);
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         v = new VueGrille(getC().getGrille());
-        mainpanel.add(v);
-        v.setSize(mainpanel.getHeight(),mainpanel.getHeight());
+        window.remove(mainpanel);
+        window.add(v);
         window.setVisible(true);
+        v.setSize(mainpanel.getHeight(),mainpanel.getHeight());
     }
 
     /**
@@ -84,47 +85,47 @@ public class MainView {
     
     public static void main(String[] args) {
         MainView m = new MainView();
-//        int nbi = 0;
-//        for (Tuile t : m.getC().getAt()) {
-//            if (t.estInonde()) {
-//                nbi++;
-//            }
-//        }
-//        while (1 == 1) {
-//            for (Joueur j : m.getC().getJoueurs()) {
-//                if (j.getAventurier() instanceof Pilote)
-//                    System.out.println("Au tour de " + j.getNom() + " (Pilote) de jouer.");
-//                if (j.getAventurier() instanceof Navigateur)
-//                    System.out.println("Au tour de " + j.getNom() + " (Navigateur) de jouer.");
-//                if (j.getAventurier() instanceof Plongeur)
-//                    System.out.println("Au tour de " + j.getNom() + " (Plongeur) de jouer.");
-//                if (j.getAventurier() instanceof Explorateur)
-//                    System.out.println("Au tour de " + j.getNom() + " (Explorateur) de jouer.");
-//                if (j.getAventurier() instanceof Ingenieur)
-//                    System.out.println("Au tour de " + j.getNom() + " (Ingénieur) de jouer.");
-//                if (j.getAventurier() instanceof Messager)
-//                    System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
-//                while(j.getAventurier().getNbactions()<3) {
-//                    ArrayList<Tuile> tuiles = new ArrayList();
-//                    for (Tuile t : j.getAventurier().getTuilesAcc(m.getC().getGrille(), 2).values()) {
-//                        tuiles.add(t);
-//                    }
-//                    m.getV().setTuilesSurbrillance(tuiles, true);
-//                    m.getC().actionJoueur(j);
-//                    m.getV().setTuilesSurbrillance(tuiles, false);
-//                    m.getV().couleur(m.getC().getGrille());
-//                }
-//                if (j.getAventurier() instanceof Pilote)
-//                    j.getAventurier().setHelico(false);
-//                j.getAventurier().setNbactions(0);
-//            }
-//            nbi = 0;
-//            for (Tuile t : m.getC().getAt()) {
-//                if (t.estInonde()) {
-//                    nbi++;
-//                }
-//            }
-//        }
+        int nbi = 0;
+        for (Tuile t : m.getC().getAt()) {
+            if (t.estInonde()) {
+                nbi++;
+            }
+        }
+        while (1 == 1) {
+            for (Joueur j : m.getC().getJoueurs()) {
+                if (j.getAventurier() instanceof Pilote)
+                    System.out.println("Au tour de " + j.getNom() + " (Pilote) de jouer.");
+                if (j.getAventurier() instanceof Navigateur)
+                    System.out.println("Au tour de " + j.getNom() + " (Navigateur) de jouer.");
+                if (j.getAventurier() instanceof Plongeur)
+                    System.out.println("Au tour de " + j.getNom() + " (Plongeur) de jouer.");
+                if (j.getAventurier() instanceof Explorateur)
+                    System.out.println("Au tour de " + j.getNom() + " (Explorateur) de jouer.");
+                if (j.getAventurier() instanceof Ingenieur)
+                    System.out.println("Au tour de " + j.getNom() + " (Ingénieur) de jouer.");
+                if (j.getAventurier() instanceof Messager)
+                    System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
+                while(j.getAventurier().getNbactions()<3) {
+                    ArrayList<Tuile> tuiles = new ArrayList();
+                    for (Tuile t : j.getAventurier().getTuilesAcc(m.getC().getGrille(), 2).values()) {
+                        tuiles.add(t);
+                    }
+                    m.getV().setTuilesSurbrillance(tuiles, true);
+                    m.getC().actionJoueur(j);
+                    m.getV().setTuilesSurbrillance(tuiles, false);
+                    m.getV().couleur(m.getC().getGrille());
+                }
+                if (j.getAventurier() instanceof Pilote)
+                    j.getAventurier().setHelico(false);
+                j.getAventurier().setNbactions(0);
+            }
+            nbi = 0;
+            for (Tuile t : m.getC().getAt()) {
+                if (t.estInonde()) {
+                    nbi++;
+                }
+            }
+        }
         
     }
     

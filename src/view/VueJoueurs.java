@@ -35,13 +35,18 @@ public class VueJoueurs extends JPanel {
     private JLabel titre;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private String strimg = new String("/img/tuiles/morte.png");
+    private JLabel info = new JLabel("Entrez 2 à 4 noms de joueur");
     
     public VueJoueurs() {
-        titre = new JLabel("Choisissez le nom des joueurs (2 à 4) :");
+        titre = new JLabel("Choisissez le nom des joueurs :");
         titre.setForeground(new Color(0,192,255));
         titre.setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/125));
         titre.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/150, 0));
         mainPanel.add(titre, BorderLayout.NORTH);
+        info.setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/140));
+        info.setForeground(new Color(0,192,255));
+        info.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300, 0));
+        mainPanel.add(info, BorderLayout.SOUTH);
         panelLabels = new JPanel(new GridLayout(3,2));
         for (int i = 0; i < 4; i++) {
             panels[i] = new JPanel(new GridLayout(1,2));
@@ -65,7 +70,6 @@ public class VueJoueurs extends JPanel {
         panelLabels.add(panels[0]);
         panelLabels.add(panels[1]);
         panelLabels.add(panels[2]);
-        panelLabels.add(panels[3]);
         panelLabels.add(panels[3]);
         panelLabels.add(panelQ);
         panelLabels.add(panelV);
@@ -94,11 +98,11 @@ public class VueJoueurs extends JPanel {
                     }
                 }
                 if (a != 0)
-                    System.out.println("Il ne peut pas y avoir 2 noms de joueur identiques");
+                    info.setText("Il ne peut pas y avoir 2 noms de joueur identiques");
                 else if (z == 0)
-                    System.out.println("Il faut au minimum 2 joueurs, vous n'avez entré aucun nom de joueur");
+                    info.setText("Il faut au minimum 2 joueurs, vous avez entré 0 nom de joueur");
                 else if (z == 1)
-                    System.out.println("Il faut au minimum 2 joueurs, vous n'avez entré qu'un nom de joueur");
+                    info.setText("Il faut au minimum 2 joueurs, vous avez entré 1 nom de joueur");
                 else
                     valider = true;
             }

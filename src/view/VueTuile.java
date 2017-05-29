@@ -5,14 +5,9 @@
  */
 package view;
 
-import controleur.Controleur;
 import java.awt.*;
-import java.io.File;
-import java.util.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import models.*;
-import util.*;
 
 /**
  *
@@ -65,7 +60,6 @@ public class VueTuile extends JPanel{
             nmimg += t.getNom();
         else if (t != null && t.estInonde())
             nmimg += t.getNom() + "i";
-        //ImageIcon img = new ImageIcon(nmimg);
         else
             nmimg += "morte";
         if (getSurbrillance()) {
