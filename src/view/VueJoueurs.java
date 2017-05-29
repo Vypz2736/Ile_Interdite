@@ -75,7 +75,7 @@ public class VueJoueurs extends JPanel {
         bQ.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("sa march pa"); //To change body of generated methods, choose Tools | Templates.
+                System.exit(0);
             }
         });
         bV.addActionListener(new ActionListener() {
