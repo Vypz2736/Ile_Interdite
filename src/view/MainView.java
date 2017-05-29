@@ -49,6 +49,7 @@ public class MainView {
         mainpanel.remove(j);
         v = new VueGrille(getC().getGrille());
         mainpanel.add(v);
+        v.setSize(mainpanel.getHeight(),mainpanel.getHeight());
         window.setVisible(true);
     }
 
