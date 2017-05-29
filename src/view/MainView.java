@@ -29,13 +29,14 @@ public class MainView {
     private Controleur c = new Controleur();
     VueJoueurs j = new VueJoueurs();
     private JPanel mainpanel;
-    private ArrayList<String> noms;
+    private ArrayList<String> noms;private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public MainView() {
         window = new JFrame();
         window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         window.setTitle("L'Île Interdite");
-        window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        window.setMinimumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));
+        window.setLocation((int)(dim.getWidth()-dim.getWidth()/2)/2, (int)(dim.getHeight()-dim.getHeight()/2)/2);
         mainpanel = new JPanel(new GridBagLayout());
         mainpanel.setSize(window.getHeight(),window.getHeight());
         mainpanel.add(j);
@@ -46,7 +47,7 @@ public class MainView {
         for (String s : noms)
             c.nouveauJoueur(s);
         c.init();
-        mainpanel.remove(j);
+        mainpanel.remove(j);window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         v = new VueGrille(getC().getGrille());
         mainpanel.add(v);
         v.setSize(mainpanel.getHeight(),mainpanel.getHeight());

@@ -32,18 +32,36 @@ public class VueJoueurs extends JPanel {
     private JButton bQ = new JButton("Quitter");
     private JButton bV = new JButton("Valider");
     private boolean valider;
+    private JLabel titre;
+    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    private String strimg = new String("/img/tuiles/morte.png");
     
     public VueJoueurs() {
+        titre = new JLabel("Choisissez le nom des joueurs (2 à 4) :");
+        titre.setForeground(new Color(0,192,255));
+        titre.setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/125));
+        titre.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/150, 0));
+        mainPanel.add(titre, BorderLayout.NORTH);
         panelLabels = new JPanel(new GridLayout(3,2));
         for (int i = 0; i < 4; i++) {
             panels[i] = new JPanel(new GridLayout(1,2));
-            labels[i] = new JLabel("Entrez le nom du joueur " + (i+1) + " : ");
+            labels[i] = new JLabel("Joueur n°" + (i+1) + " : ");
+            labels[i].setBorder(BorderFactory.createEmptyBorder(0, (int)dim.getWidth()/70, 0, (int)dim.getWidth()/70));
+            labels[i].setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/140));
+            labels[i].setForeground(new Color(0,192,255));
             texts[i] = new JTextField();
             panels[i].add(labels[i]);
             panels[i].add(texts[i]);
+            panels[i].setBackground(new Color(30,30,30));
+            panels[i].setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300));
         }
         panelQ.add(bQ, BorderLayout.CENTER);
         panelV.add(bV, BorderLayout.CENTER);
+        panelQ.setBackground(new Color(30,30,30));
+        panelV.setBackground(new Color(30,30,30));
+        panelQ.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/30, (int)dim.getWidth()/300, (int)dim.getWidth()/30));
+        panelV.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/30, (int)dim.getWidth()/300, (int)dim.getWidth()/30));
+        mainPanel.setBackground(new Color(30,30,30));
         panelLabels.add(panels[0]);
         panelLabels.add(panels[1]);
         panelLabels.add(panels[2]);
@@ -52,12 +70,12 @@ public class VueJoueurs extends JPanel {
         panelLabels.add(panelQ);
         panelLabels.add(panelV);
         mainPanel.add(panelLabels);
-        this.add(mainPanel);
+        this.add(mainPanel, BorderLayout.SOUTH);
         this.setVisible(true);
         bQ.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                throw new UnsupportedOperationException("sa march pa"); //To change body of generated methods, choose Tools | Templates.
             }
         });
         bV.addActionListener(new ActionListener() {
@@ -127,6 +145,11 @@ public class VueJoueurs extends JPanel {
         System.out.print("");
         //la methode ne fonctionne pas tant qu'on ne print pas quelque chose
         return saisie;
+    }
+    
+    @Override
+    public void paintComponent(Graphics g) {;
+        g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource(strimg)).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, 0, getWidth(), getHeight(), this);
     }
     
 }

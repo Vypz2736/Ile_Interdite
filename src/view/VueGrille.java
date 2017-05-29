@@ -25,7 +25,6 @@ public class VueGrille extends JPanel {
         panelGrille = new JPanel(new GridLayout(6,6));
         couleur(grille);
         this.add(panelGrille);
-        panelGrille.setSize(((int)panelGrille.getSize().getWidth()),(int)(panelGrille.getSize().getWidth()));
         this.setVisible(true);
         init = false;
     }
