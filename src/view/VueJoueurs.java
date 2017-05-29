@@ -46,14 +46,14 @@ public class VueJoueurs extends JPanel {
         for (int i = 0; i < 4; i++) {
             panels[i] = new JPanel(new GridLayout(1,2));
             labels[i] = new JLabel("Joueur n°" + (i+1) + " : ");
-            labels[i].setBorder(BorderFactory.createEmptyBorder(0, (int)dim.getWidth()/70, 0, (int)dim.getWidth()/70));
+            labels[i].setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
             labels[i].setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/140));
             labels[i].setForeground(new Color(0,192,255));
             texts[i] = new JTextField();
             panels[i].add(labels[i]);
             panels[i].add(texts[i]);
             panels[i].setBackground(new Color(30,30,30));
-            panels[i].setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300));
+            panels[i].setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/70, (int)dim.getWidth()/300, (int)dim.getWidth()/70));
         }
         panelQ.add(bQ, BorderLayout.CENTER);
         panelV.add(bV, BorderLayout.CENTER);

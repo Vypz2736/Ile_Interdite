@@ -27,19 +27,31 @@ public class MainView {
     private final JFrame window;
     private VueGrille v;
     private Controleur c = new Controleur();
-    VueJoueurs j = new VueJoueurs();
+    private VueJoueurs j = new VueJoueurs();
     private JPanel mainpanel;
-    private ArrayList<String> noms;private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    private JPanel saisiejoueurs;
+    private ArrayList<String> noms = new ArrayList();
+    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public MainView() {
         window = new JFrame();
         window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         window.setTitle("L'Île Interdite");
-        window.setMinimumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));
+        window.setMaximumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));window.setMinimumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));
         window.setLocation((int)(dim.getWidth()-dim.getWidth()/2)/2, (int)(dim.getHeight()-dim.getHeight()/2)/2);
         mainpanel = new JPanel(new GridBagLayout());
+        mainpanel.setBackground(new Color(35,35,35));
         mainpanel.setSize(window.getHeight(),window.getHeight());
-        mainpanel.add(j);
+        saisiejoueurs = new JPanel(new GridLayout(2,1));
+        JPanel titre = new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {;
+                g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/titre.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        saisiejoueurs.add(titre);
+        saisiejoueurs.add(j);
+        mainpanel.add(saisiejoueurs);
         window.add(mainpanel);
         window.setVisible(true);
         while (j.recupsaisie().size() == 0);
@@ -47,7 +59,9 @@ public class MainView {
         for (String s : noms)
             c.nouveauJoueur(s);
         c.init();
-        mainpanel.remove(j);window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mainpanel.remove(saisiejoueurs);
+        window.setMaximumSize(dim);
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         v = new VueGrille(getC().getGrille());
         mainpanel.add(v);
         v.setSize(mainpanel.getHeight(),mainpanel.getHeight());
