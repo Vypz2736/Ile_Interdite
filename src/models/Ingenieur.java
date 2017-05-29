@@ -12,28 +12,33 @@ public class Ingenieur extends Aventurier {
 	 * 
 	 * @param g
 	 */
+        @Override
 	public void assecher(Grille g) {
             Scanner st = new Scanner(System.in);
-            HashMap<String, Tuile> tuiles = new HashMap();
-            for (Tuile t : getTuilesAcc(g, 2).values()) {
-                if (!t.estSeche())
-                    tuiles.put(t.getNom(), t);
-            }
+            HashMap<String, Tuile> tuiles = getTuilesAcc(g, 2);
             boolean abandonner = false;
-            String nom;
-            while (getSeche() < 2 && abandonner == false) {
+            String nom = "lol";
+            int nbi = 1; 
+            while (getSeche() < 2 && abandonner == false && nbi != 0) {
                 for (Tuile t : tuiles.values()) {
-                    System.out.println("- " + t.getNom());
+                    if (t.getNom() != nom)
+                     System.out.println("- " + t.getNom());
                 }
                 nom = st.nextLine();
                 if (tuiles.get(nom) != null) {
                     tuiles.get(nom).secher();
+                    setSeche(getSeche()+1);
                     if (getSeche() == 1)
                         setNbactions(getNbactions()+1);
-                    setSeche(getSeche()+1);
-                    tuiles.remove(getTuilesAcc(g, 2).get(nom));
-                    System.out.println("Tuile " + getTuilesAcc(g, 2).get(nom) + " asséchée.");
-                }    
+                    System.out.println("Tuile " + tuiles.get(nom) + " asséchée.");
+                    tuiles.remove(tuiles.get(nom));
+                }
+                nbi = 0;
+                for (Tuile t : g.getTuiles()) {
+                    if (t != null && t.estInonde()) {
+                        nbi++;
+                    }
+                }
             }
             setSeche(0);
 	}

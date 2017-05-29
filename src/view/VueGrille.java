@@ -17,22 +17,16 @@ import models.*;
 public class VueGrille extends JPanel {
     private final VueTuile[][] tuiles = new VueTuile[6][6];
     private JPanel panelGrille;
-    private final JFrame window;
     private ImageIcon image = new ImageIcon();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean init = true;
     
     public VueGrille(Grille grille) {
-        window = new JFrame();
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        window.setTitle("Plateau");
-        window.setSize((int)(dim.getHeight()), (int)(dim.getHeight()));
-        window.setLocation(dim.width/2-window.getSize().width/2, dim.height/2-window.getSize().height/2);
         panelGrille = new JPanel(new GridLayout(6,6));
         couleur(grille);
-        window.add(panelGrille);
+        this.add(panelGrille);
         panelGrille.setSize(((int)panelGrille.getSize().getWidth()),(int)(panelGrille.getSize().getWidth()));
-        window.setVisible(true);
+        this.setVisible(true);
         init = false;
     }
     

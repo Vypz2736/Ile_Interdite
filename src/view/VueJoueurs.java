@@ -20,9 +20,8 @@ import util.*;
  *
  * @author Vypz
  */
-public class VueJoueurs {
+public class VueJoueurs extends JPanel {
 
-    private final JFrame window;
     private JPanel mainPanel = new JPanel(new BorderLayout());
     private JPanel panelLabels;
     private JPanel[] panels = new JPanel[4];
@@ -35,14 +34,10 @@ public class VueJoueurs {
     private boolean valider;
     
     public VueJoueurs() {
-        window = new JFrame();
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        window.setTitle("Entrez le nom des joueurs");
-        window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         panelLabels = new JPanel(new GridLayout(3,2));
         for (int i = 0; i < 4; i++) {
             panels[i] = new JPanel(new GridLayout(1,2));
-            labels[i] = new JLabel("Entrez le nom du joueur " + (i+1) + " :\t");
+            labels[i] = new JLabel("Entrez le nom du joueur " + (i+1) + " : ");
             texts[i] = new JTextField();
             panels[i].add(labels[i]);
             panels[i].add(texts[i]);
@@ -57,8 +52,8 @@ public class VueJoueurs {
         panelLabels.add(panelQ);
         panelLabels.add(panelV);
         mainPanel.add(panelLabels);
-        window.add(mainPanel);
-        window.setVisible(true);
+        this.add(mainPanel);
+        this.setVisible(true);
         bQ.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,7 +122,7 @@ public class VueJoueurs {
                 if (!vide(texts[i].getText()))
                     saisie.add(retirerEspaces(texts[i].getText()));    
             }
-            window.setVisible(false);
+            this.setVisible(false);
         }
         System.out.print("");
         //la methode ne fonctionne pas tant qu'on ne print pas quelque chose

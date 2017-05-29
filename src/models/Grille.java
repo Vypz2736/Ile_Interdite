@@ -48,6 +48,17 @@ public class Grille {
             }
             return grille;
         }
+        
+        public ArrayList<Tuile> getTuiles() {
+            ArrayList<Tuile> at = new ArrayList();
+            for (int j = 0; j < 6; j++) {
+                for (int i = 0; i < 6; i++) {
+                    if (this.tuiles[j][i] != null) 
+                        at.add(tuiles[j][i]);
+                }
+            }
+            return at;
+        }
 
         
 }
