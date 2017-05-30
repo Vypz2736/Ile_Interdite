@@ -99,10 +99,14 @@ public class VueJoueurs extends JPanel {
                 }
                 if (a != 0)
                     info.setText("Il ne peut pas y avoir 2 noms de joueur identiques");
-                else if (z == 0)
+                else if (z == 0) {
                     info.setText("Il faut au minimum 2 joueurs, vous avez entré 0 nom de joueur");
-                else if (z == 1)
+                    info.setForeground(new Color(255, 148, 0));
+                }
+                else if (z == 1) {
                     info.setText("Il faut au minimum 2 joueurs, vous avez entré 1 nom de joueur");
+                    info.setForeground(new Color(255, 148, 0));
+                    }
                 else
                     valider = true;
             }

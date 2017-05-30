@@ -32,6 +32,12 @@ public class MainView {
     private JPanel saisiejoueurs;
     private ArrayList<String> noms = new ArrayList();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    private VueAventurier pilote;
+    private VueAventurier navigateur;
+    private VueAventurier plongeur;
+    private VueAventurier explorateur;
+    private VueAventurier ingenieur;
+    private VueAventurier messager;
     
     public MainView() {
         window = new JFrame();
@@ -66,7 +72,6 @@ public class MainView {
         window.remove(mainpanel);
         window.add(v);
         window.setVisible(true);
-        v.setSize(mainpanel.getHeight(),mainpanel.getHeight());
     }
 
     /**
@@ -93,21 +98,21 @@ public class MainView {
         }
         while (1 == 1) {
             for (Joueur j : m.getC().getJoueurs()) {
-                if (j.getAventurier() instanceof Pilote)
-                    System.out.println("Au tour de " + j.getNom() + " (Pilote) de jouer.");
+                if (j.getAventurier() instanceof Pilote && m.getPilote() == null)
+                    m.setPilote(new VueAventurier(j));
                 if (j.getAventurier() instanceof Navigateur)
-                    System.out.println("Au tour de " + j.getNom() + " (Navigateur) de jouer.");
-                if (j.getAventurier() instanceof Plongeur)
-                    System.out.println("Au tour de " + j.getNom() + " (Plongeur) de jouer.");
-                if (j.getAventurier() instanceof Explorateur)
-                    System.out.println("Au tour de " + j.getNom() + " (Explorateur) de jouer.");
-                if (j.getAventurier() instanceof Ingenieur)
-                    System.out.println("Au tour de " + j.getNom() + " (Ingénieur) de jouer.");
-                if (j.getAventurier() instanceof Messager)
-                    System.out.println("Au tour de " + j.getNom() + " (Messager) de jouer.");
+                    m.setNavigateur(new VueAventurier(j));
+                if (j.getAventurier() instanceof Plongeur && m.getPlongeur() == null)
+                    m.setPlongeur(new VueAventurier(j));
+                if (j.getAventurier() instanceof Explorateur && m.getExplorateur() == null)
+                    m.setExplorateur(new VueAventurier(j));
+                if (j.getAventurier() instanceof Ingenieur && m.getIngenieur() == null)
+                    m.setIngenieur(new VueAventurier(j));
+                if (j.getAventurier() instanceof Messager && m.getMessager() == null)
+                    m.setMessager(new VueAventurier(j));
                 while(j.getAventurier().getNbactions()<3) {
                     ArrayList<Tuile> tuiles = new ArrayList();
-                    for (Tuile t : j.getAventurier().getTuilesAcc(m.getC().getGrille(), 2).values()) {
+                    for (Tuile t : j.getAventurier().getTuilesAcc(m.getC().getGrille(), 1).values()) {
                         tuiles.add(t);
                     }
                     m.getV().setTuilesSurbrillance(tuiles, true);
@@ -127,6 +132,90 @@ public class MainView {
             }
         }
         
+    }
+
+    /**
+     * @return the pilote
+     */
+    public VueAventurier getPilote() {
+        return pilote;
+    }
+
+    /**
+     * @return the navigateur
+     */
+    public VueAventurier getNavigateur() {
+        return navigateur;
+    }
+
+    /**
+     * @return the plongeur
+     */
+    public VueAventurier getPlongeur() {
+        return plongeur;
+    }
+
+    /**
+     * @return the explorateur
+     */
+    public VueAventurier getExplorateur() {
+        return explorateur;
+    }
+
+    /**
+     * @return the ingenieur
+     */
+    public VueAventurier getIngenieur() {
+        return ingenieur;
+    }
+
+    /**
+     * @return the messager
+     */
+    public VueAventurier getMessager() {
+        return messager;
+    }
+
+    /**
+     * @param pilote the pilote to set
+     */
+    public void setPilote(VueAventurier pilote) {
+        this.pilote = pilote;
+    }
+
+    /**
+     * @param navigateur the navigateur to set
+     */
+    public void setNavigateur(VueAventurier navigateur) {
+        this.navigateur = navigateur;
+    }
+
+    /**
+     * @param plongeur the plongeur to set
+     */
+    public void setPlongeur(VueAventurier plongeur) {
+        this.plongeur = plongeur;
+    }
+
+    /**
+     * @param explorateur the explorateur to set
+     */
+    public void setExplorateur(VueAventurier explorateur) {
+        this.explorateur = explorateur;
+    }
+
+    /**
+     * @param ingenieur the ingenieur to set
+     */
+    public void setIngenieur(VueAventurier ingenieur) {
+        this.ingenieur = ingenieur;
+    }
+
+    /**
+     * @param messager the messager to set
+     */
+    public void setMessager(VueAventurier messager) {
+        this.messager = messager;
     }
     
 }
