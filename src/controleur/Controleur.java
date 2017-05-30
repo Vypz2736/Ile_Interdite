@@ -65,61 +65,7 @@ public class Controleur {
             mainpanel.add(saisiejoueurs);
             window.add(mainpanel);
             window.setVisible(true);
-            while (j.recupsaisie().size() == 0);
-            noms = j.recupsaisie();
-            if (noms.size() != 0) {
-                for (String s : noms)
-                    nouveauJoueur(s);
-                init();
-                mainpanel.remove(saisiejoueurs);
-                window.setMaximumSize(dim);
-                window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                v = new VueGrille(getGrille(),this);
-                window.remove(mainpanel);
-                window.add(v);
-                window.setVisible(true);
-                int nbi = 0;
-                for (Tuile t : getAt()) {
-                    if (t.estInonde()) {
-                        nbi++;
-                    }
-                }
-                while (1 == 1) {
-                    for (Joueur j : getJoueurs()) {
-                        if (j.getAventurier() instanceof Pilote && pilote == null)
-                            pilote = (new VueAventurier(j));
-                        if (j.getAventurier() instanceof Navigateur && navigateur == null)
-                            navigateur = (new VueAventurier(j));
-                        if (j.getAventurier() instanceof Plongeur && plongeur == null)
-                            plongeur = (new VueAventurier(j));
-                        if (j.getAventurier() instanceof Explorateur && explorateur == null)
-                            explorateur = (new VueAventurier(j));
-                        if (j.getAventurier() instanceof Ingenieur && ingenieur == null)
-                            ingenieur = (new VueAventurier(j));
-                        if (j.getAventurier() instanceof Messager && messager == null)
-                            messager = (new VueAventurier(j));
-                        while(j.getAventurier().getNbactions()<3) {
-                            ArrayList<Tuile> tuiles = new ArrayList();
-                            for (Tuile t : j.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
-                                tuiles.add(t);
-                            }
-                            v.setTuilesSurbrillance(tuiles, true);
-                            actionJoueur(j);
-                            v.setTuilesSurbrillance(tuiles, false);
-                            v.couleur(getGrille());
-                        }
-                        if (j.getAventurier() instanceof Pilote)
-                            j.getAventurier().setHelico(false);
-                        j.getAventurier().setNbactions(0);
-                    }
-                    nbi = 0;
-                    for (Tuile t : getAt()) {
-                        if (t.estInonde()) {
-                            nbi++;
-                        }
-                    }
-                }
-            }
+            lancerPartie();
         }
 
 	public CarteTresor tirerCT() {
@@ -300,6 +246,66 @@ public class Controleur {
         public ArrayList<Joueur> getJoueurs() {
             return joueurs;
         }
+        
+        public void lancerPartie() {
+            for (String s : noms)
+                nouveauJoueur(s);
+            nouveauJoueur("jayetlan");
+            nouveauJoueur("laloule");
+            System.err.println("avantinit");
+            init();
+            System.err.println("init");
+            mainpanel.remove(saisiejoueurs);
+            window.setMaximumSize(dim);
+            window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            v = new VueGrille(getGrille(),this);
+            window.remove(mainpanel);
+            window.add(v);
+            window.setVisible(true);
+            int nbi = 0;
+            for (Tuile t : getAt()) {
+                if (t.estInonde()) {
+                    nbi++;
+                }
+            }
+            while (1 == 1) {
+            System.err.println("bouclejeu");
+                for (Joueur j : getJoueurs()) {
+                    if (j.getAventurier() instanceof Pilote && pilote == null)
+                        pilote = (new VueAventurier(j));
+                    if (j.getAventurier() instanceof Navigateur && navigateur == null)
+                        navigateur = (new VueAventurier(j));
+                    if (j.getAventurier() instanceof Plongeur && plongeur == null)
+                        plongeur = (new VueAventurier(j));
+                    if (j.getAventurier() instanceof Explorateur && explorateur == null)
+                        explorateur = (new VueAventurier(j));
+                    if (j.getAventurier() instanceof Ingenieur && ingenieur == null)
+                        ingenieur = (new VueAventurier(j));
+                    if (j.getAventurier() instanceof Messager && messager == null)
+                        messager = (new VueAventurier(j));
+                    while(j.getAventurier().getNbactions()<3) {
+                        ArrayList<Tuile> tuiles = new ArrayList();
+                        for (Tuile t : j.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
+                            tuiles.add(t);
+                        }
+                        v.setTuilesSurbrillance(tuiles, true);
+                        actionJoueur(j);
+                        v.setTuilesSurbrillance(tuiles, false);
+                        v.couleur(getGrille());
+                    }
+                    if (j.getAventurier() instanceof Pilote)
+                        j.getAventurier().setHelico(false);
+                    j.getAventurier().setNbactions(0);
+                }
+                nbi = 0;
+                for (Tuile t : getAt()) {
+                    if (t.estInonde()) {
+                        nbi++;
+                    }
+                }
+            }
+        }
 
     /**
      * @return the at
@@ -310,7 +316,9 @@ public class Controleur {
     
     public void traiterMessage(Message msg) {
         if (msg.getType() == Message.TypeMessage.SAISIEFINIE) {
-            
+            noms = j.recupsaisie();
+            System.err.println(noms);
+            lancerPartie();
         }
     }
 

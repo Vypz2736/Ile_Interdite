@@ -7,14 +7,17 @@ package view;
 
 import controleur.Controleur;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import models.*;
+import util.Message;
 
 /**
  *
  * @author Vypz
  */
-public class VueTuile extends JPanel{
+public class VueTuile extends JPanel implements ActionListener {
 
     private Tuile t;
     private boolean surbrillance = false;
@@ -30,11 +33,11 @@ public class VueTuile extends JPanel{
         int i = 1;
         
         g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/tuiles/morte.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, 0, getWidth(), getHeight(), this);
-        if (t != null && !t.estMorte())
-            g.drawImage(img(t).getImage(), getWidth()*1/20, getHeight()*1/20, getWidth()*9/10, getHeight()*9/10, this);
-        if (t != null) {
+        if (getT() != null && !t.estMorte())
+            g.drawImage(img(getT()).getImage(), getWidth()*1/20, getHeight()*1/20, getWidth()*9/10, getHeight()*9/10, this);
+        if (getT() != null) {
             Graphics2D g2 = (Graphics2D) g;
-            for (Aventurier a : t.getAventuriers()) {
+            for (Aventurier a : getT().getAventuriers()) {
                 if (a instanceof Pilote)
                     g.setColor(new Color(55,194,198));
                 if (a instanceof Navigateur)
@@ -93,5 +96,18 @@ public class VueTuile extends JPanel{
     public void setSurbrillance(boolean surbrillance) {
         this.surbrillance = surbrillance;
     }
-    
+
+    /**
+     * @return the t
+     */
+    public Tuile getT() {
+        return t;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (surbrillance)
+            c.traiterMessage(new Message(Message.TypeMessage.CASECLIQUEE,t.getLigne(),t.getColonne()));
+        System.out.println(t.getLigne() + " " + t.getColonne());
+    }
 }

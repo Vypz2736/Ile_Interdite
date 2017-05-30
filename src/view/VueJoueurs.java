@@ -109,7 +109,7 @@ public class VueJoueurs extends JPanel {
                     info.setForeground(new Color(255, 148, 0));
                     }
                 else
-                    valider = true;
+                    c.traiterMessage(new Message(Message.TypeMessage.SAISIEFINIE));
             }
         });
     }
@@ -144,15 +144,11 @@ public class VueJoueurs extends JPanel {
     
     public ArrayList<String> recupsaisie() {
         ArrayList<String> saisie = new ArrayList();
-        if (valider) {
-            for (int i = 0; i < 4; i++) {
-                if (!vide(texts[i].getText()))
-                    saisie.add(retirerEspaces(texts[i].getText()));    
-            }
-            this.setVisible(false);
+        for (int i = 0; i < 4; i++) {
+            if (!vide(texts[i].getText()))
+                saisie.add(retirerEspaces(texts[i].getText()));    
         }
-        System.out.print("");
-        //la methode ne fonctionne pas tant qu'on ne print pas quelque chose
+        this.setVisible(false);
         return saisie;
     }
     

@@ -19,9 +19,14 @@ public class Message {
     private int colonne;
     private int ligne;
     
-    public Message(TypeMessage type, int l, int c) {
+    public Message(TypeMessage t, int l, int c) {
+        type = t;
         colonne = c;
         ligne = l;
+    }
+    
+    public Message(TypeMessage t) {
+        type = t;
     }
 
     /**
