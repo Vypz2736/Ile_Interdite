@@ -5,6 +5,7 @@
  */
 package view;
 
+import controleur.Controleur;
 import java.awt.*;
 import javax.swing.*;
 import models.*;
@@ -17,8 +18,9 @@ public class VueTuile extends JPanel{
 
     private Tuile t;
     private boolean surbrillance = false;
+    private Controleur c;
     
-    public VueTuile(Tuile t) {
+    public VueTuile(Tuile t, Controleur c) {
         this.t = t;
         repaint();
     }

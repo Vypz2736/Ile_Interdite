@@ -5,6 +5,7 @@
  */
 package view;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
@@ -19,8 +20,9 @@ public class VueGrille extends JPanel {
     private ImageIcon image = new ImageIcon();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean init = true;
+    private Controleur c;
     
-    public VueGrille(Grille grille) {
+    public VueGrille(Grille grille, Controleur c) {
         this.setLayout(new GridLayout(6,6));
         couleur(grille);
         this.setVisible(true);
@@ -31,7 +33,7 @@ public class VueGrille extends JPanel {
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
                 if (init) {
-                    tuiles[j][i] = new VueTuile(grille.getGrille()[j][i]);
+                    tuiles[j][i] = new VueTuile(grille.getGrille()[j][i],c);
                     this.add(tuiles[j][i]);
                 }
                 else

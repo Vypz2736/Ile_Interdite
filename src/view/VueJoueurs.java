@@ -36,8 +36,9 @@ public class VueJoueurs extends JPanel {
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private String strimg = new String("/img/tuiles/morte.png");
     private JLabel info = new JLabel("Entrez 2 à 4 noms de joueur");
+    private Controleur c;
     
-    public VueJoueurs() {
+    public VueJoueurs(Controleur c) {
         titre = new JLabel("Choisissez le nom des joueurs :");
         titre.setForeground(new Color(0,192,255));
         titre.setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/125));

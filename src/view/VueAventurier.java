@@ -1,5 +1,6 @@
 package view;
 
+import controleur.Controleur;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -33,7 +34,8 @@ public class VueAventurier {
     private final JButton btnAutreAction;
     private final JButton btnTerminerTour;
     private final JTextField position;
-    private Color c;
+    private Controleur c;
+    private Color color;
     private String nomj;
     private String nomav;
     
@@ -43,27 +45,27 @@ public class VueAventurier {
         
         if (j.getAventurier() instanceof Pilote) {
             nomav = "Pilote";
-            c = new Color(55,194,198);
+            color = new Color(55,194,198);
         }
         if (j.getAventurier() instanceof Navigateur) {
             nomav = "Navigateur";
-            c = new Color(255, 255, 0);
+            color = new Color(255, 255, 0);
         }
         if (j.getAventurier() instanceof Plongeur) {
             nomav = "Plongeur";
-            c = new Color(204, 94, 255);
+            color = new Color(204, 94, 255);
         }  
         if (j.getAventurier() instanceof Explorateur) {
             nomav = "Explorateur";
-            c = new Color(0, 195, 0);
+            color = new Color(0, 195, 0);
         }
         if (j.getAventurier() instanceof Ingenieur) {
             nomav = "Ingénieur";
-            c = new Color(255, 0, 0);
+            color = new Color(255, 0, 0);
         }
         if (j.getAventurier() instanceof Messager) {
             nomav = "Messager";
-            c = new Color(255, 148, 0);
+            color = new Color(255, 148, 0);
         }
         
         this.window = new JFrame();
@@ -74,13 +76,13 @@ public class VueAventurier {
         this.window.add(mainPanel);
         
         mainPanel.setBackground(new Color(230, 230, 230));
-        mainPanel.setBorder(BorderFactory.createLineBorder(c, 2)) ;
+        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
 
         // =================================================================================
         // NORD : le titre = nom de l'aventurier + nom du joueur sur la couleurActive du pion
 
         this.panelAventurier = new JPanel();
-        panelAventurier.setBackground(c);
+        panelAventurier.setBackground(color);
         panelAventurier.add(new JLabel(nomav,SwingConstants.CENTER ));
         mainPanel.add(panelAventurier, BorderLayout.NORTH);
    
@@ -88,7 +90,7 @@ public class VueAventurier {
         // CENTRE : 1 ligne pour position courante
         this.panelCentre = new JPanel(new GridLayout(2, 1));
         this.panelCentre.setOpaque(false);
-        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, c));
+        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, color));
         mainPanel.add(this.panelCentre, BorderLayout.CENTER);
         
         panelCentre.add(new JLabel ("Position", SwingConstants.CENTER));
