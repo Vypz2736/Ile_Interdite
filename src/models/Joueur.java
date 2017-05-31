@@ -20,4 +20,9 @@ public class Joueur {
         public void setAventurier(Aventurier aventurier) {
             this.aventurier = aventurier;
         }
+
+        @Override
+        public String toString() {
+            return getNom();
+        }
 }

@@ -1,16 +1,8 @@
 package controleur;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.util.*;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import models.*;
 import util.*;
 import view.*;
@@ -30,8 +22,8 @@ public class Controleur {
 	private ArrayList<Tresor> tresors;
         private ArrayList<Tuile> at;
         private JFrame window = new JFrame();
-        private VueGrille v;
-        private VueJoueurs j;
+        private VueGrille vuegrille;
+        private VueJoueurs vuejoueurs;
         private JPanel mainpanel;
         private JPanel saisiejoueurs;
         private ArrayList<String> noms = new ArrayList();
@@ -44,11 +36,11 @@ public class Controleur {
         private VueAventurier messager;
 
         public Controleur() {
-            window = new JFrame();
+            window = new JFrame("Île Interdite");
             window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-            window.setTitle("L'Île Interdite");
             window.setMaximumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));window.setMinimumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));
             window.setLocation((int)(dim.getWidth()-dim.getWidth()/2)/2, (int)(dim.getHeight()-dim.getHeight()/2)/2);
+            window.setLayout(new BorderLayout());
             mainpanel = new JPanel(new GridBagLayout());
             mainpanel.setBackground(new Color(35,35,35));
             mainpanel.setSize(window.getHeight(),window.getHeight());
@@ -60,12 +52,12 @@ public class Controleur {
                 }
             };
             saisiejoueurs.add(titre);
-            j = new VueJoueurs(this);
-            saisiejoueurs.add(j);
+            vuejoueurs = new VueJoueurs(this);
+            saisiejoueurs.add(vuejoueurs);
             mainpanel.add(saisiejoueurs);
-            window.add(mainpanel);
+            window.add(mainpanel,  BorderLayout.CENTER);
             window.setVisible(true);
-            lancerPartie();
+            //lancerPartie();
         }
 
 	public CarteTresor tirerCT() {
@@ -250,61 +242,58 @@ public class Controleur {
         public void lancerPartie() {
             for (String s : noms)
                 nouveauJoueur(s);
-            nouveauJoueur("jayetlan");
-            nouveauJoueur("laloule");
-            System.err.println("avantinit");
             init();
-            System.err.println("init");
             mainpanel.remove(saisiejoueurs);
             window.setMaximumSize(dim);
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            v = new VueGrille(getGrille(),this);
             window.remove(mainpanel);
-            window.add(v);
+            window.setLayout(new BorderLayout());
+            vuegrille = new VueGrille(getGrille(),this);
+            vuegrille.setSize(new Dimension(dim.height,dim.height));
+            window.add(vuegrille,  BorderLayout.CENTER);
+            JPanel panelgauche = new JPanel(); 
+            JPanel paneldroit = new JPanel();
+            window.add(panelgauche, BorderLayout.WEST);
+            window.add(paneldroit, BorderLayout.EAST);
+            panelgauche.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
+            paneldroit.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
+            panelgauche.setBackground(new Color(35,35,35));
+            paneldroit.setBackground(new Color(35,35,35));
             window.setVisible(true);
-            int nbi = 0;
-            for (Tuile t : getAt()) {
-                if (t.estInonde()) {
-                    nbi++;
-                }
-            }
-            while (1 == 1) {
-            System.err.println("bouclejeu");
-                for (Joueur j : getJoueurs()) {
-                    if (j.getAventurier() instanceof Pilote && pilote == null)
-                        pilote = (new VueAventurier(j));
-                    if (j.getAventurier() instanceof Navigateur && navigateur == null)
-                        navigateur = (new VueAventurier(j));
-                    if (j.getAventurier() instanceof Plongeur && plongeur == null)
-                        plongeur = (new VueAventurier(j));
-                    if (j.getAventurier() instanceof Explorateur && explorateur == null)
-                        explorateur = (new VueAventurier(j));
-                    if (j.getAventurier() instanceof Ingenieur && ingenieur == null)
-                        ingenieur = (new VueAventurier(j));
-                    if (j.getAventurier() instanceof Messager && messager == null)
-                        messager = (new VueAventurier(j));
-                    while(j.getAventurier().getNbactions()<3) {
-                        ArrayList<Tuile> tuiles = new ArrayList();
-                        for (Tuile t : j.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
-                            tuiles.add(t);
-                        }
-                        v.setTuilesSurbrillance(tuiles, true);
-                        actionJoueur(j);
-                        v.setTuilesSurbrillance(tuiles, false);
-                        v.couleur(getGrille());
-                    }
-                    if (j.getAventurier() instanceof Pilote)
-                        j.getAventurier().setHelico(false);
-                    j.getAventurier().setNbactions(0);
-                }
-                nbi = 0;
-                for (Tuile t : getAt()) {
-                    if (t.estInonde()) {
-                        nbi++;
-                    }
-                }
-            }
+//            while (1 == 1) {
+//                System.err.println(joueurs);
+//                for (Joueur j : getJoueurs()) {
+//                    System.err.println("bouclejoueurs");
+//                    if (j.getAventurier() instanceof Pilote && pilote == null)
+//                        pilote = (new VueAventurier(j));
+//                    if (j.getAventurier() instanceof Navigateur && navigateur == null)
+//                        navigateur = (new VueAventurier(j));
+//                    if (j.getAventurier() instanceof Plongeur && plongeur == null)
+//                        plongeur = (new VueAventurier(j));
+//                    if (j.getAventurier() instanceof Explorateur && explorateur == null)
+//                        explorateur = (new VueAventurier(j));
+//                    if (j.getAventurier() instanceof Ingenieur && ingenieur == null)
+//                        ingenieur = (new VueAventurier(j));
+//                    if (j.getAventurier() instanceof Messager && messager == null)
+//                        messager = (new VueAventurier(j));
+//                    while(j.getAventurier().getNbactions()<3) {
+//                        System.err.println("action");
+//                        ArrayList<Tuile> ta = new ArrayList();
+//                        for (Tuile t : j.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
+//                            ta.add(t);
+//                        }
+//                        System.err.println("action");
+//                        vuegrille.setTuilesSurbrillance(ta, true);
+//                        actionJoueur(j);
+//                        vuegrille.setTuilesSurbrillance(ta, false);
+//                        vuegrille.couleur(getGrille());
+//                    }
+//                    if (j.getAventurier() instanceof Pilote)
+//                        j.getAventurier().setHelico(false);
+//                    j.getAventurier().setNbactions(0);
+//                }
+//            }
         }
 
     /**
@@ -316,7 +305,7 @@ public class Controleur {
     
     public void traiterMessage(Message msg) {
         if (msg.getType() == Message.TypeMessage.SAISIEFINIE) {
-            noms = j.recupsaisie();
+            noms = vuejoueurs.recupsaisie();
             System.err.println(noms);
             lancerPartie();
         }
