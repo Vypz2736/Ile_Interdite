@@ -9,6 +9,8 @@ import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 import models.*;
 import util.Message;
@@ -17,14 +19,22 @@ import util.Message;
  *
  * @author Vypz
  */
-public class VueTuile extends JPanel implements ActionListener {
+public class VueTuile extends JPanel {
 
     private Tuile t;
     private boolean surbrillance = false;
     private Controleur c;
     
-    public VueTuile(Tuile t, Controleur c) {
-        this.t = t;
+    public VueTuile(Tuile tuile, Controleur controleur) {
+        c = controleur;
+        t = tuile;
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (t != null && surbrillance)
+                    c.traiterMessage(new Message(Message.TypeMessage.CASECLIQUEE,t.getLigne(),t.getColonne()));
+            }
+        });
         repaint();
     }
     
@@ -102,12 +112,5 @@ public class VueTuile extends JPanel implements ActionListener {
      */
     public Tuile getT() {
         return t;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (surbrillance)
-            c.traiterMessage(new Message(Message.TypeMessage.CASECLIQUEE,t.getLigne(),t.getColonne()));
-        System.out.println(t.getLigne() + " " + t.getColonne());
     }
 }

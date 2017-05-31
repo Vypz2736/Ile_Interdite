@@ -4,6 +4,8 @@ import controleur.Controleur;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,13 +22,13 @@ import models.Messager;
 import models.Navigateur;
 import models.Pilote;
 import models.Plongeur;
+import util.Message;
 
  
-public class VueAventurier {
+public class VueAventurier extends JPanel {
      
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
-    private final JFrame window;
     private final JPanel panelAventurier;
     private final JPanel mainPanel;
     private final JButton btnAller  ;
@@ -39,9 +41,10 @@ public class VueAventurier {
     private String nomj;
     private String nomav;
     
-    public VueAventurier (Joueur j){
+    public VueAventurier (Joueur j, Controleur controleur){
 
         nomj = j.getNom();
+        c = controleur;
         
         if (j.getAventurier() instanceof Pilote) {
             nomav = "Pilote";
@@ -67,13 +70,9 @@ public class VueAventurier {
             nomav = "Messager";
             color = new Color(255, 148, 0);
         }
-        
-        this.window = new JFrame();
-        window.setSize(350, 200);
-        window.setTitle(nomj);
 
         mainPanel = new JPanel(new BorderLayout());
-        this.window.add(mainPanel);
+        this.add(mainPanel);
         
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
@@ -83,7 +82,7 @@ public class VueAventurier {
 
         this.panelAventurier = new JPanel();
         panelAventurier.setBackground(color);
-        panelAventurier.add(new JLabel(nomav,SwingConstants.CENTER ));
+        panelAventurier.add(new JLabel(nomj  + " : " + nomav,SwingConstants.CENTER ));
         mainPanel.add(panelAventurier, BorderLayout.NORTH);
    
         // =================================================================================
@@ -106,16 +105,39 @@ public class VueAventurier {
         mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
 
         this.btnAller = new JButton("Se déplacer") ;
+        btnAller.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                c.traiterMessage(new Message(Message.TypeMessage.SEDEPLACER));
+            }
+        });
         this.btnAssecher = new JButton( "Assecher");
+        btnAssecher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                c.traiterMessage(new Message(Message.TypeMessage.ASSECHER));
+            }
+        });
         this.btnAutreAction = new JButton("AutreAction") ;
+        btnAutreAction.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (nomav == "Navigateur")
+                    c.traiterMessage(new Message(Message.TypeMessage.DEPLACER));
+            }
+        });
         this.btnTerminerTour = new JButton("Terminer Tour") ;
+        btnTerminerTour.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                c.traiterMessage(new Message(Message.TypeMessage.PASSER));
+            }
+        });
         
         this.panelBoutons.add(btnAller);
         this.panelBoutons.add(btnAssecher);
         this.panelBoutons.add(btnAutreAction);
         this.panelBoutons.add(btnTerminerTour);
-
-        this.window.setVisible(true);
         mainPanel.repaint();
     }  
 

@@ -6,6 +6,7 @@ import javax.swing.*;
 import models.*;
 import util.*;
 import view.*;
+import java.math.*;
 
 public class Controleur {
 
@@ -16,14 +17,15 @@ public class Controleur {
 	private ArrayList<Joueur> joueurs = new ArrayList();
 	private ArrayList<Aventurier> aventuriers = new ArrayList();
 	private ArrayList<CarteTresor> deft = new ArrayList();
-	private ArrayList<CarteTresor> pilet = new ArrayList();
+	private java.util.Stack<CarteTresor> pilet = new Stack();
 	private ArrayList<CarteInondation> defi = new ArrayList();
-	private ArrayList<CarteInondation> pilei = new ArrayList();
+	private Stack<CarteInondation> pilei = new Stack();
 	private ArrayList<Tresor> tresors;
         private ArrayList<Tuile> at;
         private JFrame window = new JFrame();
         private VueGrille vuegrille;
         private VueJoueurs vuejoueurs;
+        private VueNiveau vueniveau;
         private JPanel mainpanel;
         private JPanel saisiejoueurs;
         private ArrayList<String> noms = new ArrayList();
@@ -34,6 +36,12 @@ public class Controleur {
         private VueAventurier explorateur;
         private VueAventurier ingenieur;
         private VueAventurier messager;
+        private Joueur joueurencours;
+        private ArrayList<Tuile> tuilesaction = new ArrayList();
+        private Message.TypeMessage action;
+        private ArrayList<Tuile> tuilesacc = new ArrayList();
+        private Tuile tuileav;
+        private JPanel panelgauche = new JPanel(),paneldroit = new JPanel();
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -218,16 +226,16 @@ public class Controleur {
                 System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile\n- 3 : terminer le tour");
             int action = sa.nextInt(); 
             if (action == 1) {
-                j.getAventurier().seDeplacer(grille);
+                j.getAventurier().seDeplacer(new Tuile("z",1),grille);
             }
             else if (action == 2) {
-                j.getAventurier().assecher(grille);
+                j.getAventurier().assecher(new ArrayList<Tuile>());
             }
             else if (action == 3) {
                 j.getAventurier().setNbactions(3);
             }
             else if (j.getAventurier() instanceof Navigateur && action == 4) {
-                j.getAventurier().deplacer(grille);
+                j.getAventurier().deplacer(new Tuile("z",1),new Tuile("z",1));
             }
             System.out.println(grille);
         }
@@ -245,15 +253,19 @@ public class Controleur {
             init();
             mainpanel.remove(saisiejoueurs);
             window.setMaximumSize(dim);
+            window.setSize(new Dimension((int)dim.getWidth()/4*3,(int)dim.getHeight()/18*11));
+            window.setLocation((int)dim.getWidth()/8*1, (int)dim.getHeight()/4);
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.remove(mainpanel);
             window.setLayout(new BorderLayout());
             vuegrille = new VueGrille(getGrille(),this);
-            vuegrille.setSize(new Dimension(dim.height,dim.height));
+            vuegrille.setPreferredSize(new Dimension(dim.height,dim.height));
             window.add(vuegrille,  BorderLayout.CENTER);
-            JPanel panelgauche = new JPanel(); 
-            JPanel paneldroit = new JPanel();
+            vueniveau = new VueNiveau(1,this);
+            paneldroit.add(vueniveau);
+            vueniveau.setBackground(new Color(35,35,35));
+            vueniveau.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
             window.add(panelgauche, BorderLayout.WEST);
             window.add(paneldroit, BorderLayout.EAST);
             panelgauche.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
@@ -261,52 +273,47 @@ public class Controleur {
             panelgauche.setBackground(new Color(35,35,35));
             paneldroit.setBackground(new Color(35,35,35));
             window.setVisible(true);
-            int nbi = 1;
-            for (Tuile t : at) {
-                    if (t.estInonde())
-                        nbi++;
+            for (Joueur j : getJoueurs()) {
+                    fenetrejoueur(j);
             }
-//            while (nbi != 0) {
-                System.err.println(joueurs);
-                for (Joueur j : getJoueurs()) {
-                    System.err.println("bouclejoueurs");
-                }
-                nbi = 0;
-                for (Tuile t : at) {
-                    if (t.estInonde())
-                        nbi++;
-                }
-//            }
+            joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
+            afficherfenetrej(joueurencours);
+            panelgauche.add(new VueAventurier(joueurencours,this));
+            System.err.println(joueurencours.getNom());
         }
+    
         
-    public  void tourjoueur (Joueur j) {
-        if (j.getAventurier() instanceof Pilote && pilote == null)
-            pilote = (new VueAventurier(j));
-        if (j.getAventurier() instanceof Navigateur && navigateur == null)
-            navigateur = (new VueAventurier(j));
-        if (j.getAventurier() instanceof Plongeur && plongeur == null)
-            plongeur = (new VueAventurier(j));
-        if (j.getAventurier() instanceof Explorateur && explorateur == null)
-            explorateur = (new VueAventurier(j));
-        if (j.getAventurier() instanceof Ingenieur && ingenieur == null)
-            ingenieur = (new VueAventurier(j));
-        if (j.getAventurier() instanceof Messager && messager == null)
-            messager = (new VueAventurier(j));
-        while(j.getAventurier().getNbactions()<3) {
-            System.err.println("action");
-            ArrayList<Tuile> ta = new ArrayList();
-            for (Tuile t : j.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
-                ta.add(t);
-            }
-            System.err.println("action");
-            vuegrille.setTuilesSurbrillance(ta, true);
-            actionJoueur(j);
-            vuegrille.setTuilesSurbrillance(ta, false);
-            vuegrille.couleur(getGrille());
+    public  void fenetrejoueur (Joueur j) {
+        if (j.getAventurier() instanceof Pilote && pilote == null) {
+            pilote = (new VueAventurier(j,this));
+            pilote.setVisible(false);
+            panelgauche.add(pilote);
         }
-        if (j.getAventurier() instanceof Pilote)
-            j.getAventurier().setHelico(false);
-        j.getAventurier().setNbactions(0);
+        if (j.getAventurier() instanceof Navigateur && navigateur == null) {
+            navigateur = (new VueAventurier(j,this));
+            navigateur.setVisible(false);
+            panelgauche.add(navigateur);
+        }
+        if (j.getAventurier() instanceof Plongeur && plongeur == null) {
+            plongeur = (new VueAventurier(j,this));
+            plongeur.setVisible(false);
+            panelgauche.add(plongeur);
+        }
+        if (j.getAventurier() instanceof Explorateur && explorateur == null) {
+            explorateur = (new VueAventurier(j,this));
+            explorateur.setVisible(false);
+            panelgauche.add(explorateur);
+        }
+        if (j.getAventurier() instanceof Ingenieur && ingenieur == null) {
+            ingenieur = (new VueAventurier(j,this));
+            ingenieur.setVisible(false);
+            panelgauche.add(ingenieur);
+        }
+        if (j.getAventurier() instanceof Messager && messager == null) {
+            messager = (new VueAventurier(j,this));
+            messager.setVisible(false);
+            panelgauche.add(messager);
+        }
     }
 
     /**
@@ -316,12 +323,144 @@ public class Controleur {
         return at;
     }
     
+    public ArrayList<Tuile> getTuilesI() {
+        ArrayList<Tuile> ti = new ArrayList();
+        for (Tuile t : at) {
+            if (t.estInonde())
+                ti.add(t);
+        }
+        return ti;
+    }
+    
     public void traiterMessage(Message msg) {
         if (msg.getType() == Message.TypeMessage.SAISIEFINIE) {
             noms = vuejoueurs.recupsaisie();
-            System.err.println(noms);
             lancerPartie();
         }
+        else
+            vuegrille.setTuilesSurbrillance(tuilesacc, false);
+        
+        if (msg.getType() == Message.TypeMessage.CASECLIQUEE) {
+            if (!(action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur))
+                tuilesaction.clear();
+            tuilesaction.add(grille.getTuile(msg.getLigne(),msg.getColonne()));
+            
+            if (action == Message.TypeMessage.SEDEPLACER) {
+                tuileav = null;
+                joueurencours.getAventurier().seDeplacer(tuilesaction.get(0), grille);
+                tuilesaction.clear();
+            }
+            
+            if (action == Message.TypeMessage.ASSECHER || (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && (tuilesaction.size() == 2 || getTuilesI().size() == 1))) {
+                tuileav = null;
+                joueurencours.getAventurier().assecher(tuilesaction);
+                tuilesaction.clear();
+            } 
+            
+            if (action == Message.TypeMessage.DEPLACER && tuileav == null) {tuileav = null;
+                tuileav = tuilesaction.get(0);
+                tuilesaction.clear();
+                for (Tuile t : joueurencours.getAventurier().getTuilesAccDeplacer(grille, tuileav).values()) {
+                tuilesacc.add(t);
+                }
+                vuegrille.setTuilesSurbrillance(tuilesacc, true);
+            }
+            
+            if (action == Message.TypeMessage.DEPLACER && tuileav != null) {
+                joueurencours.getAventurier().deplacer(tuileav, tuilesaction.get(0));
+                tuilesaction.clear();
+                tuileav = null;
+            }
+        }
+                
+        if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
+            action = msg.getType();
+            tuilesacc.clear();
+            for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
+                tuilesacc.add(t);
+            }
+            vuegrille.setTuilesSurbrillance(tuilesacc, true);
+        }
+        if (msg.getType() == Message.TypeMessage.ASSECHER) {
+            action = msg.getType();
+            tuilesacc.clear();
+            for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 2).values()) {
+                tuilesacc.add(t);
+            }
+            vuegrille.setTuilesSurbrillance(tuilesacc, true);
+        }
+        if (msg.getType() == Message.TypeMessage.DEPLACER) {
+            action = msg.getType();
+            tuilesacc.clear();
+            for (Tuile t : joueurencours.getAventurier().getTuilesAv(grille).values()) {
+                tuilesacc.add(t);
+            }
+            vuegrille.setTuilesSurbrillance(tuilesacc, true);
+        }
+        
+        if (msg.getType() == Message.TypeMessage.PASSER)
+            joueurencours.getAventurier().setNbactions(3);
+        
+        if (joueurencours.getAventurier().getNbactions() == 3)
+            fintour();
+        
+        vuegrille.couleur(getGrille());
+        
+        if (getTuilesI().isEmpty()) {
+            System.err.println("fin de la partie");
+        }
+    }
+    
+    public void cacherfenetrej(Joueur j) {
+        if (j.getAventurier() instanceof Pilote && pilote == null) {
+            pilote.setVisible(false);
+        }
+        if (j.getAventurier() instanceof Navigateur && navigateur == null) {
+            navigateur.setVisible(false);
+        }
+        if (j.getAventurier() instanceof Plongeur && plongeur == null) {
+            plongeur.setVisible(false);
+        }
+        if (j.getAventurier() instanceof Explorateur && explorateur == null) {
+            explorateur.setVisible(false);
+        }
+        if (j.getAventurier() instanceof Ingenieur && ingenieur == null) {
+            ingenieur.setVisible(false);
+        }
+        if (j.getAventurier() instanceof Messager && messager == null) {
+            messager.setVisible(false);
+        }
+    }
+    
+    public void afficherfenetrej(Joueur j) {
+        if (j.getAventurier() instanceof Pilote && pilote == null) {
+            pilote.setVisible(true);
+        }
+        if (j.getAventurier() instanceof Navigateur && navigateur == null) {
+            navigateur.setVisible(true);
+        }
+        if (j.getAventurier() instanceof Plongeur && plongeur == null) {
+            plongeur.setVisible(true);
+        }
+        if (j.getAventurier() instanceof Explorateur && explorateur == null) {
+            explorateur.setVisible(true);
+        }
+        if (j.getAventurier() instanceof Ingenieur && ingenieur == null) {
+            ingenieur.setVisible(true);
+        }
+        if (j.getAventurier() instanceof Messager && messager == null) {
+            messager.setVisible(true);
+        }
+    }
+    
+    public void fintour() {
+        if (joueurencours.getAventurier() instanceof Pilote)
+            joueurencours.getAventurier().setHelico(false);
+        cacherfenetrej(joueurencours);
+        joueurencours.getAventurier().setNbactions(0);
+        joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
+        afficherfenetrej(joueurencours);
+        System.err.println(joueurencours.getNom());
     }
 
 }

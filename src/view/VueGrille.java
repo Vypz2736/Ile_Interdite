@@ -22,7 +22,8 @@ public class VueGrille extends JPanel {
     private boolean init = true;
     private Controleur c;
     
-    public VueGrille(Grille grille, Controleur c) {
+    public VueGrille(Grille grille, Controleur controleur) {
+        c = controleur;
         this.setLayout(new GridLayout(6,6));
         couleur(grille);
         this.setVisible(true);

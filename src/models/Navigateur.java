@@ -10,29 +10,13 @@ public class Navigateur extends Aventurier {
 	 * 
 	 * @param t
 	 */
-	public void deplacer(Grille g) {
-            Scanner st = new Scanner(System.in);
-            for (Tuile t : getTuilesAv(g).values()) {
-                System.out.println("- " + t);
-            }
-            String nom = st.nextLine();
-            Tuile t1 = getTuilesAv(g).get(nom);
-            for (Tuile t : getTuilesAccDeplacer(g,t1).values()) {
-                System.out.println("- " + t);
-            }
-            nom = st.nextLine();
-            if (getTuilesAccDeplacer(g,t1).get(nom) != null) {
-                ArrayList<Aventurier> aa = new ArrayList();
+	public void deplacer(Tuile t1, Tuile t2) {
                 for (Aventurier a : t1.getAventuriers()) {
-                    aa.add(a);
-                }
-                for (Aventurier a : aa) {
-                    t1.retirerAv(a);
-                    getTuilesAccDeplacer(g,t1).get(nom).ajouterAv(a);
-                    a.setPos(getTuilesAccDeplacer(g,t1).get(nom));
-                }
-                setNbactions(getNbactions()+1);
+                t1.retirerAv(a);
+                t2.ajouterAv(a);
+                a.setPos(t2);
             }
+            setNbactions(getNbactions()+1);
 	}
         
         public HashMap<String,Tuile> getTuilesAv(Grille g) {

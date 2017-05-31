@@ -59,6 +59,10 @@ public class Grille {
             }
             return at;
         }
+        
+        public Tuile getTuile(int ligne, int colonne) {
+            return tuiles[ligne][colonne];
+        }
 
         
 }

@@ -73,40 +73,20 @@ public abstract class Aventurier {
      *
      * @param g
      */
-    public void seDeplacer(Grille g) {
-        Scanner st = new Scanner(System.in);
-        for (Tuile t : getTuilesAcc(g, 1).values()) {
-            System.out.println("- " + t);
-        }
-        String nom = st.nextLine();
-        if (getTuilesAcc(g, 1).get(nom) != null) {
-            getPos().retirerAv(this);
-            getTuilesAcc(g, 1).get(nom).ajouterAv(this);
-            setPos(getTuilesAcc(g, 1).get(nom));
-            setNbactions(getNbactions() + 1);
-        }
+    public void seDeplacer(Tuile t, Grille g) {
+        getPos().retirerAv(this);
+        t.ajouterAv(this);
+        setPos(t);
+        setNbactions(getNbactions() + 1);
     }
 
     /**
      *
      * @param g
      */
-    public void assecher(Grille g) {
-        Scanner st = new Scanner(System.in);
-        HashMap<String, Tuile> tuiles = new HashMap();
-        for (Tuile t : getTuilesAcc(g, 2).values()) {
-            if (!t.estSeche())
-                tuiles.put(t.getNom(), t);
-        }
-        for (Tuile t : tuiles.values()) {
-            System.out.println("- " + t.getNom());
-        }
-        String nom = st.nextLine();
-        if (tuiles.get(nom) != null) {
-            tuiles.get(nom).secher();
-            setNbactions(getNbactions() + 1);
-            System.out.println("Tuile " + getTuilesAcc(g, 2).get(nom) + " asséchée.");
-        }
+    public void assecher(ArrayList<Tuile> at) {
+        at.get(0).secher();
+        setNbactions(getNbactions() + 1);
     }
 
     /**
@@ -170,7 +150,7 @@ public abstract class Aventurier {
         return ta;
     }
 
-    public abstract void deplacer(Grille g);
+    public abstract void deplacer(Tuile t1, Tuile t2);
 
     /**
      * @return the helico
@@ -181,5 +161,9 @@ public abstract class Aventurier {
      * @param helico the helico to set
      */
     public abstract void setHelico(boolean helico);
+    
+    public abstract HashMap<String,Tuile> getTuilesAv(Grille g);
+    
+    public abstract HashMap<String,Tuile> getTuilesAccDeplacer(Grille g, Tuile t1);
 
 }

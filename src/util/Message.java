@@ -12,7 +12,11 @@ package util;
 public class Message {
     public enum TypeMessage {
         SAISIEFINIE,
-        CASECLIQUEE;
+        CASECLIQUEE,
+        DEPLACER,
+        SEDEPLACER,
+        ASSECHER,
+        PASSER;
     }
     
     private TypeMessage type;

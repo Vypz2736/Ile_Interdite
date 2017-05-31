@@ -13,34 +13,10 @@ public class Ingenieur extends Aventurier {
 	 * @param g
 	 */
         @Override
-	public void assecher(Grille g) {
-            Scanner st = new Scanner(System.in);
-            HashMap<String, Tuile> tuiles = getTuilesAcc(g, 2);
-            boolean abandonner = false;
-            String nom = "lol";
-            int nbi = 1; 
-            while (getSeche() < 2 && abandonner == false && nbi != 0) {
-                for (Tuile t : tuiles.values()) {
-                    if (t.getNom() != nom)
-                     System.out.println("- " + t.getNom());
-                }
-                nom = st.nextLine();
-                if (tuiles.get(nom) != null) {
-                    tuiles.get(nom).secher();
-                    setSeche(getSeche()+1);
-                    if (getSeche() == 1)
-                        setNbactions(getNbactions()+1);
-                    System.out.println("Tuile " + tuiles.get(nom) + " asséchée.");
-                    tuiles.remove(tuiles.get(nom));
-                }
-                nbi = 0;
-                for (Tuile t : g.getTuiles()) {
-                    if (t != null && t.estInonde()) {
-                        nbi++;
-                    }
-                }
-            }
-            setSeche(0);
+	public void assecher(ArrayList<Tuile> at) {
+                for (Tuile t : at)
+                    t.secher();
+            setNbactions(getNbactions()+1);
 	}
 
 	public int getSeche() {
@@ -88,7 +64,7 @@ public class Ingenieur extends Aventurier {
             return ta;
 	}
         
-        public void deplacer(Grille g) {
+        public void deplacer(Tuile t1, Tuile t2) {
             // TODO - implement Aventurier.recupTresor
             throw new UnsupportedOperationException();
         }
@@ -102,6 +78,16 @@ public class Ingenieur extends Aventurier {
          * @param helico the helico to set
          */
         public void setHelico(boolean helico) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
+        
+        public HashMap<String,Tuile> getTuilesAv(Grille g) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
+    
+        public HashMap<String,Tuile> getTuilesAccDeplacer(Grille g, Tuile t1) {
             // TODO - implement Aventurier.recupTresor
             throw new UnsupportedOperationException();
         }

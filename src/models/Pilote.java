@@ -10,8 +10,9 @@ public class Pilote extends Aventurier {
 	 * 
 	 * @param g
 	 */
-	public void seDeplacer(Grille g) {
-            super.seDeplacer(g);
+        @Override
+	public void seDeplacer(Tuile t, Grille g) {
+            super.seDeplacer(t,g);
             if (!super.getTuilesAcc(g,1).values().contains(getPosPrec())) {
                 setHelico(true);
             }
@@ -77,7 +78,17 @@ public class Pilote extends Aventurier {
             this.helico = helico;
         }
         
-        public void deplacer(Grille g) {
+        public void deplacer(Tuile t1, Tuile t2) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
+        
+        public HashMap<String,Tuile> getTuilesAv(Grille g) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
+    
+        public HashMap<String,Tuile> getTuilesAccDeplacer(Grille g, Tuile t1) {
             // TODO - implement Aventurier.recupTresor
             throw new UnsupportedOperationException();
         }
