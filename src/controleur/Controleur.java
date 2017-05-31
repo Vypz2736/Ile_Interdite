@@ -261,40 +261,53 @@ public class Controleur {
             panelgauche.setBackground(new Color(35,35,35));
             paneldroit.setBackground(new Color(35,35,35));
             window.setVisible(true);
-//            while (1 == 1) {
-//                System.err.println(joueurs);
-//                for (Joueur j : getJoueurs()) {
-//                    System.err.println("bouclejoueurs");
-//                    if (j.getAventurier() instanceof Pilote && pilote == null)
-//                        pilote = (new VueAventurier(j));
-//                    if (j.getAventurier() instanceof Navigateur && navigateur == null)
-//                        navigateur = (new VueAventurier(j));
-//                    if (j.getAventurier() instanceof Plongeur && plongeur == null)
-//                        plongeur = (new VueAventurier(j));
-//                    if (j.getAventurier() instanceof Explorateur && explorateur == null)
-//                        explorateur = (new VueAventurier(j));
-//                    if (j.getAventurier() instanceof Ingenieur && ingenieur == null)
-//                        ingenieur = (new VueAventurier(j));
-//                    if (j.getAventurier() instanceof Messager && messager == null)
-//                        messager = (new VueAventurier(j));
-//                    while(j.getAventurier().getNbactions()<3) {
-//                        System.err.println("action");
-//                        ArrayList<Tuile> ta = new ArrayList();
-//                        for (Tuile t : j.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
-//                            ta.add(t);
-//                        }
-//                        System.err.println("action");
-//                        vuegrille.setTuilesSurbrillance(ta, true);
-//                        actionJoueur(j);
-//                        vuegrille.setTuilesSurbrillance(ta, false);
-//                        vuegrille.couleur(getGrille());
-//                    }
-//                    if (j.getAventurier() instanceof Pilote)
-//                        j.getAventurier().setHelico(false);
-//                    j.getAventurier().setNbactions(0);
-//                }
+            int nbi = 1;
+            for (Tuile t : at) {
+                    if (t.estInonde())
+                        nbi++;
+            }
+//            while (nbi != 0) {
+                System.err.println(joueurs);
+                for (Joueur j : getJoueurs()) {
+                    System.err.println("bouclejoueurs");
+                }
+                nbi = 0;
+                for (Tuile t : at) {
+                    if (t.estInonde())
+                        nbi++;
+                }
 //            }
         }
+        
+    public  void tourjoueur (Joueur j) {
+        if (j.getAventurier() instanceof Pilote && pilote == null)
+            pilote = (new VueAventurier(j));
+        if (j.getAventurier() instanceof Navigateur && navigateur == null)
+            navigateur = (new VueAventurier(j));
+        if (j.getAventurier() instanceof Plongeur && plongeur == null)
+            plongeur = (new VueAventurier(j));
+        if (j.getAventurier() instanceof Explorateur && explorateur == null)
+            explorateur = (new VueAventurier(j));
+        if (j.getAventurier() instanceof Ingenieur && ingenieur == null)
+            ingenieur = (new VueAventurier(j));
+        if (j.getAventurier() instanceof Messager && messager == null)
+            messager = (new VueAventurier(j));
+        while(j.getAventurier().getNbactions()<3) {
+            System.err.println("action");
+            ArrayList<Tuile> ta = new ArrayList();
+            for (Tuile t : j.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
+                ta.add(t);
+            }
+            System.err.println("action");
+            vuegrille.setTuilesSurbrillance(ta, true);
+            actionJoueur(j);
+            vuegrille.setTuilesSurbrillance(ta, false);
+            vuegrille.couleur(getGrille());
+        }
+        if (j.getAventurier() instanceof Pilote)
+            j.getAventurier().setHelico(false);
+        j.getAventurier().setNbactions(0);
+    }
 
     /**
      * @return the at
