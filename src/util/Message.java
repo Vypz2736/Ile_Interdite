@@ -16,7 +16,9 @@ public class Message {
         DEPLACER,
         SEDEPLACER,
         ASSECHER,
-        PASSER;
+        PASSER,
+        DONNER,
+        TRESOR;
     }
     
     private TypeMessage type;

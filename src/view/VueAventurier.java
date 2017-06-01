@@ -3,6 +3,7 @@ package view;
 import controleur.Controleur;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,16 +28,15 @@ import util.Message;
  
 public class VueAventurier extends JPanel {
      
-    private final JPanel panelBoutons ;
-    private final JPanel panelCentre ;
+    private final JPanel panelBoutons;
     private final JPanel panelAventurier;
-    private final JPanel mainPanel;
     private final JButton btnAller  ;
     private final JButton btnAssecher;
-    private final JButton btnAutreAction;
+    private final JButton btndeplacer;
     private final JButton btnTerminerTour;
-    private final JTextField position;
-    private JLabel nom;
+    private final JButton btndonnercarte;
+    private final JButton btnrecuptresor;
+    private final JLabel nom;
     private Controleur c;
     private Color color;
     private String nomj;
@@ -45,6 +45,8 @@ public class VueAventurier extends JPanel {
     
     public VueAventurier (Joueur joueur, Controleur controleur){
 
+        setLayout(new BorderLayout());
+        
         j = joueur;
         nomj = j.getNom();
         c = controleur;
@@ -73,12 +75,9 @@ public class VueAventurier extends JPanel {
             nomav = "Messager";
             color = new Color(255, 148, 0);
         }
-
-        mainPanel = new JPanel(new BorderLayout());
-        this.add(mainPanel);
         
-        mainPanel.setBackground(new Color(230, 230, 230));
-        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2));
+        this.setBackground(new Color(230, 230, 230));
+        this.setBorder(BorderFactory.createLineBorder(color, 5));
 
         // =================================================================================
         // NORD : le titre = nom de l'aventurier + nom du joueur sur la couleurActive du pion
@@ -87,26 +86,11 @@ public class VueAventurier extends JPanel {
         panelAventurier.setBackground(color);
         nom = new JLabel(nomj  + " : " + nomav,SwingConstants.CENTER);
         panelAventurier.add(nom);
-        mainPanel.add(panelAventurier, BorderLayout.NORTH);
+        this.add(panelAventurier, BorderLayout.NORTH);
    
-        // =================================================================================
-        // CENTRE : 1 ligne pour position courante
-        this.panelCentre = new JPanel(new GridLayout(2, 1));
-        this.panelCentre.setOpaque(false);
-        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, color));
-        mainPanel.add(this.panelCentre, BorderLayout.CENTER);
-        
-        panelCentre.add(new JLabel ("Position", SwingConstants.CENTER));
-        position = new  JTextField(30); 
-        position.setHorizontalAlignment(CENTER);
-        panelCentre.add(position);
-
-
-        // =================================================================================
-        // SUD : les boutons
-        this.panelBoutons = new JPanel(new GridLayout(2,2));
+        this.panelBoutons = new JPanel(new GridLayout(3,2));
         this.panelBoutons.setOpaque(false);
-        mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
+        this.add(this.panelBoutons, BorderLayout.SOUTH);
 
         this.btnAller = new JButton("Se déplacer") ;
         btnAller.addActionListener(new ActionListener() {
@@ -124,8 +108,15 @@ public class VueAventurier extends JPanel {
                     c.traiterMessage(new Message(Message.TypeMessage.ASSECHER));
             }
         });
-        this.btnAutreAction = new JButton("AutreAction") ;
-        btnAutreAction.addActionListener(new ActionListener() {
+        if (nomav == "Navigateur") {
+            this.btndeplacer = new JButton("Deplacer");
+            btndeplacer.setEnabled(true);
+        }
+        else {
+            this.btndeplacer = new JButton("Autre action");
+            btndeplacer.setEnabled(false);
+        }
+        btndeplacer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (j.getAventurier().getNbactions() < 3)
@@ -133,23 +124,38 @@ public class VueAventurier extends JPanel {
                         c.traiterMessage(new Message(Message.TypeMessage.DEPLACER));
             }
         });
-        this.btnTerminerTour = new JButton("Terminer Tour") ;
+        this.btnTerminerTour = new JButton("Terminer tour") ;
         btnTerminerTour.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 c.traiterMessage(new Message(Message.TypeMessage.PASSER));
             }
         });
+        this.btndonnercarte = new JButton("Donner carte") ;
+        btndonnercarte.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (j.getAventurier().getNbactions() < 3)
+                    c.traiterMessage(new Message(Message.TypeMessage.DONNER));
+            }
+            
+        });
+        this.btnrecuptresor = new JButton("Recuperer tresor") ;
+        btndonnercarte.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (j.getAventurier().getNbactions() < 3)
+                    c.traiterMessage(new Message(Message.TypeMessage.TRESOR));
+            }
+        });
         
         this.panelBoutons.add(btnAller);
         this.panelBoutons.add(btnAssecher);
-        this.panelBoutons.add(btnAutreAction);
+        this.panelBoutons.add(btndonnercarte);
+        this.panelBoutons.add(btnrecuptresor);
+        this.panelBoutons.add(btndeplacer);
         this.panelBoutons.add(btnTerminerTour);
-        mainPanel.repaint();
-    }
-
-    public void setPosition(String pos) {
-        this.position.setText(pos);
+        this.repaint();
     }
     
     public void changerj(Joueur joueur) {
@@ -179,12 +185,20 @@ public class VueAventurier extends JPanel {
             nomav = "Messager";
             color = new Color(255, 148, 0);
         }
-        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2));
+        if (nomav == "Navigateur") {
+            btndeplacer.setText("Deplacer");
+            btndeplacer.setEnabled(true);
+        }
+        else {
+            btndeplacer.setText("Autre action");
+            btndeplacer.setEnabled(false);
+        }
+        this.setBorder(BorderFactory.createLineBorder(color, 5));
         panelAventurier.setBackground(color);
-        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, color));
         nom.setText(nomj  + " : " + nomav);
         
     }
+    
 }
 
  

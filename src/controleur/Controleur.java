@@ -37,6 +37,8 @@ public class Controleur {
         private Tuile tuileav = null;;
         private JPanel panelgauche = new JPanel(),paneldroit = new JPanel();
         private VueAventurier vuejcours;
+        private VueTourJoueurs vuetourjoueurs;
+        private JLabel textepartie;
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -60,7 +62,6 @@ public class Controleur {
             mainpanel.add(saisiejoueurs);
             window.add(mainpanel,  BorderLayout.CENTER);
             window.setVisible(true);
-            //lancerPartie();
         }
 
 	public CarteTresor tirerCT() {
@@ -70,11 +71,6 @@ public class Controleur {
 
 	public CarteInondation tirerCI() {
 		// TODO - implement Controleur.tirerCI
-		throw new UnsupportedOperationException();
-	}
-
-	public NivEau getNiv() {
-		// TODO - implement Controleur.getNiv
 		throw new UnsupportedOperationException();
 	}
         
@@ -189,21 +185,8 @@ public class Controleur {
             int i = 0;
             for (Joueur j : getJoueurs()) {
                 j.setAventurier(aventuriers.get(i));
-                if (j.getAventurier() instanceof Pilote)
-                    System.out.println(j.getNom() + " jouera le pilote.");
-                if (j.getAventurier() instanceof Navigateur)
-                    System.out.println(j.getNom() + " jouera le navigateur.");
-                if (j.getAventurier() instanceof Plongeur)
-                    System.out.println(j.getNom() + " jouera le plongeur.");
-                if (j.getAventurier() instanceof Explorateur)
-                    System.out.println(j.getNom() + " jouera l'explorateur.");
-                if (j.getAventurier() instanceof Ingenieur)
-                    System.out.println(j.getNom() + " jouera l'ingénieur.");
-                if (j.getAventurier() instanceof Messager)
-                    System.out.println(j.getNom() + " jouera le messager.");
                 i++;
             }
-            System.out.println("");
         }
         
         public void init() {
@@ -212,32 +195,6 @@ public class Controleur {
             initGrille();
         }
         
-        public void actionJoueur(Joueur j) {
-            Scanner sa = new Scanner(System.in);
-            System.out.println(grille);
-            if (j.getAventurier() instanceof Navigateur)
-                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile\n- 3 : terminer le tour\n- 4 : deplacer un joueur");
-            else
-                System.out.println("Choisissez une action parmis : \n- 1 : se deplacer \n- 2 : assecher une tuile\n- 3 : terminer le tour");
-            int action = sa.nextInt(); 
-            if (action == 1) {
-                j.getAventurier().seDeplacer(new Tuile("z",1),grille);
-            }
-            else if (action == 2) {
-                j.getAventurier().assecher(new ArrayList<Tuile>());
-            }
-            else if (action == 3) {
-                j.getAventurier().setNbactions(3);
-            }
-            else if (j.getAventurier() instanceof Navigateur && action == 4) {
-                j.getAventurier().deplacer(new Tuile("z",1),new Tuile("z",1));
-            }
-            System.out.println(grille);
-        }
-
-        /**
-         * @return the joueurs
-         */
         public ArrayList<Joueur> getJoueurs() {
             return joueurs;
         }
@@ -269,9 +226,16 @@ public class Controleur {
             paneldroit.setBackground(new Color(35,35,35));
             window.setVisible(true);
             joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
-            //afficherfenetrej(joueurencours);
+            vuetourjoueurs = new VueTourJoueurs(joueurencours, joueurs);
+            vuetourjoueurs.setPreferredSize(new Dimension((int)(dim.width-dim.height)/20*9,(int)vuetourjoueurs.getPreferredSize().getHeight()));
+            textepartie = new JLabel("Tour de " + joueurencours.getNom());
+            textepartie.setFont(new Font(textepartie.getFont().getFontName(), textepartie.getFont().getStyle(), (int)dim.getWidth()/140));
+            textepartie.setForeground(Color.white);
             vuejcours = new VueAventurier(joueurencours,this);
-            vuejcours.setBackground(new Color(35,35,35));
+            vuejcours.setPreferredSize(new Dimension((int)(dim.width-dim.height)/2,(int)vuejcours.getPreferredSize().getHeight()));
+            textepartie.setPreferredSize(new Dimension((int)(dim.width-dim.height)/20*9,(int)vuejcours.getPreferredSize().getHeight()));
+            panelgauche.add(vuetourjoueurs);
+            panelgauche.add(textepartie);
             panelgauche.add(vuejcours);
         }
 
@@ -306,12 +270,14 @@ public class Controleur {
             if (action == Message.TypeMessage.SEDEPLACER) {
                 tuileav = null;
                 joueurencours.getAventurier().seDeplacer(tuilesaction.get(0), grille);
+                textepartie.setText(joueurencours.getNom() + " se déplace de " + joueurencours.getAventurier().getPosPrec().getNom() + " vers " + tuilesaction.get(0).getNom());
                 tuilesaction.clear();
             }
             
             if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() != true) {
                 tuileav = null;
                 joueurencours.getAventurier().assecherG(tuilesaction);
+                textepartie.setText(joueurencours.getNom() + " assèche " + tuilesaction.get(0).getNom() + " sans utiliser d'action");
                 tuilesaction.clear();
                 joueurencours.getAventurier().setSeche(true);
             }
@@ -319,6 +285,7 @@ public class Controleur {
             else if (action == Message.TypeMessage.ASSECHER) {
                 tuileav = null;
                 joueurencours.getAventurier().assecher(tuilesaction);
+                textepartie.setText(joueurencours.getNom() + " assèche " + tuilesaction.get(0).getNom());
                 tuilesaction.clear();
                 if (joueurencours.getAventurier() instanceof Ingenieur) {
                     joueurencours.getAventurier().setSeche(true);
@@ -337,9 +304,11 @@ public class Controleur {
             
             else if (action == Message.TypeMessage.DEPLACER && tuileav != null) {
                 joueurencours.getAventurier().deplacer(tuileav, tuilesaction.get(0));
+                textepartie.setText(joueurencours.getNom() + " déplace le(s) joueur(s) de " + tuileav.getNom() + " vers " + tuilesaction.get(0).getNom());
                 tuilesaction.clear();
                 tuileav = null;
             }
+            textepartie.setText(textepartie.getText() + "\n Il lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
         }
                 
         if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
@@ -380,11 +349,11 @@ public class Controleur {
     public void fintour() {
         if (joueurencours.getAventurier() instanceof Pilote)
             joueurencours.getAventurier().setHelico(false);
-        //cacherfenetrej(joueurencours);
         joueurencours.getAventurier().setNbactions(0);
         joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
-        //afficherfenetrej(joueurencours);
         vuejcours.changerj(joueurencours);
+        vuetourjoueurs.fintour();
+        textepartie.setText("Tour de " + joueurencours.getNom());
     }
 
 }
