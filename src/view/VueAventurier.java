@@ -36,6 +36,7 @@ public class VueAventurier extends JPanel {
     private final JButton btnAutreAction;
     private final JButton btnTerminerTour;
     private final JTextField position;
+    private JLabel nom;
     private Controleur c;
     private Color color;
     private String nomj;
@@ -75,14 +76,15 @@ public class VueAventurier extends JPanel {
         this.add(mainPanel);
         
         mainPanel.setBackground(new Color(230, 230, 230));
-        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
+        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2));
 
         // =================================================================================
         // NORD : le titre = nom de l'aventurier + nom du joueur sur la couleurActive du pion
 
         this.panelAventurier = new JPanel();
         panelAventurier.setBackground(color);
-        panelAventurier.add(new JLabel(nomj  + " : " + nomav,SwingConstants.CENTER ));
+        nom = new JLabel(nomj  + " : " + nomav,SwingConstants.CENTER);
+        panelAventurier.add(nom);
         mainPanel.add(panelAventurier, BorderLayout.NORTH);
    
         // =================================================================================
@@ -139,26 +141,43 @@ public class VueAventurier extends JPanel {
         this.panelBoutons.add(btnAutreAction);
         this.panelBoutons.add(btnTerminerTour);
         mainPanel.repaint();
-    }  
-
-     public JButton getBtnAutreAction() {
-        return btnAutreAction;
     }
 
     public void setPosition(String pos) {
         this.position.setText(pos);
     }
-
-    public JButton getBtnAller() {
-        return btnAller;
-    }
     
-    public JButton getBtnAssecher() {
-        return btnAssecher;
-    }
-
-    public JButton getBtnTerminerTour() {
-        return btnTerminerTour;
+    public void changerj(Joueur j) {
+        nomj = j.getNom();
+        if (j.getAventurier() instanceof Pilote) {
+            nomav = "Pilote";
+            color = new Color(55,194,198);
+        }
+        if (j.getAventurier() instanceof Navigateur) {
+            nomav = "Navigateur";
+            color = new Color(255, 255, 0);
+        }
+        if (j.getAventurier() instanceof Plongeur) {
+            nomav = "Plongeur";
+            color = new Color(204, 94, 255);
+        }  
+        if (j.getAventurier() instanceof Explorateur) {
+            nomav = "Explorateur";
+            color = new Color(0, 195, 0);
+        }
+        if (j.getAventurier() instanceof Ingenieur) {
+            nomav = "Ingénieur";
+            color = new Color(255, 0, 0);
+        }
+        if (j.getAventurier() instanceof Messager) {
+            nomav = "Messager";
+            color = new Color(255, 148, 0);
+        }
+        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2));
+        panelAventurier.setBackground(color);
+        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, color));
+        nom.setText(nomj  + " : " + nomav);
+        
     }
 }
 

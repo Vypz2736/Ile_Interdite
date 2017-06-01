@@ -30,18 +30,13 @@ public class Controleur {
         private JPanel saisiejoueurs;
         private ArrayList<String> noms = new ArrayList();
         private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        private VueAventurier pilote;
-        private VueAventurier navigateur;
-        private VueAventurier plongeur;
-        private VueAventurier explorateur;
-        private VueAventurier ingenieur;
-        private VueAventurier messager;
         private Joueur joueurencours;
         private ArrayList<Tuile> tuilesaction = new ArrayList();
         private Message.TypeMessage action;
         private ArrayList<Tuile> tuilesacc = new ArrayList();
-        private Tuile tuileav;
+        private Tuile tuileav = null;;
         private JPanel panelgauche = new JPanel(),paneldroit = new JPanel();
+        private VueAventurier vuejcours;
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -273,48 +268,12 @@ public class Controleur {
             panelgauche.setBackground(new Color(35,35,35));
             paneldroit.setBackground(new Color(35,35,35));
             window.setVisible(true);
-            for (Joueur j : getJoueurs()) {
-                    fenetrejoueur(j);
-            }
             joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
-            afficherfenetrej(joueurencours);
-            panelgauche.add(new VueAventurier(joueurencours,this));
-            System.err.println(joueurencours.getNom());
+            //afficherfenetrej(joueurencours);
+            vuejcours = new VueAventurier(joueurencours,this);
+            vuejcours.setBackground(new Color(35,35,35));
+            panelgauche.add(vuejcours);
         }
-    
-        
-    public  void fenetrejoueur (Joueur j) {
-        if (j.getAventurier() instanceof Pilote && pilote == null) {
-            pilote = (new VueAventurier(j,this));
-            pilote.setVisible(false);
-            panelgauche.add(pilote);
-        }
-        if (j.getAventurier() instanceof Navigateur && navigateur == null) {
-            navigateur = (new VueAventurier(j,this));
-            navigateur.setVisible(false);
-            panelgauche.add(navigateur);
-        }
-        if (j.getAventurier() instanceof Plongeur && plongeur == null) {
-            plongeur = (new VueAventurier(j,this));
-            plongeur.setVisible(false);
-            panelgauche.add(plongeur);
-        }
-        if (j.getAventurier() instanceof Explorateur && explorateur == null) {
-            explorateur = (new VueAventurier(j,this));
-            explorateur.setVisible(false);
-            panelgauche.add(explorateur);
-        }
-        if (j.getAventurier() instanceof Ingenieur && ingenieur == null) {
-            ingenieur = (new VueAventurier(j,this));
-            ingenieur.setVisible(false);
-            panelgauche.add(ingenieur);
-        }
-        if (j.getAventurier() instanceof Messager && messager == null) {
-            messager = (new VueAventurier(j,this));
-            messager.setVisible(false);
-            panelgauche.add(messager);
-        }
-    }
 
     /**
      * @return the at
@@ -344,29 +303,43 @@ public class Controleur {
             if (!(action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur))
                 tuilesaction.clear();
             tuilesaction.add(grille.getTuile(msg.getLigne(),msg.getColonne()));
-            
+            System.err.println(tuilesaction);
             if (action == Message.TypeMessage.SEDEPLACER) {
                 tuileav = null;
                 joueurencours.getAventurier().seDeplacer(tuilesaction.get(0), grille);
                 tuilesaction.clear();
             }
             
-            if (action == Message.TypeMessage.ASSECHER || (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && (tuilesaction.size() == 2 || getTuilesI().size() == 1))) {
+            if (action == Message.TypeMessage.ASSECHER && !(joueurencours.getAventurier() instanceof Ingenieur)) {
                 tuileav = null;
                 joueurencours.getAventurier().assecher(tuilesaction);
                 tuilesaction.clear();
             } 
             
-            if (action == Message.TypeMessage.DEPLACER && tuileav == null) {tuileav = null;
+            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && (tuilesaction.size() == 1 || getTuilesI().size() != 1)) {
+                tuilesacc.remove(tuilesaction.get(0));
+                vuegrille.setTuilesSurbrillance(tuilesacc, true);
+            }
+            
+            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && (tuilesaction.size() == 2 || getTuilesI().size() == 1)) {
+                tuileav = null;
+                joueurencours.getAventurier().assecher(tuilesaction);
+                tuilesaction.clear();vuegrille.setTuilesSurbrillance(tuilesacc, false);
+            }
+            
+            if(action == Message.TypeMessage.DEPLACER && tuileav == null) {
+                System.err.println("1");
                 tuileav = tuilesaction.get(0);
                 tuilesaction.clear();
+                tuilesacc.clear();
                 for (Tuile t : joueurencours.getAventurier().getTuilesAccDeplacer(grille, tuileav).values()) {
                 tuilesacc.add(t);
                 }
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
             
-            if (action == Message.TypeMessage.DEPLACER && tuileav != null) {
+            else if (action == Message.TypeMessage.DEPLACER && tuileav != null) {
+                System.err.println("2");
                 joueurencours.getAventurier().deplacer(tuileav, tuilesaction.get(0));
                 tuilesaction.clear();
                 tuileav = null;
@@ -411,56 +384,14 @@ public class Controleur {
         }
     }
     
-    public void cacherfenetrej(Joueur j) {
-        if (j.getAventurier() instanceof Pilote && pilote == null) {
-            pilote.setVisible(false);
-        }
-        if (j.getAventurier() instanceof Navigateur && navigateur == null) {
-            navigateur.setVisible(false);
-        }
-        if (j.getAventurier() instanceof Plongeur && plongeur == null) {
-            plongeur.setVisible(false);
-        }
-        if (j.getAventurier() instanceof Explorateur && explorateur == null) {
-            explorateur.setVisible(false);
-        }
-        if (j.getAventurier() instanceof Ingenieur && ingenieur == null) {
-            ingenieur.setVisible(false);
-        }
-        if (j.getAventurier() instanceof Messager && messager == null) {
-            messager.setVisible(false);
-        }
-    }
-    
-    public void afficherfenetrej(Joueur j) {
-        if (j.getAventurier() instanceof Pilote && pilote == null) {
-            pilote.setVisible(true);
-        }
-        if (j.getAventurier() instanceof Navigateur && navigateur == null) {
-            navigateur.setVisible(true);
-        }
-        if (j.getAventurier() instanceof Plongeur && plongeur == null) {
-            plongeur.setVisible(true);
-        }
-        if (j.getAventurier() instanceof Explorateur && explorateur == null) {
-            explorateur.setVisible(true);
-        }
-        if (j.getAventurier() instanceof Ingenieur && ingenieur == null) {
-            ingenieur.setVisible(true);
-        }
-        if (j.getAventurier() instanceof Messager && messager == null) {
-            messager.setVisible(true);
-        }
-    }
-    
     public void fintour() {
         if (joueurencours.getAventurier() instanceof Pilote)
             joueurencours.getAventurier().setHelico(false);
-        cacherfenetrej(joueurencours);
+        //cacherfenetrej(joueurencours);
         joueurencours.getAventurier().setNbactions(0);
         joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
-        afficherfenetrej(joueurencours);
-        System.err.println(joueurencours.getNom());
+        //afficherfenetrej(joueurencours);
+        vuejcours.changerj(joueurencours);
     }
 
 }

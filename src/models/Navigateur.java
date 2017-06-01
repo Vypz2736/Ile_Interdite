@@ -11,7 +11,11 @@ public class Navigateur extends Aventurier {
 	 * @param t
 	 */
 	public void deplacer(Tuile t1, Tuile t2) {
-                for (Aventurier a : t1.getAventuriers()) {
+            ArrayList<Aventurier> av = new ArrayList();
+            for (Aventurier a : t1.getAventuriers()) {
+                av.add(a);
+            }
+            for (Aventurier a : av) {
                 t1.retirerAv(a);
                 t2.ajouterAv(a);
                 a.setPos(t2);
