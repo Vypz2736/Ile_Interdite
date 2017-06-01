@@ -166,4 +166,10 @@ public abstract class Aventurier {
     
     public abstract HashMap<String,Tuile> getTuilesAccDeplacer(Grille g, Tuile t1);
 
+    public abstract boolean getSeche();
+
+    public abstract void setSeche(boolean seche);
+        
+    public abstract void assecherG(ArrayList<Tuile> at);
+
 }

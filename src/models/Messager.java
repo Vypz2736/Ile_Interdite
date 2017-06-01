@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Messager extends Aventurier {
@@ -33,6 +34,21 @@ public class Messager extends Aventurier {
         }
     
         public HashMap<String,Tuile> getTuilesAccDeplacer(Grille g, Tuile t1) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
+
+	public boolean getSeche() {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+	}
+        
+	public void setSeche(boolean seche) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+	}
+        
+        public void assecherG(ArrayList<Tuile> at) {
             // TODO - implement Aventurier.recupTresor
             throw new UnsupportedOperationException();
         }

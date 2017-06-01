@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Ingenieur extends Aventurier {
 
-	private int seche;
+	private boolean seche;
 
 	/**
 	 * 
@@ -19,15 +19,11 @@ public class Ingenieur extends Aventurier {
             setNbactions(getNbactions()+1);
 	}
 
-	public int getSeche() {
+	public boolean getSeche() {
             return this.seche;
 	}
-
-	/**
-	 * 
-	 * @param seche
-	 */
-	public void setSeche(int seche) {
+        
+	public void setSeche(boolean seche) {
             this.seche = seche;
 	}
 
@@ -63,6 +59,10 @@ public class Ingenieur extends Aventurier {
             }
             return ta;
 	}
+        
+        public void assecherG(ArrayList<Tuile> at) {
+        at.get(0).secher();
+        }
         
         public void deplacer(Tuile t1, Tuile t2) {
             // TODO - implement Aventurier.recupTresor

@@ -93,4 +93,19 @@ public class Pilote extends Aventurier {
             throw new UnsupportedOperationException();
         }
 
+	public boolean getSeche() {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+	}
+        
+	public void setSeche(boolean seche) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+	}
+        
+        public void assecherG(ArrayList<Tuile> at) {
+            // TODO - implement Aventurier.recupTresor
+            throw new UnsupportedOperationException();
+        }
+
 }

@@ -303,32 +303,29 @@ public class Controleur {
             if (!(action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur))
                 tuilesaction.clear();
             tuilesaction.add(grille.getTuile(msg.getLigne(),msg.getColonne()));
-            System.err.println(tuilesaction);
             if (action == Message.TypeMessage.SEDEPLACER) {
                 tuileav = null;
                 joueurencours.getAventurier().seDeplacer(tuilesaction.get(0), grille);
                 tuilesaction.clear();
             }
             
-            if (action == Message.TypeMessage.ASSECHER && !(joueurencours.getAventurier() instanceof Ingenieur)) {
+            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() != true) {
+                tuileav = null;
+                joueurencours.getAventurier().assecherG(tuilesaction);
+                tuilesaction.clear();
+                joueurencours.getAventurier().setSeche(true);
+            }
+            
+            else if (action == Message.TypeMessage.ASSECHER) {
                 tuileav = null;
                 joueurencours.getAventurier().assecher(tuilesaction);
                 tuilesaction.clear();
-            } 
-            
-            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && (tuilesaction.size() == 1 || getTuilesI().size() != 1)) {
-                tuilesacc.remove(tuilesaction.get(0));
-                vuegrille.setTuilesSurbrillance(tuilesacc, true);
-            }
-            
-            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && (tuilesaction.size() == 2 || getTuilesI().size() == 1)) {
-                tuileav = null;
-                joueurencours.getAventurier().assecher(tuilesaction);
-                tuilesaction.clear();vuegrille.setTuilesSurbrillance(tuilesacc, false);
+                if (joueurencours.getAventurier() instanceof Ingenieur) {
+                    joueurencours.getAventurier().setSeche(true);
+                }
             }
             
             if(action == Message.TypeMessage.DEPLACER && tuileav == null) {
-                System.err.println("1");
                 tuileav = tuilesaction.get(0);
                 tuilesaction.clear();
                 tuilesacc.clear();
@@ -339,7 +336,6 @@ public class Controleur {
             }
             
             else if (action == Message.TypeMessage.DEPLACER && tuileav != null) {
-                System.err.println("2");
                 joueurencours.getAventurier().deplacer(tuileav, tuilesaction.get(0));
                 tuilesaction.clear();
                 tuileav = null;
@@ -372,9 +368,6 @@ public class Controleur {
         }
         
         if (msg.getType() == Message.TypeMessage.PASSER)
-            joueurencours.getAventurier().setNbactions(3);
-        
-        if (joueurencours.getAventurier().getNbactions() == 3)
             fintour();
         
         vuegrille.couleur(getGrille());

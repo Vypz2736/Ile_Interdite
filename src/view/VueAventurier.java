@@ -41,9 +41,11 @@ public class VueAventurier extends JPanel {
     private Color color;
     private String nomj;
     private String nomav;
+    private Joueur j;
     
-    public VueAventurier (Joueur j, Controleur controleur){
+    public VueAventurier (Joueur joueur, Controleur controleur){
 
+        j = joueur;
         nomj = j.getNom();
         c = controleur;
         
@@ -110,22 +112,25 @@ public class VueAventurier extends JPanel {
         btnAller.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                c.traiterMessage(new Message(Message.TypeMessage.SEDEPLACER));
+                if (j.getAventurier().getNbactions() < 3)
+                    c.traiterMessage(new Message(Message.TypeMessage.SEDEPLACER));
             }
         });
         this.btnAssecher = new JButton( "Assecher");
         btnAssecher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                c.traiterMessage(new Message(Message.TypeMessage.ASSECHER));
+                if (j.getAventurier().getNbactions() < 3 || (nomav == "Ingénieur" && j.getAventurier().getSeche()))
+                    c.traiterMessage(new Message(Message.TypeMessage.ASSECHER));
             }
         });
         this.btnAutreAction = new JButton("AutreAction") ;
         btnAutreAction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (nomav == "Navigateur")
-                    c.traiterMessage(new Message(Message.TypeMessage.DEPLACER));
+                if (j.getAventurier().getNbactions() < 3)
+                    if (nomav == "Navigateur")
+                        c.traiterMessage(new Message(Message.TypeMessage.DEPLACER));
             }
         });
         this.btnTerminerTour = new JButton("Terminer Tour") ;
@@ -147,7 +152,8 @@ public class VueAventurier extends JPanel {
         this.position.setText(pos);
     }
     
-    public void changerj(Joueur j) {
+    public void changerj(Joueur joueur) {
+        j = joueur;
         nomj = j.getNom();
         if (j.getAventurier() instanceof Pilote) {
             nomav = "Pilote";
