@@ -20,7 +20,7 @@ public class Controleur {
 	private java.util.Stack<CarteTresor> pilet = new Stack();
 	private ArrayList<CarteInondation> defi = new ArrayList();
 	private Stack<CarteInondation> pilei = new Stack();
-	private ArrayList<Tresor> tresors;
+	private ArrayList<Tresor> tresors = new ArrayList();
         private ArrayList<Tuile> at;
         private JFrame window = new JFrame();
         private VueGrille vuegrille;
@@ -38,7 +38,7 @@ public class Controleur {
         private JPanel panelgauche = new JPanel(),paneldroit = new JPanel();
         private VueAventurier vuejcours;
         private VueTourJoueurs vuetourjoueurs;
-        private JLabel textepartie;
+        private JTextArea textepartie;
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -228,11 +228,15 @@ public class Controleur {
             joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
             vuetourjoueurs = new VueTourJoueurs(joueurencours, joueurs);
             vuetourjoueurs.setPreferredSize(new Dimension((int)(dim.width-dim.height)/20*9,(int)vuetourjoueurs.getPreferredSize().getHeight()));
-            textepartie = new JLabel("Tour de " + joueurencours.getNom());
+            textepartie = new JTextArea("Au tour de " + joueurencours.getNom() + " de jouer");
+            textepartie.setEditable(false);
             textepartie.setFont(new Font(textepartie.getFont().getFontName(), textepartie.getFont().getStyle(), (int)dim.getWidth()/140));
             textepartie.setForeground(Color.white);
+            textepartie.setBackground(new Color(35,35,35));
+            textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, 0, 0, 0));
             vuejcours = new VueAventurier(joueurencours,this);
             vuejcours.setPreferredSize(new Dimension((int)(dim.width-dim.height)/2,(int)vuejcours.getPreferredSize().getHeight()));
+            vuejcours.verifboutons(tresors, grille);
             textepartie.setPreferredSize(new Dimension((int)(dim.width-dim.height)/20*9,(int)vuejcours.getPreferredSize().getHeight()));
             panelgauche.add(vuetourjoueurs);
             panelgauche.add(textepartie);
@@ -274,12 +278,12 @@ public class Controleur {
                 tuilesaction.clear();
             }
             
-            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() != true) {
+            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() == true) {
                 tuileav = null;
                 joueurencours.getAventurier().assecherG(tuilesaction);
                 textepartie.setText(joueurencours.getNom() + " assèche " + tuilesaction.get(0).getNom() + " sans utiliser d'action");
                 tuilesaction.clear();
-                joueurencours.getAventurier().setSeche(true);
+                joueurencours.getAventurier().setSeche(false);
             }
             
             else if (action == Message.TypeMessage.ASSECHER) {
@@ -308,7 +312,9 @@ public class Controleur {
                 tuilesaction.clear();
                 tuileav = null;
             }
-            textepartie.setText(textepartie.getText() + "\n Il lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
+            textepartie.setText(textepartie.getText() + "\nIl lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
+            if (joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() && (joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty()))
+                textepartie.setText(textepartie.getText() + "\nMais il peut encore assécher une tuile sans utiliser d'action");
         }
                 
         if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
@@ -344,6 +350,9 @@ public class Controleur {
         if (getTuilesI().isEmpty()) {
             System.err.println("fin de la partie");
         }
+        
+        vuejcours.verifboutons(tresors, grille);
+        
     }
     
     public void fintour() {
@@ -353,7 +362,7 @@ public class Controleur {
         joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
-        textepartie.setText("Tour de " + joueurencours.getNom());
+        textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
     }
 
 }

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,13 +18,16 @@ import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 import models.Explorateur;
+import models.Grille;
 import models.Ingenieur;
 import models.Joueur;
 import models.Messager;
 import models.Navigateur;
 import models.Pilote;
 import models.Plongeur;
+import models.Tuile;
 import util.Message;
+import util.Tresor;
 
  
 public class VueAventurier extends JPanel {
@@ -96,16 +100,14 @@ public class VueAventurier extends JPanel {
         btnAller.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (j.getAventurier().getNbactions() < 3)
-                    c.traiterMessage(new Message(Message.TypeMessage.SEDEPLACER));
+                c.traiterMessage(new Message(Message.TypeMessage.SEDEPLACER));
             }
         });
         this.btnAssecher = new JButton( "Assecher");
         btnAssecher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (j.getAventurier().getNbactions() < 3 || (nomav == "Ingénieur" && j.getAventurier().getSeche()))
-                    c.traiterMessage(new Message(Message.TypeMessage.ASSECHER));
+                c.traiterMessage(new Message(Message.TypeMessage.ASSECHER));
             }
         });
         if (nomav == "Navigateur") {
@@ -119,9 +121,7 @@ public class VueAventurier extends JPanel {
         btndeplacer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (j.getAventurier().getNbactions() < 3)
-                    if (nomav == "Navigateur")
-                        c.traiterMessage(new Message(Message.TypeMessage.DEPLACER));
+                c.traiterMessage(new Message(Message.TypeMessage.DEPLACER));
             }
         });
         this.btnTerminerTour = new JButton("Terminer tour") ;
@@ -135,17 +135,15 @@ public class VueAventurier extends JPanel {
         btndonnercarte.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (j.getAventurier().getNbactions() < 3)
-                    c.traiterMessage(new Message(Message.TypeMessage.DONNER));
+                c.traiterMessage(new Message(Message.TypeMessage.DONNER));
             }
             
         });
-        this.btnrecuptresor = new JButton("Recuperer tresor") ;
+        this.btnrecuptresor = new JButton("Récupérer tresor") ;
         btndonnercarte.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (j.getAventurier().getNbactions() < 3)
-                    c.traiterMessage(new Message(Message.TypeMessage.TRESOR));
+                c.traiterMessage(new Message(Message.TypeMessage.TRESOR));
             }
         });
         
@@ -199,6 +197,44 @@ public class VueAventurier extends JPanel {
         
     }
     
+    public void tresor(ArrayList<Tresor> at) {
+        if (j.getAventurier().getPos().getTresor() != null && !at.contains(j.getAventurier().getPos().getTresor()) && j.getAventurier().getNbactions() < 3)
+            btnrecuptresor.setEnabled(true);
+        else
+            btnrecuptresor.setEnabled(false);
+    }
+    
+    public void donner() {
+        if (j.getAventurier().getPos().getAventuriers().size() > 1 && !j.getAventurier().getCartes().isEmpty() && j.getAventurier().getNbactions() < 3)
+            btndonnercarte.setEnabled(true);
+        else
+            btndonnercarte.setEnabled(false);
+    }
+
+    public void assecher(Grille g) {
+        if (!j.getAventurier().getTuilesAcc(g, 2).isEmpty() && ((j.getAventurier().getNbactions() < 3 || (nomav == "Ingénieur" && j.getAventurier().getSeche()))))
+            btnAssecher.setEnabled(true);
+        else
+            btnAssecher.setEnabled(false);
+    }
+    
+    public void deplacer() {
+        if (j.getAventurier().getNbactions() < 3) {
+            btndeplacer.setEnabled(true);
+            btnAller.setEnabled(true);
+        }
+        else {
+            btndeplacer.setEnabled(false);
+            btnAller.setEnabled(false);
+        }
+    }
+    
+    public void verifboutons(ArrayList<Tresor> at, Grille g) {
+        tresor(at);
+        donner();
+        assecher(g);
+        deplacer();
+    }
 }
 
  
