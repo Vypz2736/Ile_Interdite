@@ -13,7 +13,6 @@ public class Controleur {
 	private NivEau nivEau;
 	private Grille grille;
 	private VueAventurier vueAventurier;
-	private VueGrille vueGrille;
 	private ArrayList<Joueur> joueurs = new ArrayList();
 	private ArrayList<Aventurier> aventuriers = new ArrayList();
 	private ArrayList<CarteTresor> deft = new ArrayList();
@@ -34,7 +33,7 @@ public class Controleur {
         private ArrayList<Tuile> tuilesaction = new ArrayList();
         private Message.TypeMessage action;
         private ArrayList<Tuile> tuilesacc = new ArrayList();
-        private Tuile tuileav = null;;
+        private Tuile tuileav = null;
         private JPanel panelgauche = new JPanel(),paneldroit = new JPanel();
         private VueAventurier vuejcours;
         private VueTourJoueurs vuetourjoueurs;
