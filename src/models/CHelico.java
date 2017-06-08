@@ -5,6 +5,7 @@
  */
 package models;
 
-public class CHelico {
-    
+public class CHelico extends Carte{
+    public CHelico() {
+    }   
 }
