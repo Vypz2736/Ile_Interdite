@@ -1,6 +1,5 @@
 package controleur;
 
-import models.CHelico;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
