@@ -15,8 +15,8 @@ public class Controleur {
 	private VueAventurier vueAventurier;
 	private ArrayList<Joueur> joueurs = new ArrayList();
 	private ArrayList<Aventurier> aventuriers = new ArrayList();
-	private ArrayList<CarteTresor> deft = new ArrayList();
-	private java.util.Stack<CarteTresor> pilet = new Stack();
+	private ArrayList<Carte> deft = new ArrayList();
+	private Stack<Carte> pilet = new Stack();
 	private ArrayList<CarteInondation> defi = new ArrayList();
 	private Stack<CarteInondation> pilei = new Stack();
 	private ArrayList<Tresor> tresors = new ArrayList();
@@ -62,8 +62,38 @@ public class Controleur {
             window.add(mainpanel,  BorderLayout.CENTER);
             window.setVisible(true);
         }
+        
+        public void initCartes() {
+            for (int i = 0; i < 5; i++) {
+                deft.add(new CTresor(Tresor.Calice));
+                deft.add(new CTresor(Tresor.Cristal));
+                deft.add(new CTresor(Tresor.Pierre));
+                deft.add(new CTresor(Tresor.Statue));
+                if (i < 1) {
+                    if (i > 3)
+                        deft.add(new CSacSable());
+                    deft.add(new CHelico());
+                    deft.add(new CNiveauEau());
+                }
+            }
+            
+            for (Tuile t : at) {
+                defi.add(new CarteInondation(t));
+            }
+            
+            Collections.shuffle(deft);
+            Collections.shuffle(defi);
+            for (Carte c : deft) {
+                pilet.add(c);
+            }
+            deft.clear();
+            for (CarteInondation c : defi) {
+                pilei.add(c);
+            }
+            defi.clear();
+        }
 
-	public CarteTresor tirerCT() {
+	public Carte tirerCT() {
 		// TODO - implement Controleur.tirerCT
 		throw new UnsupportedOperationException();
 	}
@@ -192,6 +222,7 @@ public class Controleur {
             initAventuriers();
             initJoueurs();
             initGrille();
+            initCartes();
         }
         
         public ArrayList<Joueur> getJoueurs() {

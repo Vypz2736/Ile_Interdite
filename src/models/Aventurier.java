@@ -1,11 +1,12 @@
 package models;
 
+import models.*;
 import java.util.*;
 import util.*;
 
 public abstract class Aventurier {
 
-    ArrayList<CarteTresor> cartes = new ArrayList();
+    ArrayList<Carte> cartes = new ArrayList();
     Tuile emplacement;
     Tuile empPrec;
     private int nbactions = 0;
@@ -15,7 +16,7 @@ public abstract class Aventurier {
      *
      * @param c
      */
-    public void utiliserCarte(CarteTresor c) {
+    public void utiliserCarte(Carte c) {
         // TODO - implement Aventurier.utiliserCarte
         throw new UnsupportedOperationException();
     }
@@ -36,11 +37,11 @@ public abstract class Aventurier {
      *
      * @param c
      */
-    public void jetercarte(CarteTresor c) {
+    public void jetercarte(Carte c) {
         cartes.remove(c);
     }
 
-    public ArrayList<CarteTresor> getCartes() {
+    public ArrayList<Carte> getCartes() {
         return cartes;
     }
 
@@ -48,7 +49,7 @@ public abstract class Aventurier {
      *
      * @param c
      */
-    public void ajouterCarte(CarteTresor c) {
+    public void ajouterCarte(Carte c) {
         cartes.add(c);
     }
 

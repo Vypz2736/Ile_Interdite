@@ -1,4 +1,4 @@
 package models;
 
-public class CNiveauEau extends CarteTresor {
+public class CNiveauEau extends Carte {    
 }
