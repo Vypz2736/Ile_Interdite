@@ -220,7 +220,8 @@ public class VueAventurier extends JPanel {
     
     public void deplacer() {
         if (j.getAventurier().getNbactions() < 3) {
-            btndeplacer.setEnabled(true);
+            if (j.getAventurier() instanceof Navigateur)
+               btndeplacer.setEnabled(true);
             btnAller.setEnabled(true);
         }
         else {

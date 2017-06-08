@@ -72,7 +72,7 @@ public class Controleur {
                 if (i < 1) {
                     if (i > 3)
                         deft.add(new CSacSable());
-                    deft.add(new CHelico());
+                    //deft.add(new CHelico());
                     deft.add(new CNiveauEau());
                 }
             }
@@ -91,6 +91,10 @@ public class Controleur {
                 pilei.add(c);
             }
             defi.clear();
+            for (int i = 0; i < 6; i++) {
+                defi.add(pilei.pop());
+                defi.get(defi.size()-1).getTuile().inonder();
+            }
         }
 
 	public Carte tirerCT() {
@@ -111,7 +115,7 @@ public class Controleur {
             int i;
             at = new ArrayList();
             getAt().add(new Tuile("LePontdesabimes",0));
-            getAt().add(new Tuile("LaPortedebronze",1));
+            getAt().add(new Tuile("LaPortedebronze",0));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Ingenieur) {
@@ -150,7 +154,7 @@ public class Controleur {
                     j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            getAt().add(new Tuile("LesDunesdelillusion",2));
+            getAt().add(new Tuile("LesDunesdelillusion",0));
             getAt().add(new Tuile("Heliport",0));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
@@ -171,17 +175,17 @@ public class Controleur {
             i = getAt().size()-1;
             getAt().get(i).setTresor(Tresor.Statue);
             getAt().add(new Tuile("LaForetpourpre",0));
-            getAt().add(new Tuile("LeLagonperdu",1));
-            getAt().add(new Tuile("LeMaraisbrumeux",2));
-            getAt().add(new Tuile("Observatoire",1));
-            getAt().add(new Tuile("LeRocherfantome",2));
-            getAt().add(new Tuile("LaCavernedubrasier",1));
+            getAt().add(new Tuile("LeLagonperdu",0));
+            getAt().add(new Tuile("LeMaraisbrumeux",0));
+            getAt().add(new Tuile("Observatoire",0));
+            getAt().add(new Tuile("LeRocherfantome",0));
+            getAt().add(new Tuile("LaCavernedubrasier",0));
             i = getAt().size()-1;
             getAt().get(i).setTresor(Tresor.Cristal);
             getAt().add(new Tuile("LeTempledusoleil",0));
             i = getAt().size()-1;
             getAt().get(i).setTresor(Tresor.Pierre);
-            getAt().add(new Tuile("LeTempledelalune",2));
+            getAt().add(new Tuile("LeTempledelalune",0));
             i = getAt().size()-1;
             getAt().get(i).setTresor(Tresor.Pierre);
             getAt().add(new Tuile("LePalaisdesmarees",0));
@@ -189,10 +193,10 @@ public class Controleur {
             getAt().get(i).setTresor(Tresor.Calice);
             getAt().add(new Tuile("LeValducrepuscule",0));
             getAt().add(new Tuile("LaTourdeguet",0));
-            getAt().add(new Tuile("LeJardindesmurmures",1));
+            getAt().add(new Tuile("LeJardindesmurmures",0));
             i = getAt().size()-1;
             getAt().get(i).setTresor(Tresor.Statue);
-            //Collections.shuffle(at);
+            Collections.shuffle(at);
             grille = new Grille(getAt());
         }
         
