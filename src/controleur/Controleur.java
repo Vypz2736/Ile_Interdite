@@ -10,7 +10,7 @@ import java.math.*;
 
 public class Controleur {
 
-	private NivEau nivEau;
+	private NivEau nivEau = new NivEau(3);
 	private Grille grille;
 	private VueAventurier vueAventurier;
 	private ArrayList<Joueur> joueurs = new ArrayList();
@@ -72,7 +72,7 @@ public class Controleur {
                 if (i < 1) {
                     if (i > 3)
                         deft.add(new CSacSable());
-                    deft.add(new CHelico());
+                    //deft.add(new CHelico());
                     deft.add(new CNiveauEau());
                 }
             }
@@ -97,15 +97,30 @@ public class Controleur {
             }
         }
 
-	public Carte tirerCT() {
-		// TODO - implement Controleur.tirerCT
-		throw new UnsupportedOperationException();
+	public ArrayList<Carte> tirerCT() {
+            ArrayList<Carte> ac = new ArrayList();
+            ac.add(pilet.pop());
+            ac.add(pilet.pop());
+            for (int i = 0; i < 2; i++) {
+                if (ac.get(0) instanceof CNiveauEau) {
+                    ac.remove(ac.get(0));
+                    Collections.shuffle(defi);
+                    for (CarteInondation c : defi) {
+                        pilei.push(c);
+                    }
+                    nivEau.gradPlus();
+                }
+            }
+            defi.clear();
+            return ac;
 	}
 
-	public CarteInondation tirerCI() {
-		// TODO - implement Controleur.tirerCI
-		throw new UnsupportedOperationException();
-	}
+	public void tirerCI() {
+            for (int i = 0; i < nivEau.getNiv(); i++) {
+                defi.add(pilei.pop());
+                defi.get(defi.size()-1).getTuile().inonder();
+            }
+        }
         
         public void nouveauJoueur(String nom) {
             getJoueurs().add(new Joueur(nom));
@@ -397,6 +412,16 @@ public class Controleur {
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
         textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
+        if (pilei.size() < nivEau.getNiv()) {
+            Collections.shuffle(defi);
+            for (CarteInondation c : defi) {
+                pilei.push(c);
+            }
+            defi.clear();
+        }
+        tirerCI();
+        tirerCT();
+        vuegrille.couleur(grille);
     }
 
 }
