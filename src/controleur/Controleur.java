@@ -72,7 +72,7 @@ public class Controleur {
                 if (i < 1) {
                     if (i > 3)
                         deft.add(new CSacSable());
-                    //deft.add(new CHelico());
+                    deft.add(new CHelico());
                     deft.add(new CNiveauEau());
                 }
             }
