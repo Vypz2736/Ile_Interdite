@@ -122,34 +122,49 @@ public class Controleur {
             ac.add(pilet.pop());
             for (int i = 0; i < 2; i++) {
                 if (ac.get(0) instanceof CNiveauEau) {
+                    deft.add(ac.get(0));
                     ac.remove(ac.get(0));
                     Collections.shuffle(defi);
                     for (CarteInondation c : defi) {
                         pilei.push(c);
                     }
                     nivEau.gradPlus();
+                    defi.clear();
                 }
             }
-            defi.clear();
             return ac;
 	}
 
 	public void tirerCI() {
-            //System.err.println(pilei.size()-nivEau.getNiv());
-            if (pilei.size()-nivEau.getNiv() <= 0) {
-                //System.err.println("entré");
+            if (pilei.size()-nivEau.getNiv() <= 0 || pilei.size() <= 0 || pilei.size() <= nivEau.getNiv()) {
                 Collections.shuffle(defi);
                 for (CarteInondation c : defi) {
                     pilei.push(c);
                 }
                 defi.clear();
             }
-            //System.err.println(pilei.size()-nivEau.getNiv());
-            for (int i = 0; i < nivEau.getNiv(); i++) {
-                defi.add(pilei.pop());
-                System.err.println(defi.size());
-                defi.get(defi.size()-1).getTuile().inonder();
-            }
+            
+            System.err.println(nivEau.getNiv());
+            System.err.println(defi.size());
+            System.err.println(pilei.size());
+            if (defi.size() == 0 || pilei.size() > nivEau.getNiv())
+                for (int i = 0; i < nivEau.getNiv(); i++) {
+                    defi.add(pilei.pop());
+                    defi.get(defi.size()-1).getTuile().inonder();
+                    if (defi.get(defi.size()-1).getTuile().estMorte()) {
+                        defi.remove(defi.get(defi.size()-1));
+                    }
+                }
+            else
+                System.out.println("PRANK");
+//                for (int i = 0; i < (24-getTuilesM().size()); i++) {
+//                    defi.add(pilei.pop());
+//                    defi.get(defi.size()-1).getTuile().inonder();
+//                    if (defi.get(defi.size()-1).getTuile().estMorte()) {
+//                        defi.remove(defi.get(defi.size()-1));
+//                    }
+//                }
+                
         }
         
         public void nouveauJoueur(String nom) {
@@ -338,6 +353,15 @@ public class Controleur {
         return ti;
     }
     
+    public ArrayList<Tuile> getTuilesM() {
+        ArrayList<Tuile> ti = new ArrayList();
+        for (Tuile t : at) {
+            if (t.estMorte())
+                ti.add(t);
+        }
+        return ti;
+    }
+    
     public void traiterMessage(Message msg) {
         if (msg.getType() == Message.TypeMessage.SAISIEFINIE) {
             noms = vuejoueurs.recupsaisie();
@@ -425,10 +449,6 @@ public class Controleur {
             fintour();
         
         vuegrille.couleur(getGrille());
-        
-        if (getTuilesI().isEmpty()) {
-            System.err.println("fin de la partie");
-        }
         
         vuejcours.verifboutons(tresors, grille);
         
