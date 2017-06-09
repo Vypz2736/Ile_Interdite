@@ -95,9 +95,28 @@ public class Controleur {
                 defi.add(pilei.pop());
                 defi.get(defi.size()-1).getTuile().inonder();
             }
+            for (Joueur j : joueurs) {
+                Carte c;
+                while (j.getAventurier().getCartes().size() < 2) {
+                    c = pilet.pop();
+                    if (c instanceof CNiveauEau) {
+                        pilet.push(c);
+                        Collections.shuffle(pilet);
+                    }
+                    else
+                    j.getAventurier().ajouterCarte(c);
+                }
+            }
         }
 
 	public ArrayList<Carte> tirerCT() {
+            if (pilet.size() < 2) {
+                Collections.shuffle(deft);
+                for (Carte c : deft) {
+                    pilet.push(c);
+                }
+                defi.clear();
+            }
             ArrayList<Carte> ac = new ArrayList();
             ac.add(pilet.pop());
             ac.add(pilet.pop());
@@ -116,8 +135,19 @@ public class Controleur {
 	}
 
 	public void tirerCI() {
+            //System.err.println(pilei.size()-nivEau.getNiv());
+            if (pilei.size()-nivEau.getNiv() <= 0) {
+                //System.err.println("entré");
+                Collections.shuffle(defi);
+                for (CarteInondation c : defi) {
+                    pilei.push(c);
+                }
+                defi.clear();
+            }
+            //System.err.println(pilei.size()-nivEau.getNiv());
             for (int i = 0; i < nivEau.getNiv(); i++) {
                 defi.add(pilei.pop());
+                System.err.println(defi.size());
                 defi.get(defi.size()-1).getTuile().inonder();
             }
         }
@@ -405,6 +435,14 @@ public class Controleur {
     }
     
     public void fintour() {
+        tirerCI();
+        joueurencours.getAventurier().ajouterCarte(tirerCT());
+        if (joueurencours.getAventurier().getCartes().size() > 5)
+            for (int i = 4; i < joueurencours.getAventurier().getCartes().size(); i++) {
+                deft.add(joueurencours.getAventurier().getCartes().get(0));
+                joueurencours.getAventurier().getCartes().remove(joueurencours.getAventurier().getCartes().get(0));
+            }
+        vuegrille.couleur(grille);
         if (joueurencours.getAventurier() instanceof Pilote)
             joueurencours.getAventurier().setHelico(false);
         joueurencours.getAventurier().setNbactions(0);
@@ -412,16 +450,6 @@ public class Controleur {
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
         textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
-        if (pilei.size() < nivEau.getNiv()) {
-            Collections.shuffle(defi);
-            for (CarteInondation c : defi) {
-                pilei.push(c);
-            }
-            defi.clear();
-        }
-        tirerCI();
-        tirerCT();
-        vuegrille.couleur(grille);
     }
 
 }

@@ -52,6 +52,12 @@ public abstract class Aventurier {
     public void ajouterCarte(Carte c) {
         cartes.add(c);
     }
+    
+    public void ajouterCarte(ArrayList<Carte> ac) {
+        for (Carte c : ac) {
+            cartes.add(c);
+        }
+    }
 
     public Tuile getPos() {
         return emplacement;
