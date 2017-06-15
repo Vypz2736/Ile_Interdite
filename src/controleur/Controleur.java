@@ -308,7 +308,7 @@ public class Controleur {
             vuegrille = new VueGrille(getGrille(),this);
             vuegrille.setPreferredSize(new Dimension(dim.height,dim.height));
             window.add(vuegrille,  BorderLayout.CENTER);
-            vueniveau = new VueNiveau(1,this);
+            vueniveau = new VueNiveau(1);
             paneldroit.add(vueniveau);
             vueniveau.setBackground(new Color(35,35,35));
             vueniveau.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
