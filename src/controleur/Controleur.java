@@ -38,6 +38,11 @@ public class Controleur {
         private VueAventurier vuejcours;
         private VueTourJoueurs vuetourjoueurs;
         private JTextArea textepartie;
+        private Tuile helico;
+        private ArrayList<Tuile> cristal = new ArrayList();
+        private ArrayList<Tuile> statue = new ArrayList();
+        private ArrayList<Tuile> calice = new ArrayList();
+        private ArrayList<Tuile> pierre = new ArrayList();
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -122,6 +127,7 @@ public class Controleur {
             ac.add(pilet.pop());
             for (int i = 0; i < 2; i++) {
                 if (ac.get(0) instanceof CNiveauEau) {
+                    vueniveau.nivplus();
                     deft.add(ac.get(0));
                     ac.remove(ac.get(0));
                     Collections.shuffle(defi);
@@ -144,26 +150,25 @@ public class Controleur {
                 defi.clear();
             }
             
-            System.err.println(nivEau.getNiv());
-            System.err.println(defi.size());
-            System.err.println(pilei.size());
-            if (defi.size() == 0 || pilei.size() > nivEau.getNiv())
-                for (int i = 0; i < nivEau.getNiv(); i++) {
-                    defi.add(pilei.pop());
-                    defi.get(defi.size()-1).getTuile().inonder();
-                    if (defi.get(defi.size()-1).getTuile().estMorte()) {
-                        defi.remove(defi.get(defi.size()-1));
+            for (int i = 0; i < nivEau.getNiv(); i++) {
+                defi.add(pilei.pop());
+                defi.get(defi.size()-1).getTuile().inonder();
+                if (defi.get(defi.size()-1).getTuile().estMorte()) {
+                    if (cristal.contains(defi.get(defi.size()-1))) {
+                        cristal.remove(defi.get(defi.size()-1));
                     }
+                    if (statue.contains(defi.get(defi.size()-1))) {
+                        statue.remove(defi.get(defi.size()-1));
+                    }
+                    if (calice.contains(defi.get(defi.size()-1))) {
+                        calice.remove(defi.get(defi.size()-1));
+                    }
+                    if (pierre.contains(defi.get(defi.size()-1))) {
+                        pierre.remove(defi.get(defi.size()-1));
+                    }
+                    defi.remove(defi.get(defi.size()-1));
                 }
-            else
-                System.out.println("PRANK");
-//                for (int i = 0; i < (24-getTuilesM().size()); i++) {
-//                    defi.add(pilei.pop());
-//                    defi.get(defi.size()-1).getTuile().inonder();
-//                    if (defi.get(defi.size()-1).getTuile().estMorte()) {
-//                        defi.remove(defi.get(defi.size()-1));
-//                    }
-//                }
+            }
                 
         }
         
@@ -185,6 +190,7 @@ public class Controleur {
             }
             getAt().add(new Tuile("LaCavernedesombres",0));
             i = getAt().size()-1;
+            cristal.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Cristal);
             getAt().add(new Tuile("LaPortedefer",0));
             i = getAt().size()-1;
@@ -205,6 +211,7 @@ public class Controleur {
             getAt().add(new Tuile("LesFalaisesdeloubli",0));
             getAt().add(new Tuile("LePalaisdecorail",0));
             i = getAt().size()-1;
+            calice.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Calice);
             getAt().add(new Tuile("LaPortedargent",0));
             i = getAt().size()-1;
@@ -223,6 +230,7 @@ public class Controleur {
                     j.getAventurier().setPos(getAt().get(i));
                 }
             }
+            helico = getAt().get(i);
             getAt().add(new Tuile("LaPortedecuivre",0));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
@@ -233,6 +241,7 @@ public class Controleur {
             }
             getAt().add(new Tuile("LeJardindeshurlements",0));
             i = getAt().size()-1;
+            statue.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Statue);
             getAt().add(new Tuile("LaForetpourpre",0));
             getAt().add(new Tuile("LeLagonperdu",0));
@@ -241,20 +250,25 @@ public class Controleur {
             getAt().add(new Tuile("LeRocherfantome",0));
             getAt().add(new Tuile("LaCavernedubrasier",0));
             i = getAt().size()-1;
+            cristal.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Cristal);
             getAt().add(new Tuile("LeTempledusoleil",0));
             i = getAt().size()-1;
+            pierre.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Pierre);
             getAt().add(new Tuile("LeTempledelalune",0));
             i = getAt().size()-1;
+            pierre.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Pierre);
             getAt().add(new Tuile("LePalaisdesmarees",0));
             i = getAt().size()-1;
+            calice.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Calice);
             getAt().add(new Tuile("LeValducrepuscule",0));
             getAt().add(new Tuile("LaTourdeguet",0));
             getAt().add(new Tuile("LeJardindesmurmures",0));
             i = getAt().size()-1;
+            statue.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Statue);
             Collections.shuffle(at);
             grille = new Grille(getAt());
@@ -446,14 +460,21 @@ public class Controleur {
             vuegrille.setTuilesSurbrillance(tuilesacc, true);
         }
         
+        if (msg.getType() == Message.TypeMessage.TRESOR) {
+            tresors.add(joueurencours.getAventurier().getPos().getTresor());
+        }
+        
         if (msg.getType() == Message.TypeMessage.PASSER)
             fintour();
         
         vuegrille.couleur(getGrille());
         
         vuejcours.verifboutons(tresors, grille);
+        if (toustresors())
+            textepartie.setText(textepartie.getText()+ "\n Vous avez acquis tous les trésors, rendez vous à l'héliport");
         
     }
+    
     
     public void fintour() {
         tirerCI();
@@ -471,6 +492,19 @@ public class Controleur {
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
         textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
+    }
+    
+    public boolean perdu() {
+        return (calice.size() < 2 && !tresors.contains(Tresor.Calice)) || (statue.size() < 2 && !tresors.contains(Tresor.Statue)) ||
+               (cristal.size() < 2 && !tresors.contains(Tresor.Cristal)) || (pierre.size() < 2 && !tresors.contains(Tresor.Pierre)) || helico.estMorte();
+    }
+    
+    public boolean gagne() {
+        return toustresors() && helico.getAventuriers().size() == joueurs.size();
+    }
+    
+    public boolean toustresors() {
+        return tresors.size() == 4;
     }
 
 }

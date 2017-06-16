@@ -17,7 +17,7 @@ public class VueNiveau extends JPanel {
     private ArrayList<PanelGrad> panelsgrad = new ArrayList();
     private int niveau;
     private int[] nbpanels = {1,2,2,3,2};
-    private String[] num = {"2","3","4","5"};
+    private String[] num = {"5","4","3","2"};
     private JLabel[] labels = new JLabel[4];
     
     public VueNiveau(int niveauInitial) {
@@ -98,24 +98,6 @@ public class VueNiveau extends JPanel {
         niveau++;
         panelsgrad.get(niveau-1).setActuel(true);
         panelsgrad.get(niveau-1).repaint();
-    }
-   
-    public static void main(String[] args) {
-        JFrame window = new JFrame();
-        window.setSize(400,1000);
-        VueNiveau v = new VueNiveau(1);
-        window.add(v);
-        window.setVisible(true);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        v.nivplus();
-        v.nivplus();
-        v.nivplus();
-        v.nivplus();
-        v.nivplus();
-        v.nivplus();
-        v.nivplus();
-        v.nivplus();
-        v.nivplus();
     }
    
 }
