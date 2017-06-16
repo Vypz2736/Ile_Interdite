@@ -9,76 +9,113 @@ public class VueNiveau extends JPanel {
    
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Controleur c;
-    private ArrayList<JPanel>[] inceptionpanel = new ArrayList[5];
-    private ArrayList<JPanel> panelsgrad = new ArrayList();
-    private ArrayList<JPanel> panels = new ArrayList();
-    private JLabel labelimg = new JLabel();
-       
+    private ArrayList<PanelTrait>[] panelsgauche = new ArrayList[5];
+    private ArrayList<PanelGrad>[] panelsmid = new ArrayList[5];
+    private ArrayList<JPanel> panelmid = new ArrayList();
+    private ArrayList<JPanel> panelgauche = new ArrayList();
+    private ArrayList<JPanel> paneldroit = new ArrayList();
+    private ArrayList<PanelGrad> panelsgrad = new ArrayList();
+    private int niveau;
+    private int[] nbpanels = {1,2,2,3,2};
+    private String[] num = {"2","3","4","5"};
+    private JLabel[] labels = new JLabel[4];
+    
     public VueNiveau(int niveauInitial) {
-        labelimg.setText("img");
-        setLayout(new GridLayout(5,1));
+        niveau = niveauInitial;
+        setLayout(new GridLayout(5,3));
+        int n = 0;
         for (int i = 0; i < 5; i++) {
-            inceptionpanel[i] = new ArrayList();
-            panels.add(new JPanel(new GridLayout(1,2)));
-            if (i == 3) {
-                panelsgrad.add(new JPanel(new GridLayout(3,1)));
-                for (int j = 0; j < 3; j++) {
-                    //inceptionpanel[i].add(new JPanel());
-                    //panels.get(panels.size()-1).add(inceptionpanel[i].get(inceptionpanel[i].size()-1));
-                }
+            panelsgauche[i] = new ArrayList();
+            panelsmid[i] = new ArrayList();
+            panelgauche.add(new JPanel(new GridLayout(nbpanels[i],1))); 
+            panelmid.add(new JPanel(new GridLayout(nbpanels[i],1)));
+            if (i != 0) {
+                paneldroit.add(new JPanel(new GridBagLayout()));
+                labels[i-1] = new JLabel(num[i-1]);
+                labels[i-1].setForeground(Color.white);
+                labels[i-1].setFont(new Font(labels[i-1].getFont().getFontName(), labels[i-1].getFont().getStyle(), (int)dim.getWidth()/25));
+                paneldroit.get(i).add(labels[i-1]);
             }
-            else if (i == 0) {
-                panelsgrad.add(new JPanel(new GridLayout(1,1)));
-                inceptionpanel[i].add(new JPanel());
-                panels.get(panels.size()-1).add(inceptionpanel[i].get(inceptionpanel[i].size()-1));
-            }
-            else {
-                panelsgrad.add(new JPanel(new GridLayout(2,1)));
-                for (int j = 0; j < 2; j++)
-                   
-                    inceptionpanel[i].add(new JPanel());
-                    panels.get(panels.size()-1).add(inceptionpanel[i].get(inceptionpanel[i].size()-1));
-            }
-            panels.get(panels.size()-1).add(panelsgrad.get(panelsgrad.size()-1));
-            if (i != 0)
-                panels.get(panels.size()-1).add(new JLabel(Integer.toString(6-i)));
             else
-                panels.get(panels.size()-1).add(labelimg);
-            this.add(panels.get(panels.size()-1));
-            for (JPanel p : inceptionpanel[i]) {
+                paneldroit.add(new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    g.setColor(new Color(186, 33, 51));
+                    g.fillRect(0, 0, getWidth(), getHeight());
+                    g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/tdm.png"))
+                    .getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, (getHeight()-getWidth())/2, getWidth(), getWidth(), this);
+                }
+                });
+            for (int j = 0;j < nbpanels[i]; j++) {
+                panelsgauche[i].add(new PanelTrait(9-n));
+                panelgauche.get(i).add(panelsgauche[i].get(j));
+                panelsmid[i].add(new PanelGrad(9-n,getHeight()));
+                panelmid.get(i).add(panelsmid[i].get(j));
+                panelsgrad.add(panelsmid[i].get(j));
+                n++;
+            }
+            this.add(panelgauche.get(i));
+            this.add(panelmid.get(i));
+            this.add(paneldroit.get(i));
+            for (int j = 0; j < nbpanels[i]; j++) {
                 switch (i) {
                     case 0:
-                        panels.get(i).setBackground(new Color(186, 33, 51));
-                        p.setBackground(new Color(186, 33, 51));
+                        panelsgauche[i].get(j).setBackground(new Color(186, 33, 51));
+                        panelsmid[i].get(j).setBackground(new Color(186, 33, 51));
                         break;
                     case 1:
-                        panels.get(i).setBackground(new Color(53, 67, 114));
-                        p.setBackground(new Color(53, 67, 114));
+                        panelsgauche[i].get(j).setBackground(new Color(53, 67, 114));
+                        panelsmid[i].get(j).setBackground(new Color(53, 67, 114));
                         break;
                     case 2:
-                        panels.get(i).setBackground(new Color(67, 93, 144));
-                        p.setBackground(new Color(67, 93, 144));
+                        panelsgauche[i].get(j).setBackground(new Color(67, 93, 144));
+                        panelsmid[i].get(j).setBackground(new Color(67, 93, 144));
                         break;
                     case 3:
-                        panels.get(i).setBackground(new Color(92, 131, 174));
-                        p.setBackground(new Color(92, 131, 174));
+                        panelsgauche[i].get(j).setBackground(new Color(92, 131, 174));
+                        panelsmid[i].get(j).setBackground(new Color(92, 131, 174));
                         break;
                     case 4:
-                        panels.get(i).setBackground(new Color(138, 181, 200));
-                        p.setBackground(new Color(138, 181, 200));
+                        panelsgauche[i].get(j).setBackground(new Color(138, 181, 200));
+                        panelsmid[i].get(j).setBackground(new Color(138, 181, 200));
                         break;
                 }
             }
         }
+        Collections.sort(panelsgrad);
+        panelsgrad.get(niveau-1).setActuel(true);
+        panelsgrad.get(niveau-1).repaint();
+        paneldroit.get(1).setBackground(new Color(53, 67, 114));
+        paneldroit.get(2).setBackground(new Color(67, 93, 144));
+        paneldroit.get(3).setBackground(new Color(92, 131, 174));
+        paneldroit.get(4).setBackground(new Color(138, 181, 200));
         
+    }
+    
+    public void nivplus() {
+        panelsgrad.get(niveau-1).setActuel(false);
+        panelsgrad.get(niveau-1).repaint();
+        niveau++;
+        panelsgrad.get(niveau-1).setActuel(true);
+        panelsgrad.get(niveau-1).repaint();
     }
    
     public static void main(String[] args) {
         JFrame window = new JFrame();
         window.setSize(400,1000);
-        window.add(new VueNiveau(1));
+        VueNiveau v = new VueNiveau(1);
+        window.add(v);
         window.setVisible(true);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        v.nivplus();
+        v.nivplus();
+        v.nivplus();
+        v.nivplus();
+        v.nivplus();
+        v.nivplus();
+        v.nivplus();
+        v.nivplus();
+        v.nivplus();
     }
    
 }

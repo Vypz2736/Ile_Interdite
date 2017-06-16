@@ -34,7 +34,7 @@ public class Controleur {
         private Message.TypeMessage action;
         private ArrayList<Tuile> tuilesacc = new ArrayList();
         private Tuile tuileav = null;
-        private JPanel panelgauche = new JPanel(),paneldroit = new JPanel();
+        private JPanel panelgauche = new JPanel(),paneldroit = new JPanel(new BorderLayout());
         private VueAventurier vuejcours;
         private VueTourJoueurs vuetourjoueurs;
         private JTextArea textepartie;
@@ -309,6 +309,7 @@ public class Controleur {
             vuegrille.setPreferredSize(new Dimension(dim.height,dim.height));
             window.add(vuegrille,  BorderLayout.CENTER);
             vueniveau = new VueNiveau(1);
+            vueniveau.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/600, (int)dim.getWidth()/600, (int)dim.getWidth()/600, (int)dim.getWidth()/600));
             paneldroit.add(vueniveau);
             vueniveau.setBackground(new Color(35,35,35));
             vueniveau.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
