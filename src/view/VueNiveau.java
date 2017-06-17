@@ -8,7 +8,6 @@ import javax.swing.*;
 public class VueNiveau extends JPanel {
    
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-    private Controleur c;
     private ArrayList<PanelTrait>[] panelsgauche = new ArrayList[5];
     private ArrayList<PanelGrad>[] panelsmid = new ArrayList[5];
     private ArrayList<JPanel> panelmid = new ArrayList();
@@ -89,7 +88,20 @@ public class VueNiveau extends JPanel {
         paneldroit.get(2).setBackground(new Color(67, 93, 144));
         paneldroit.get(3).setBackground(new Color(92, 131, 174));
         paneldroit.get(4).setBackground(new Color(138, 181, 200));
+        panelsgauche[4].get(1).setLayout(new BorderLayout());
+        panelsgauche[4].get(0).setLayout(new BorderLayout());
+        panelsgauche[3].get(2).setLayout(new BorderLayout());
+        panelsgauche[3].get(1).setLayout(new BorderLayout());
         
+        panelsgauche[4].get(1).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
+        panelsgauche[4].get(0).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
+        panelsgauche[3].get(2).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
+        panelsgauche[3].get(1).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
+        
+        panelsgauche[4].get(1).add(new JLabel("Novice"), BorderLayout.WEST);
+        panelsgauche[4].get(0).add(new JLabel("Normal"), BorderLayout.WEST);
+        panelsgauche[3].get(2).add(new JLabel("Elite"), BorderLayout.WEST);
+        panelsgauche[3].get(1).add(new JLabel("Légendaire"), BorderLayout.WEST);
     }
     
     public void nivplus() {

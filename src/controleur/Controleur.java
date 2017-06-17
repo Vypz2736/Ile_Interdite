@@ -10,7 +10,7 @@ import java.math.*;
 
 public class Controleur {
 
-	private NivEau nivEau = new NivEau(3);
+	private NivEau nivEau;
 	private Grille grille;
 	private VueAventurier vueAventurier;
 	private ArrayList<Joueur> joueurs = new ArrayList();
@@ -43,6 +43,7 @@ public class Controleur {
         private ArrayList<Tuile> statue = new ArrayList();
         private ArrayList<Tuile> calice = new ArrayList();
         private ArrayList<Tuile> pierre = new ArrayList();
+        private int nivini;
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -127,6 +128,7 @@ public class Controleur {
             ac.add(pilet.pop());
             for (int i = 0; i < 2; i++) {
                 if (ac.get(0) instanceof CNiveauEau) {
+                    System.err.println("zzzzzzzzzzzzzzzzz");
                     vueniveau.nivplus();
                     deft.add(ac.get(0));
                     ac.remove(ac.get(0));
@@ -322,9 +324,11 @@ public class Controleur {
             vuegrille = new VueGrille(getGrille(),this);
             vuegrille.setPreferredSize(new Dimension(dim.height,dim.height));
             window.add(vuegrille,  BorderLayout.CENTER);
-            vueniveau = new VueNiveau(1);
+            nivEau = new NivEau(nivini);
+            vueniveau = new VueNiveau(nivini);
             vueniveau.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/600, (int)dim.getWidth()/600, (int)dim.getWidth()/600, (int)dim.getWidth()/600));
-            paneldroit.add(vueniveau);
+            paneldroit.setLayout(new BorderLayout());
+            paneldroit.add(vueniveau, BorderLayout.EAST);
             vueniveau.setBackground(new Color(35,35,35));
             vueniveau.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
             window.add(panelgauche, BorderLayout.WEST);
@@ -380,6 +384,7 @@ public class Controleur {
     public void traiterMessage(Message msg) {
         if (msg.getType() == Message.TypeMessage.SAISIEFINIE) {
             noms = vuejoueurs.recupsaisie();
+            nivini = msg.getNiveau();
             lancerPartie();
         }
         else
@@ -492,6 +497,8 @@ public class Controleur {
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
         textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
+        
+            System.err.println(nivEau.getNiv());
     }
     
     public boolean perdu() {

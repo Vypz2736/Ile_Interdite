@@ -16,13 +16,13 @@ public class NivEau {
 	}
 
 	public void setNiv() {
-		if (niveau < 3)
+		if (grad < 3)
                     niveau = 2;
-                else if (niveau < 6)
+                else if (grad < 6)
                     niveau = 3;
-                else if (niveau < 8)
+                else if (grad < 8)
                     niveau = 4;
-                else if (niveau < 10)
+                else if (grad < 10)
                     niveau = 5;
                 else 
                     niveau = 0;

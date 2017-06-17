@@ -24,6 +24,7 @@ public class Message {
     private TypeMessage type;
     private int colonne;
     private int ligne;
+    private int niveau;
     
     public Message(TypeMessage t, int l, int c) {
         type = t;
@@ -33,6 +34,11 @@ public class Message {
     
     public Message(TypeMessage t) {
         type = t;
+    }
+    
+    public Message(TypeMessage t, int n) {
+        type = t;
+        niveau = n+1;
     }
 
     /**
@@ -54,5 +60,12 @@ public class Message {
      */
     public int getLigne() {
         return ligne;
+    }
+
+    /**
+     * @return the niveau
+     */
+    public int getNiveau() {
+        return niveau;
     }
 }

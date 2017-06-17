@@ -31,12 +31,13 @@ public class VueJoueurs extends JPanel {
     private JPanel panelV = new JPanel(new BorderLayout());
     private JButton bQ = new JButton("Quitter");
     private JButton bV = new JButton("Valider");
-    private boolean valider;
     private JLabel titre;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private String strimg = new String("/img/tuiles/morte.png");
     private JLabel info = new JLabel("Entrez 2 à 4 noms de joueur");
     private Controleur c;
+    private JLabel nv = new JLabel("Choisissez une difficulté : ");
+    private JComboBox niveau = new JComboBox(new String[]{"Novice","Normal","Elite","Légendaire"});
     
     public VueJoueurs(Controleur c) {
         titre = new JLabel("Choisissez le nom des joueurs :");
@@ -48,7 +49,16 @@ public class VueJoueurs extends JPanel {
         info.setForeground(new Color(0,192,255));
         info.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300, 0));
         mainPanel.add(info, BorderLayout.SOUTH);
-        panelLabels = new JPanel(new GridLayout(3,2));
+        panelLabels = new JPanel(new GridLayout(4,2));
+        nv.setForeground(new Color(0,192,255));
+        nv.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/50, (int)dim.getWidth()/300, (int)dim.getWidth()/300));
+        nv.setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/140));
+        niveau.setFont(new Font(titre.getFont().getFontName(), titre.getFont().getStyle(), (int)dim.getWidth()/140));
+        niveau.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/50));
+        niveau.setBackground(new Color(30,30,30));
+        niveau.setForeground(new Color(0,192,255));
+        niveau.setFocusable(false);
+        panelLabels.setBackground(new Color(30,30,30));
         for (int i = 0; i < 4; i++) {
             panels[i] = new JPanel(new GridLayout(1,2));
             labels[i] = new JLabel("Joueur n°" + (i+1) + " : ");
@@ -72,6 +82,8 @@ public class VueJoueurs extends JPanel {
         panelLabels.add(panels[1]);
         panelLabels.add(panels[2]);
         panelLabels.add(panels[3]);
+        panelLabels.add(nv);
+        panelLabels.add(niveau);
         panelLabels.add(panelQ);
         panelLabels.add(panelV);
         mainPanel.add(panelLabels);
@@ -109,7 +121,7 @@ public class VueJoueurs extends JPanel {
                     info.setForeground(new Color(255, 148, 0));
                     }
                 else
-                    c.traiterMessage(new Message(Message.TypeMessage.SAISIEFINIE));
+                    c.traiterMessage(new Message(Message.TypeMessage.SAISIEFINIE,niveau.getSelectedIndex()));
             }
         });
     }
