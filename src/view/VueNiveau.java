@@ -93,10 +93,10 @@ public class VueNiveau extends JPanel {
         panelsgauche[3].get(2).setLayout(new BorderLayout());
         panelsgauche[3].get(1).setLayout(new BorderLayout());
         
-        panelsgauche[4].get(1).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
-        panelsgauche[4].get(0).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
-        panelsgauche[3].get(2).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
-        panelsgauche[3].get(1).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/300, 0, 0));
+        panelsgauche[4].get(1).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/400, 0, 0));
+        panelsgauche[4].get(0).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/400, 0, 0));
+        panelsgauche[3].get(2).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/400, 0, 0));
+        panelsgauche[3].get(1).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, (int)dim.getWidth()/400, 0, 0));
         
         panelsgauche[4].get(1).add(new JLabel("Novice"), BorderLayout.WEST);
         panelsgauche[4].get(0).add(new JLabel("Normal"), BorderLayout.WEST);

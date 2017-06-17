@@ -23,15 +23,15 @@ public class VueTourJoueurs extends JPanel {
         j = joueur;
         aj = joueurs;
         setBackground(new Color(35,35,35));
-        setLayout(new GridLayout(aj.size()+1,1));
-        for (int i = 0; i < aj.size()+1; i++) {
+        setLayout(new GridLayout(aj.size(),1));
+        for (int i = 0; i < aj.size(); i++) {
             if (i == 0)
                 labels.add(new JLabel("File d'attente de tour :"));
             else
                 labels.add(new JLabel());
             add(labels.get(i));
         }
-        labels.get(0).setForeground(Color.white);
+        labels.get(0).setForeground(new Color(30,30,30));
         labels.get(0).setFont(new Font(labels.get(0).getFont().getFontName(), labels.get(0).getFont().getStyle(), (int)dim.getWidth()/125));
         texte();
     }

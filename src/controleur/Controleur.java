@@ -44,6 +44,7 @@ public class Controleur {
         private ArrayList<Tuile> calice = new ArrayList();
         private ArrayList<Tuile> pierre = new ArrayList();
         private int nivini;
+        VueTresors vuetresor;
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -128,7 +129,6 @@ public class Controleur {
             ac.add(pilet.pop());
             for (int i = 0; i < 2; i++) {
                 if (ac.get(0) instanceof CNiveauEau) {
-                    System.err.println("zzzzzzzzzzzzzzzzz");
                     vueniveau.nivplus();
                     deft.add(ac.get(0));
                     ac.remove(ac.get(0));
@@ -315,6 +315,7 @@ public class Controleur {
             init();
             mainpanel.remove(saisiejoueurs);
             window.setMaximumSize(dim);
+            window.setMinimumSize(new Dimension((int)(dim.getWidth()),(int)(dim.getHeight())));
             window.setSize(new Dimension((int)dim.getWidth()/4*3,(int)dim.getHeight()/18*11));
             window.setLocation((int)dim.getWidth()/8*1, (int)dim.getHeight()/4);
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -326,34 +327,47 @@ public class Controleur {
             window.add(vuegrille,  BorderLayout.CENTER);
             nivEau = new NivEau(nivini);
             vueniveau = new VueNiveau(nivini);
-            vueniveau.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/600, (int)dim.getWidth()/600, (int)dim.getWidth()/600, (int)dim.getWidth()/600));
             paneldroit.setLayout(new BorderLayout());
-            paneldroit.add(vueniveau, BorderLayout.EAST);
-            vueniveau.setBackground(new Color(35,35,35));
-            vueniveau.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
+            vuetresor = new VueTresors(tresors);
+            paneldroit.add(vuetresor, BorderLayout.NORTH);
+            paneldroit.add(vueniveau, BorderLayout.SOUTH);
+            vueniveau.setBackground(new Color(30,30,30));
             window.add(panelgauche, BorderLayout.WEST);
             window.add(paneldroit, BorderLayout.EAST);
             panelgauche.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
             paneldroit.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
-            panelgauche.setBackground(new Color(35,35,35));
-            paneldroit.setBackground(new Color(35,35,35));
+            paneldroit.setBackground(new Color(30,30,30));
+            vuetresor.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getWidth()*195/235));
+            vueniveau.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getHeight()-(int)paneldroit.getPreferredSize().getWidth()*205/235));
             window.setVisible(true);
             joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
             vuetourjoueurs = new VueTourJoueurs(joueurencours, joueurs);
-            vuetourjoueurs.setPreferredSize(new Dimension((int)(dim.width-dim.height)/20*9,(int)vuetourjoueurs.getPreferredSize().getHeight()));
+            vuetourjoueurs.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuetourjoueurs.getPreferredSize().getHeight()));
             textepartie = new JTextArea("Au tour de " + joueurencours.getNom() + " de jouer");
             textepartie.setEditable(false);
             textepartie.setFont(new Font(textepartie.getFont().getFontName(), textepartie.getFont().getStyle(), (int)dim.getWidth()/140));
-            textepartie.setForeground(Color.white);
-            textepartie.setBackground(new Color(35,35,35));
+            textepartie.setForeground(new Color(30,30,30));
             textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, 0, 0, 0));
             vuejcours = new VueAventurier(joueurencours,this);
-            vuejcours.setPreferredSize(new Dimension((int)(dim.width-dim.height)/2,(int)vuejcours.getPreferredSize().getHeight()));
+            vuejcours.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
             vuejcours.verifboutons(tresors, grille);
-            textepartie.setPreferredSize(new Dimension((int)(dim.width-dim.height)/20*9,(int)vuejcours.getPreferredSize().getHeight()));
+            textepartie.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
             panelgauche.add(vuetourjoueurs);
             panelgauche.add(textepartie);
             panelgauche.add(vuejcours);
+            int r = vuejcours.getColor().getRed()-70;
+            int g = vuejcours.getColor().getGreen()-70;
+            int b = vuejcours.getColor().getBlue()-70;
+            if (r < 0)
+                r = 0;
+            if (g < 0)
+                g = 0;
+            if (b < 0)
+                b = 0;
+            Color c = new Color(r, g, b);
+            panelgauche.setBackground(c);
+            textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
         }
 
     /**
@@ -467,6 +481,7 @@ public class Controleur {
         
         if (msg.getType() == Message.TypeMessage.TRESOR) {
             tresors.add(joueurencours.getAventurier().getPos().getTresor());
+            vuetresor.majtresor(tresors);
         }
         
         if (msg.getType() == Message.TypeMessage.PASSER)
@@ -497,8 +512,19 @@ public class Controleur {
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
         textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
-        
-            System.err.println(nivEau.getNiv());
+        int r = vuejcours.getColor().getRed()-70;
+        int g = vuejcours.getColor().getGreen()-70;
+        int b = vuejcours.getColor().getBlue()-70;
+        if (r < 0)
+            r = 0;
+        if (g < 0)
+            g = 0;
+        if (b < 0)
+            b = 0;
+        Color c = new Color(r, g, b);
+        panelgauche.setBackground(c);
+        textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+        vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
     }
     
     public boolean perdu() {

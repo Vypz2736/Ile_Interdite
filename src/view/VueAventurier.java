@@ -17,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
+import models.CTresor;
+import models.Carte;
 import models.Explorateur;
 import models.Grille;
 import models.Ingenieur;
@@ -140,7 +142,7 @@ public class VueAventurier extends JPanel {
             
         });
         this.btnrecuptresor = new JButton("Récupérer tresor") ;
-        btndonnercarte.addActionListener(new ActionListener() {
+        btnrecuptresor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 c.traiterMessage(new Message(Message.TypeMessage.TRESOR));
@@ -191,17 +193,28 @@ public class VueAventurier extends JPanel {
             btndeplacer.setText("Autre action");
             btndeplacer.setEnabled(false);
         }
-        this.setBorder(BorderFactory.createLineBorder(color, 5));
-        panelAventurier.setBackground(color);
+        this.setBorder(BorderFactory.createLineBorder(getColor(), 5));
+        panelAventurier.setBackground(getColor());
         nom.setText(nomj  + " : " + nomav);
         
     }
     
     public void tresor(ArrayList<Tresor> at) {
-        if (j.getAventurier().getPos().getTresor() != null && !at.contains(j.getAventurier().getPos().getTresor()) && j.getAventurier().getNbactions() < 3)
+        if (j.getAventurier().getPos().getTresor() != null && !at.contains(j.getAventurier().getPos().getTresor()) && j.getAventurier().getNbactions() < 3 && cartestresor(j.getAventurier().getPos().getTresor()))
             btnrecuptresor.setEnabled(true);
         else
             btnrecuptresor.setEnabled(false);
+    }
+    
+    public boolean cartestresor(Tresor t) {
+        int nb = 0;
+        for (Carte c : j.getAventurier().getCartes())
+            if (c instanceof CTresor) {
+                CTresor ct = (CTresor) c;
+                if (ct.getTresor().equals(t))
+                    nb++;
+            }
+        return nb < 3;
     }
     
     public void donner() {
@@ -235,6 +248,13 @@ public class VueAventurier extends JPanel {
         donner();
         assecher(g);
         deplacer();
+    }
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
     }
 }
 
