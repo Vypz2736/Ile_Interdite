@@ -156,17 +156,17 @@ public class Controleur {
                 defi.add(pilei.pop());
                 defi.get(defi.size()-1).getTuile().inonder();
                 if (defi.get(defi.size()-1).getTuile().estMorte()) {
-                    if (cristal.contains(defi.get(defi.size()-1))) {
-                        cristal.remove(defi.get(defi.size()-1));
+                    if (cristal.contains(defi.get(defi.size()-1).getTuile())) {
+                        cristal.remove(defi.get(defi.size()-1).getTuile());
                     }
-                    if (statue.contains(defi.get(defi.size()-1))) {
-                        statue.remove(defi.get(defi.size()-1));
+                    else if (statue.contains(defi.get(defi.size()-1).getTuile())) {
+                        statue.remove(defi.get(defi.size()-1).getTuile());
                     }
-                    if (calice.contains(defi.get(defi.size()-1))) {
-                        calice.remove(defi.get(defi.size()-1));
+                    else if (calice.contains(defi.get(defi.size()-1).getTuile())) {
+                        calice.remove(defi.get(defi.size()-1).getTuile());
                     }
-                    if (pierre.contains(defi.get(defi.size()-1))) {
-                        pierre.remove(defi.get(defi.size()-1));
+                    else if (pierre.contains(defi.get(defi.size()-1).getTuile())) {
+                        pierre.remove(defi.get(defi.size()-1).getTuile());
                     }
                     defi.remove(defi.get(defi.size()-1));
                 }
@@ -342,7 +342,6 @@ public class Controleur {
             window.setVisible(true);
             joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
             vuetourjoueurs = new VueTourJoueurs(joueurencours, joueurs);
-            vuetourjoueurs.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuetourjoueurs.getPreferredSize().getHeight()));
             textepartie = new JTextArea("Au tour de " + joueurencours.getNom() + " de jouer");
             textepartie.setEditable(false);
             textepartie.setFont(new Font(textepartie.getFont().getFontName(), textepartie.getFont().getStyle(), (int)dim.getWidth()/140));
@@ -351,6 +350,9 @@ public class Controleur {
             vuejcours = new VueAventurier(joueurencours,this);
             vuejcours.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
             vuejcours.verifboutons(tresors, grille);
+            textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/200, (int)dim.getWidth()/200, (int)dim.getWidth()/200, 0));
+            vuetourjoueurs.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/200, (int)dim.getWidth()/200, (int)dim.getWidth()/200, 0));
+            vuetourjoueurs.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuetourjoueurs.getPreferredSize().getHeight()));
             textepartie.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
             panelgauche.add(vuetourjoueurs);
             panelgauche.add(textepartie);
@@ -404,94 +406,101 @@ public class Controleur {
         else
             vuegrille.setTuilesSurbrillance(tuilesacc, false);
         
-        if (msg.getType() == Message.TypeMessage.CASECLIQUEE) {
-            if (!(action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur))
-                tuilesaction.clear();
-            tuilesaction.add(grille.getTuile(msg.getLigne(),msg.getColonne()));
-            if (action == Message.TypeMessage.SEDEPLACER) {
-                tuileav = null;
-                joueurencours.getAventurier().seDeplacer(tuilesaction.get(0), grille);
-                textepartie.setText(joueurencours.getNom() + " se déplace de " + joueurencours.getAventurier().getPosPrec().getNom() + " vers " + tuilesaction.get(0).getNom());
-                tuilesaction.clear();
-            }
-            
-            if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() == true) {
-                tuileav = null;
-                joueurencours.getAventurier().assecherG(tuilesaction);
-                textepartie.setText(joueurencours.getNom() + " assèche " + tuilesaction.get(0).getNom() + " sans utiliser d'action");
-                tuilesaction.clear();
-                joueurencours.getAventurier().setSeche(false);
-            }
-            
-            else if (action == Message.TypeMessage.ASSECHER) {
-                tuileav = null;
-                joueurencours.getAventurier().assecher(tuilesaction);
-                textepartie.setText(joueurencours.getNom() + " assèche " + tuilesaction.get(0).getNom());
-                tuilesaction.clear();
-                if (joueurencours.getAventurier() instanceof Ingenieur) {
-                    joueurencours.getAventurier().setSeche(true);
+        if (!gagne() && !perdu()) {
+            if (msg.getType() == Message.TypeMessage.CASECLIQUEE) {
+                if (!(action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur))
+                    tuilesaction.clear();
+                tuilesaction.add(grille.getTuile(msg.getLigne(),msg.getColonne()));
+                if (action == Message.TypeMessage.SEDEPLACER) {
+                    tuileav = null;
+                    joueurencours.getAventurier().seDeplacer(tuilesaction.get(0), grille);
+                    textepartie.setText(joueurencours.getNom() + " se déplace de " + joueurencours.getAventurier().getPosPrec().getNom() + " vers " + tuilesaction.get(0).getNom());
+                    tuilesaction.clear();
                 }
+
+                if (action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() == true) {
+                    tuileav = null;
+                    joueurencours.getAventurier().assecherG(tuilesaction);
+                    textepartie.setText(joueurencours.getNom() + " assèche " + tuilesaction.get(0).getNom() + " sans utiliser d'action");
+                    tuilesaction.clear();
+                    joueurencours.getAventurier().setSeche(false);
+                }
+
+                else if (action == Message.TypeMessage.ASSECHER) {
+                    tuileav = null;
+                    joueurencours.getAventurier().assecher(tuilesaction);
+                    textepartie.setText(joueurencours.getNom() + " assèche " + tuilesaction.get(0).getNom());
+                    tuilesaction.clear();
+                    if (joueurencours.getAventurier() instanceof Ingenieur) {
+                        joueurencours.getAventurier().setSeche(true);
+                    }
+                }
+
+                if(action == Message.TypeMessage.DEPLACER && tuileav == null) {
+                    tuileav = tuilesaction.get(0);
+                    tuilesaction.clear();
+                    tuilesacc.clear();
+                    for (Tuile t : joueurencours.getAventurier().getTuilesAccDeplacer(grille, tuileav).values()) {
+                    tuilesacc.add(t);
+                    }
+                    vuegrille.setTuilesSurbrillance(tuilesacc, true);
+                }
+
+                else if (action == Message.TypeMessage.DEPLACER && tuileav != null) {
+                    joueurencours.getAventurier().deplacer(tuileav, tuilesaction.get(0));
+                    textepartie.setText(joueurencours.getNom() + " déplace le(s) joueur(s) de " + tuileav.getNom() + " vers " + tuilesaction.get(0).getNom());
+                    tuilesaction.clear();
+                    tuileav = null;
+                }
+                textepartie.setText(textepartie.getText() + "\nIl lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
+                if (joueurencours.getAventurier() instanceof Ingenieur && (joueurencours.getAventurier().getSeche() && (joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty())))
+                    textepartie.setText(textepartie.getText() + "\nMais il peut encore assécher une tuile sans utiliser d'action");
             }
-            
-            if(action == Message.TypeMessage.DEPLACER && tuileav == null) {
-                tuileav = tuilesaction.get(0);
-                tuilesaction.clear();
+
+            if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
+                action = msg.getType();
                 tuilesacc.clear();
-                for (Tuile t : joueurencours.getAventurier().getTuilesAccDeplacer(grille, tuileav).values()) {
-                tuilesacc.add(t);
+                for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
+                    tuilesacc.add(t);
                 }
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
-            
-            else if (action == Message.TypeMessage.DEPLACER && tuileav != null) {
-                joueurencours.getAventurier().deplacer(tuileav, tuilesaction.get(0));
-                textepartie.setText(joueurencours.getNom() + " déplace le(s) joueur(s) de " + tuileav.getNom() + " vers " + tuilesaction.get(0).getNom());
-                tuilesaction.clear();
-                tuileav = null;
+            if (msg.getType() == Message.TypeMessage.ASSECHER) {
+                action = msg.getType();
+                tuilesacc.clear();
+                for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 2).values()) {
+                    tuilesacc.add(t);
+                }
+                vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
-            textepartie.setText(textepartie.getText() + "\nIl lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
-            if (joueurencours.getAventurier() instanceof Ingenieur && joueurencours.getAventurier().getSeche() && (joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty()))
-                textepartie.setText(textepartie.getText() + "\nMais il peut encore assécher une tuile sans utiliser d'action");
-        }
-                
-        if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
-            action = msg.getType();
-            tuilesacc.clear();
-            for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
-                tuilesacc.add(t);
+            if (msg.getType() == Message.TypeMessage.DEPLACER) {
+                action = msg.getType();
+                tuilesacc.clear();
+                for (Tuile t : joueurencours.getAventurier().getTuilesAv(grille).values()) {
+                    tuilesacc.add(t);
+                }
+                vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
-            vuegrille.setTuilesSurbrillance(tuilesacc, true);
-        }
-        if (msg.getType() == Message.TypeMessage.ASSECHER) {
-            action = msg.getType();
-            tuilesacc.clear();
-            for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 2).values()) {
-                tuilesacc.add(t);
+
+            if (msg.getType() == Message.TypeMessage.TRESOR) {
+                tresors.add(joueurencours.getAventurier().getPos().getTresor());
+                vuetresor.majtresor(tresors);
+                joueurencours.getAventurier().setNbactions(joueurencours.getAventurier().getNbactions()+1);
             }
-            vuegrille.setTuilesSurbrillance(tuilesacc, true);
+
+            if (msg.getType() == Message.TypeMessage.PASSER)
+                fintour();
         }
-        if (msg.getType() == Message.TypeMessage.DEPLACER) {
-            action = msg.getType();
-            tuilesacc.clear();
-            for (Tuile t : joueurencours.getAventurier().getTuilesAv(grille).values()) {
-                tuilesacc.add(t);
-            }
-            vuegrille.setTuilesSurbrillance(tuilesacc, true);
-        }
-        
-        if (msg.getType() == Message.TypeMessage.TRESOR) {
-            tresors.add(joueurencours.getAventurier().getPos().getTresor());
-            vuetresor.majtresor(tresors);
-        }
-        
-        if (msg.getType() == Message.TypeMessage.PASSER)
-            fintour();
         
         vuegrille.couleur(getGrille());
         
         vuejcours.verifboutons(tresors, grille);
-        if (toustresors())
-            textepartie.setText(textepartie.getText()+ "\n Vous avez acquis tous les trésors, rendez vous à l'héliport");
+        if (toustresors() && !gagne())
+            textepartie.setText(textepartie.getText()+ "\nVous avez acquis tous les trésors, rendez vous à l'héliport");
+        if (perdu())
+            textepartie.setText("\nVous avez perdu !");
+        if (gagne())
+            textepartie.setText("\nVous avez gagné !");
         
     }
     
@@ -528,8 +537,8 @@ public class Controleur {
     }
     
     public boolean perdu() {
-        return (calice.size() < 2 && !tresors.contains(Tresor.Calice)) || (statue.size() < 2 && !tresors.contains(Tresor.Statue)) ||
-               (cristal.size() < 2 && !tresors.contains(Tresor.Cristal)) || (pierre.size() < 2 && !tresors.contains(Tresor.Pierre)) || helico.estMorte();
+        return (calice.size() == 0 && !tresors.contains(Tresor.Calice)) || (statue.size() == 0 && !tresors.contains(Tresor.Statue)) ||
+               (cristal.size() == 0 && !tresors.contains(Tresor.Cristal)) || (pierre.size() == 0 && !tresors.contains(Tresor.Pierre)) || helico.estMorte();
     }
     
     public boolean gagne() {

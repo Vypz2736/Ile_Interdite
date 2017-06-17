@@ -26,8 +26,14 @@ public class VueTresors extends JPanel {
     private ImageIcon cristalg;
     private ImageIcon pierreg;
     private ImageIcon caliceg;
+    private JLabel label = new JLabel("Trésors acquis");
+    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public VueTresors(ArrayList<Tresor> at) {
+        label.setForeground(new Color(200,200,200,200));
+        label.setFont(new Font(label.getFont().getFontName(), label.getFont().getStyle(), (int)dim.getWidth()/125));
+        label.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, 0, 0, (int)dim.getWidth()/7));
+        add(label);
         tresors = at;
         statue = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Statue.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
         cristal = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Cristal.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
@@ -41,8 +47,8 @@ public class VueTresors extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        //g.setColor(new Color(30,30,30));
-        //g.fillRect(0, 0, getWidth(), getHeight());
+        g.setColor(new Color(30,30,30));
+        g.fillRect(0, 0, getWidth(), getHeight());
         if (tresors.contains(Tresor.Calice))
             g.drawImage(calice.getImage(), 0, 0, getWidth(), getHeight(), this);
         else
