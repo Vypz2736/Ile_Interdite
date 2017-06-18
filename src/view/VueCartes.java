@@ -22,17 +22,15 @@ import models.*;
  * @author Vypz
  */
 public class VueCartes extends JPanel {
-    private Carte ca;
     private ArrayList<Carte> ac;
     private HashMap<Carte,PanelCarte> panels = new HashMap();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Controleur c;
     
-    public VueCartes(Carte carte, ArrayList<Carte> cartes, Controleur controleur) {
-        ca = carte;
+    public VueCartes(ArrayList<Carte> cartes, Controleur controleur) {
         ac = cartes;
         c = controleur;
-        setLayout(new GridLayout(1,7));
+        setLayout(new GridLayout(1,8));
         images();
     }
     
@@ -41,14 +39,14 @@ public class VueCartes extends JPanel {
         panels.clear();
         for (int i = 0; i < ac.size(); i++) {
             panels.put(ac.get(i),new PanelCarte(ac, ac.get(i), c));
-            panels.get(i).setBorder(BorderFactory.createEmptyBorder(0,(int)((dim.width-dim.height)/2-dim.getHeight()/10*(7))/(2*(7)),0,(int)((dim.width-dim.height)/2-dim.getHeight()/10*(7))/(2*(7))));
-            this.add(panels.get(i));
+            panels.get(ac.get(i)).repaint();
+            this.add(panels.get(ac.get(i)));
         }
-        for (int i = ac.size(); i < 8; i++) {
-            panels.put(ac.get(i),new PanelCarte(ac, null, c));
-            panels.get(i).setBorder(BorderFactory.createEmptyBorder(0,(int)((dim.width-dim.height)/2-dim.getHeight()/10*(7))/(2*(7)),0,(int)((dim.width-dim.height)/2-dim.getHeight()/10*(7))/(2*(7))));
-            this.add(panels.get(i));
-        }
+        //affiche les emplacements de carte vide
+        //for (int i = ac.size(); i < 7; i++) {
+        //    this.add(new PanelCarte(ac, null, c));
+        //}
+        repaint();
     }
     
     public void setCliquable(ArrayList<Carte> cartes, boolean etat) {

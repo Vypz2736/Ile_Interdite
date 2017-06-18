@@ -12,7 +12,6 @@ public class Controleur {
 
 	private NivEau nivEau;
 	private Grille grille;
-	private VueAventurier vueAventurier;
 	private ArrayList<Joueur> joueurs = new ArrayList();
 	private ArrayList<Aventurier> aventuriers = new ArrayList();
 	private ArrayList<Carte> deft = new ArrayList();
@@ -38,6 +37,7 @@ public class Controleur {
         private VueAventurier vuejcours;
         private VueTourJoueurs vuetourjoueurs;
         private JTextArea textepartie;
+        private VueCartesJoueur vuecartesj;
         private Tuile helico;
         private ArrayList<Tuile> cristal = new ArrayList();
         private ArrayList<Tuile> statue = new ArrayList();
@@ -47,6 +47,7 @@ public class Controleur {
         private VueTresors vuetresor;
         private VueJoueursAction vuejoueursaction;
         private JPanel panelgvja = new JPanel();
+        private JPanel panelgvc = new JPanel();
         private ArrayList<Joueur> JAcc = new ArrayList();
         private Carte cartedon;
 
@@ -80,10 +81,10 @@ public class Controleur {
                 deft.add(new CTresor(Tresor.Cristal));
                 deft.add(new CTresor(Tresor.Pierre));
                 deft.add(new CTresor(Tresor.Statue));
-                if (i < 1) {
+                if (i > 1) {
                     if (i > 3)
                         deft.add(new CSacSable());
-                    //deft.add(new CHelico());
+                    deft.add(new CHelico());
                     deft.add(new CNiveauEau());
                 }
             }
@@ -121,6 +122,7 @@ public class Controleur {
         }
 
 	public ArrayList<Carte> tirerCT() {
+            textepartie.setText("");
             if (pilet.size() < 2) {
                 Collections.shuffle(deft);
                 for (Carte c : deft) {
@@ -131,18 +133,20 @@ public class Controleur {
             ArrayList<Carte> ac = new ArrayList();
             ac.add(pilet.pop());
             ac.add(pilet.pop());
-            for (int i = 0; i < 2; i++) {
-                if (ac.get(0) instanceof CNiveauEau) {
-                    vueniveau.nivplus();
-                    deft.add(ac.get(0));
-                    ac.remove(ac.get(0));
-                    Collections.shuffle(defi);
-                    for (CarteInondation c : defi) {
-                        pilei.push(c);
-                    }
-                    nivEau.gradPlus();
-                    defi.clear();
+            for (int i = 1; i > 0; i--) {
+                if (ac.get(i) instanceof CNiveauEau) {
+                        vueniveau.nivplus();
+                        nivEau.gradPlus();
+                        deft.add(ac.get(i));
+                        ac.remove(ac.get(i));
+                        Collections.shuffle(defi);
+                        for (CarteInondation c : defi) {
+                            pilei.push(c);
+                        }
+                        defi.clear();
                 }
+                else
+                    textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " pioche " + ac.get(i).getNom());
             }
             return ac;
 	}
@@ -353,6 +357,7 @@ public class Controleur {
             textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, 0, 0, 0));
             vuejoueursaction = new VueJoueursAction(joueurencours, joueurs, this);
             vuejcours = new VueAventurier(joueurencours,this);
+            vuecartesj = new VueCartesJoueur(joueurencours, joueurs, this);
             vuejcours.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
             vuejcours.verifboutons(tresors, grille, joueurs);
             textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/200, (int)dim.getWidth()/200, (int)dim.getWidth()/200, 0));
@@ -360,11 +365,14 @@ public class Controleur {
             vuetourjoueurs.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuetourjoueurs.getPreferredSize().getHeight()));
             textepartie.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
             vuejoueursaction.setPreferredSize(new Dimension((int)(int)panelgauche.getPreferredSize().getWidth(),(int)dim.getHeight()/10));
+            vuecartesj.setPreferredSize(new Dimension((int)(int)panelgauche.getPreferredSize().getWidth(),(int)dim.getHeight()/15*(2*joueurs.size()-1)));
             panelgauche.add(vuetourjoueurs);
             panelgauche.add(textepartie);
             panelgauche.add(vuejcours);
             panelgvja.add(vuejoueursaction);
             panelgauche.add(panelgvja);
+            panelgvc.add(vuecartesj);
+            panelgauche.add(panelgvc);
             int r = vuejcours.getColor().getRed()-70;
             int g = vuejcours.getColor().getGreen()-70;
             int b = vuejcours.getColor().getBlue()-70;
@@ -380,6 +388,9 @@ public class Controleur {
             vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
             vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
             panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            panelgvc.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            vuecartesj.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            vuecartesj.images();
         }
 
     /**
@@ -504,6 +515,7 @@ public class Controleur {
                 action = msg.getType();
                 tuilesacc.clear();
                 textepartie.setText(joueurencours.getNom() + " doit choisir la carte à donner");
+                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
             }
             
             if (action == Message.TypeMessage.DONNER && msg.getType() == Message.TypeMessage.CARTE) {
@@ -512,11 +524,14 @@ public class Controleur {
                 JAcc = joueurencours.getAventurier().getJAcc(joueurs);
                 vuejoueursaction.setCliquable(JAcc, true);
                 textepartie.setText(joueurencours.getNom() + " doit choisir à qui donner sa carte");
+                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
             }
             
             if (action == Message.TypeMessage.CARTE && msg.getType() == Message.TypeMessage.JOUEUR) {
                 action = msg.getType();
                 joueurencours.getAventurier().donnerCarte(joueurs.get(msg.getIndice()),cartedon);
+                vuejoueursaction.setCliquable(JAcc, false);
+                vuecartesj.images();
             }
 
             if (msg.getType() == Message.TypeMessage.TRESOR) {
@@ -534,14 +549,15 @@ public class Controleur {
                     nmtresor = "la Statue du zéphyr";
                 textepartie.setText(textepartie.getText()+ "\nVous récupérez " + nmtresor + " !");
             }
-
-            if (msg.getType() == Message.TypeMessage.PASSER)
-                fintour();
             
             if (msg.getType() != Message.TypeMessage.DONNER && msg.getType() != Message.TypeMessage.CARTE && msg.getType() != Message.TypeMessage.JOUEUR) {
                 vuejoueursaction.setCliquable(JAcc, false);
                 JAcc.clear();
+                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
             }
+
+            if (msg.getType() == Message.TypeMessage.PASSER)
+                fintour();
         }
         
         vuegrille.couleur(getGrille());
@@ -566,12 +582,15 @@ public class Controleur {
         vuegrille.couleur(grille);
         if (joueurencours.getAventurier() instanceof Pilote)
             joueurencours.getAventurier().setHelico(false);
+        for (Carte c : joueurencours.getAventurier().getCartes())
+            System.err.println(c.getNom());
         joueurencours.getAventurier().setNbactions(0);
         joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
         vuejoueursaction.fintour();
-        textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
+        vuecartesj.fintour();
+        textepartie.setText(textepartie.getText() + "\nAu tour de " + joueurencours.getNom() + " de jouer");
         int r = vuejcours.getColor().getRed()-70;
         int g = vuejcours.getColor().getGreen()-70;
         int b = vuejcours.getColor().getBlue()-70;
@@ -587,6 +606,9 @@ public class Controleur {
         vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
         vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
         panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+        panelgvc.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+        vuecartesj.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+        vuecartesj.images();
     }
     
     public boolean perdu() {

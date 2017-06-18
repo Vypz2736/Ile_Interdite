@@ -40,7 +40,6 @@ public class PanelCarte extends JPanel {
     private ArrayList<Carte> ac = new ArrayList();
     private Carte ca;
     private Controleur c;
-    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean cliquable = false;
     private int x1, l, y1, h;
     private CTresor ct;
@@ -53,20 +52,20 @@ public class PanelCarte extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (cliquable)
-                c.traiterMessage(new Message(Message.TypeMessage.JOUEUR,ac.indexOf(ca)));
+                c.traiterMessage(new Message(Message.TypeMessage.CARTE,ac.indexOf(ca)-1));
             }
         });
     }
     
     @Override
     protected void paintComponent(Graphics g) {
-        x1 = (int) (getWidth()-(getHeight()/69*49))/2;
-        l = (int) getHeight()/690*490;
-        y1 = (int) 0;
         h = (int) getHeight();
+        l = (int) (h*49)/69;
+        x1 = (int) (getWidth()-l)/2;
+        y1 = (int) 1;
         if (ca == null) {
             cliquable = false;
-            g.setColor(new Color(150,150,150));
+            g.setColor(new Color(30,30,30));
             g.fillRect(x1, y1, l, h);
         }
         
@@ -93,8 +92,8 @@ public class PanelCarte extends JPanel {
                                         .getImage(), x1, y1, l, h, this);
             }
             g.setColor(Color.black);
-            g.drawRect(x1, y1, l-1, h-1);
-            g.drawRect(x1+1, y1+1, l-3, h-3);
+            g.drawRect(x1, y1, l-1, h-2);
+            g.drawRect(x1+1, y1+1, l-3, h-4);
 
             if (!cliquable) {
                 g.setColor(new Color(150,150,150,150));

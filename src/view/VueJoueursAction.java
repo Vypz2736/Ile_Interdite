@@ -46,7 +46,6 @@ public class VueJoueursAction extends JPanel {
         panels.clear();
         for (int i = 0; i < aj.size()-1; i++) {
             panels.put(aj.get((aj.indexOf(j)+1+i) % aj.size()),new PanelJoueur(aj, aj.get((aj.indexOf(j)+1+i) % aj.size()), c));
-            panels.get(aj.get((aj.indexOf(j)+1+i) % aj.size())).setBorder(BorderFactory.createEmptyBorder(0,(int)((dim.width-dim.height)/2-dim.getHeight()/10*(aj.size()-1))/(2*(aj.size()-1)),0,(int)((dim.width-dim.height)/2-dim.getHeight()/10*(aj.size()-1))/(2*(aj.size()-1))));
             this.add(panels.get(aj.get((aj.indexOf(j)+1+i) % aj.size())));
         }
     }

@@ -17,4 +17,9 @@ public class CTresor extends Carte {
         tresor = t;
     }
 
+    @Override
+    public String getNom() {
+        return "une carte pour le tresor : " + tresor.toString();
+    }
+
 }
