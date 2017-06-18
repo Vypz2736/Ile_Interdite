@@ -47,6 +47,8 @@ public class Controleur {
         private VueTresors vuetresor;
         private VueJoueursAction vuejoueursaction;
         private JPanel panelgvja = new JPanel();
+        private ArrayList<Joueur> JAcc = new ArrayList();
+        private Carte cartedon;
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -352,7 +354,7 @@ public class Controleur {
             vuejoueursaction = new VueJoueursAction(joueurencours, joueurs, this);
             vuejcours = new VueAventurier(joueurencours,this);
             vuejcours.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
-            vuejcours.verifboutons(tresors, grille);
+            vuejcours.verifboutons(tresors, grille, joueurs);
             textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/200, (int)dim.getWidth()/200, (int)dim.getWidth()/200, 0));
             vuetourjoueurs.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/200, (int)dim.getWidth()/200, (int)dim.getWidth()/200, 0));
             vuetourjoueurs.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuetourjoueurs.getPreferredSize().getHeight()));
@@ -503,6 +505,19 @@ public class Controleur {
                 tuilesacc.clear();
                 textepartie.setText(joueurencours.getNom() + " doit choisir la carte à donner");
             }
+            
+            if (action == Message.TypeMessage.DONNER && msg.getType() == Message.TypeMessage.CARTE) {
+                action = msg.getType();
+                cartedon = joueurencours.getAventurier().getCartes().get(msg.getIndice());
+                JAcc = joueurencours.getAventurier().getJAcc(joueurs);
+                vuejoueursaction.setCliquable(JAcc, true);
+                textepartie.setText(joueurencours.getNom() + " doit choisir à qui donner sa carte");
+            }
+            
+            if (action == Message.TypeMessage.CARTE && msg.getType() == Message.TypeMessage.JOUEUR) {
+                action = msg.getType();
+                joueurencours.getAventurier().donnerCarte(joueurs.get(msg.getIndice()),cartedon);
+            }
 
             if (msg.getType() == Message.TypeMessage.TRESOR) {
                 tresors.add(joueurencours.getAventurier().getPos().getTresor());
@@ -522,11 +537,16 @@ public class Controleur {
 
             if (msg.getType() == Message.TypeMessage.PASSER)
                 fintour();
+            
+            if (msg.getType() != Message.TypeMessage.DONNER && msg.getType() != Message.TypeMessage.CARTE && msg.getType() != Message.TypeMessage.JOUEUR) {
+                vuejoueursaction.setCliquable(JAcc, false);
+                JAcc.clear();
+            }
         }
         
         vuegrille.couleur(getGrille());
         
-        vuejcours.verifboutons(tresors, grille);
+        vuejcours.verifboutons(tresors, grille, joueurs);
         if (perdu())
             textepartie.setText("\nVous avez perdu !");
         if (gagne())

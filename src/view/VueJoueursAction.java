@@ -58,6 +58,6 @@ public class VueJoueursAction extends JPanel {
     
     public void setCliquable(ArrayList<Joueur> joueurs, boolean etat) {
         for (Joueur joueur : joueurs)
-            panels.get(j).setCliquable(etat);
+            panels.get(joueur).setCliquable(etat);
     }
 }

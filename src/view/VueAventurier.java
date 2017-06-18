@@ -217,8 +217,8 @@ public class VueAventurier extends JPanel {
         return nb < 3;
     }
     
-    public void donner() {
-        if (j.getAventurier().getPos().getAventuriers().size() > 1 && !j.getAventurier().getCartes().isEmpty() && j.getAventurier().getNbactions() < 3)
+    public void donner(ArrayList<Joueur> aj) {
+        if (!j.getAventurier().getJAcc(aj).isEmpty() && !j.getAventurier().getCartes().isEmpty() && j.getAventurier().getNbactions() < 3)
             btndonnercarte.setEnabled(true);
         else
             btndonnercarte.setEnabled(false);
@@ -243,9 +243,9 @@ public class VueAventurier extends JPanel {
         }
     }
     
-    public void verifboutons(ArrayList<Tresor> at, Grille g) {
+    public void verifboutons(ArrayList<Tresor> at, Grille g, ArrayList<Joueur> aj) {
         tresor(at);
-        donner();
+        donner(aj);
         assecher(g);
         deplacer();
     }

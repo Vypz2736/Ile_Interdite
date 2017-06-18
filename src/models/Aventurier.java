@@ -96,15 +96,6 @@ public abstract class Aventurier {
         setNbactions(getNbactions() + 1);
     }
 
-    /**
-     *
-     * @param g
-     */
-    public void donnerCarte(Grille g) {
-        // TODO - implement Aventurier.donnerCarte
-        throw new UnsupportedOperationException();
-    }
-
     public Tresor recupTresor() {
         if (getPos().getTresor() != null)
             setNbactions(getNbactions() + 1);
@@ -178,5 +169,19 @@ public abstract class Aventurier {
     public abstract void setSeche(boolean seche);
         
     public abstract void assecherG(ArrayList<Tuile> at);
+    
+    public ArrayList<Joueur> getJAcc(ArrayList<Joueur> joueurs) {
+        ArrayList<Joueur> aj = new ArrayList();
+        for (Joueur j : joueurs)
+            if (!j.getAventurier().equals(this) && j.getAventurier().getCartes().size() < 5 && getPos().getAventuriers().contains(j.getAventurier()))
+                aj.add(j);
+        return aj;
+    }
+
+    public void donnerCarte(Joueur j, Carte c) {
+        this.getCartes().remove(c);
+        j.getAventurier().getCartes().add(c);
+        setNbactions(getNbactions() + 1);
+    }
 
 }

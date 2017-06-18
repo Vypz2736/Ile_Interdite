@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Messager extends Aventurier {
-
-	public void donnerCarte() {
-		// TODO - implement Messager.donnerCarte
-		throw new UnsupportedOperationException();
-	}
+    
+        public ArrayList<Joueur> getJAcc(ArrayList<Joueur> joueurs) {
+            ArrayList<Joueur> aj = new ArrayList();
+            for (Joueur j : joueurs)
+                if (!j.getAventurier().equals(this) && j.getAventurier().getCartes().size() < 5)
+                    aj.add(j);
+            return aj;
+        }
         
         public void deplacer(Tuile t1, Tuile t2) {
             // TODO - implement Aventurier.recupTresor
