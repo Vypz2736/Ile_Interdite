@@ -451,6 +451,7 @@ public class Controleur {
                     for (Tuile t : joueurencours.getAventurier().getTuilesAccDeplacer(grille, tuileav).values()) {
                     tuilesacc.add(t);
                     }
+                    textepartie.setText(joueurencours.getNom() + " doit choisir la tuile ou le(s) déplacer");
                     vuegrille.setTuilesSurbrillance(tuilesacc, true);
                 }
 
@@ -461,8 +462,10 @@ public class Controleur {
                     tuileav = null;
                 }
                 textepartie.setText(textepartie.getText() + "\nIl lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
-                if (joueurencours.getAventurier() instanceof Ingenieur && (joueurencours.getAventurier().getSeche() && (joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty())))
+                if (joueurencours.getAventurier() instanceof Ingenieur && (joueurencours.getAventurier().getSeche() && ((joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty()))))
                     textepartie.setText(textepartie.getText() + "\nMais il peut encore assécher une tuile sans utiliser d'action");
+                if (toustresors() && !gagne())
+                    textepartie.setText(textepartie.getText()+ "\nVous avez acquis tous les trésors, rendez vous à l'héliport");
             }
 
             if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
@@ -471,6 +474,9 @@ public class Controleur {
                 for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 1).values()) {
                     tuilesacc.add(t);
                 }
+                textepartie.setText(joueurencours.getNom() + " doit choisir la tuile où se déplacer");
+                if (joueurencours.getAventurier() instanceof Pilote && !joueurencours.getAventurier().getHelico())
+                    textepartie.setText(textepartie.getText()+ "\nSon hélicoptère est disponible");
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
             if (msg.getType() == Message.TypeMessage.ASSECHER) {
@@ -479,6 +485,7 @@ public class Controleur {
                 for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 2).values()) {
                     tuilesacc.add(t);
                 }
+                textepartie.setText(joueurencours.getNom() + " doit choisir la tuile à assécher");
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
             if (msg.getType() == Message.TypeMessage.DEPLACER) {
@@ -488,12 +495,29 @@ public class Controleur {
                     tuilesacc.add(t);
                 }
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
+                textepartie.setText(joueurencours.getNom() + " doit choisir la tuile ou se trouve(nt) le(s) joueur(s) à déplacer");
+            }
+            
+            if (msg.getType() == Message.TypeMessage.DONNER) {
+                action = msg.getType();
+                tuilesacc.clear();
+                textepartie.setText(joueurencours.getNom() + " doit choisir la carte à donner");
             }
 
             if (msg.getType() == Message.TypeMessage.TRESOR) {
                 tresors.add(joueurencours.getAventurier().getPos().getTresor());
                 vuetresor.majtresor(tresors);
                 joueurencours.getAventurier().setNbactions(joueurencours.getAventurier().getNbactions()+1);
+                String nmtresor = "rien";
+                if (tresors.get(tresors.size()-1).equals(Tresor.Pierre))
+                    nmtresor = "la Pierre sacrée";
+                if (tresors.get(tresors.size()-1).equals(Tresor.Cristal))
+                    nmtresor = "le Cristal ardent";
+                if (tresors.get(tresors.size()-1).equals(Tresor.Calice))
+                    nmtresor = "le Calice de l'onde";
+                if (tresors.get(tresors.size()-1).equals(Tresor.Statue))
+                    nmtresor = "la Statue du zéphyr";
+                textepartie.setText(textepartie.getText()+ "\nVous récupérez " + nmtresor + " !");
             }
 
             if (msg.getType() == Message.TypeMessage.PASSER)
@@ -503,8 +527,6 @@ public class Controleur {
         vuegrille.couleur(getGrille());
         
         vuejcours.verifboutons(tresors, grille);
-        if (toustresors() && !gagne())
-            textepartie.setText(textepartie.getText()+ "\nVous avez acquis tous les trésors, rendez vous à l'héliport");
         if (perdu())
             textepartie.setText("\nVous avez perdu !");
         if (gagne())

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Ingenieur extends Aventurier {
 
-	private boolean seche;
+	private boolean seche = false;
 
 	/**
 	 * 
