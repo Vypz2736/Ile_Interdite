@@ -18,13 +18,14 @@ public class Message {
         ASSECHER,
         PASSER,
         DONNER,
-        TRESOR;
+        TRESOR,
+        JOUEUR;
     }
     
     private TypeMessage type;
     private int colonne;
     private int ligne;
-    private int niveau;
+    private int niveauindice;
     
     public Message(TypeMessage t, int l, int c) {
         type = t;
@@ -38,7 +39,7 @@ public class Message {
     
     public Message(TypeMessage t, int n) {
         type = t;
-        niveau = n+1;
+        niveauindice = n+1;
     }
 
     /**
@@ -66,6 +67,10 @@ public class Message {
      * @return the niveau
      */
     public int getNiveau() {
-        return niveau;
+        return niveauindice;
+    }
+    
+    public int getIndice() {
+        return niveauindice;
     }
 }

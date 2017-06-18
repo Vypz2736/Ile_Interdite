@@ -35,14 +35,14 @@ public class VueTresors extends JPanel {
         label.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, 0, 0, (int)dim.getWidth()/7));
         add(label);
         tresors = at;
-        statue = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Statue.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        cristal = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Cristal.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        pierre = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Pierre.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        calice = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Calice.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        statueg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Statueg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        cristalg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Cristalg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        pierreg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Pierreg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        caliceg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Caliceg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+        statue = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Statue.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+        cristal = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Cristal.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+        pierre = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Pierre.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+        calice = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Calice.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+        statueg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Statueg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+        cristalg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Cristalg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+        pierreg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Pierreg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
+        caliceg = new ImageIcon(new ImageIcon(getClass().getResource("/img/tresors/Caliceg.png")).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
     }
 
     @Override

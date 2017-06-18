@@ -14,9 +14,9 @@ import util.Message;
 
 public class VueTourJoueurs extends JPanel {
     
-    public Joueur j;
-    public ArrayList<Joueur> aj;
-    public ArrayList<JLabel> labels = new ArrayList();
+    private Joueur j;
+    private ArrayList<Joueur> aj;
+    private ArrayList<JLabel> labels = new ArrayList();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public VueTourJoueurs(Joueur joueur, ArrayList<Joueur> joueurs) {

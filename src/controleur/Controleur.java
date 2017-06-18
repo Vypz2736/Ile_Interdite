@@ -44,7 +44,9 @@ public class Controleur {
         private ArrayList<Tuile> calice = new ArrayList();
         private ArrayList<Tuile> pierre = new ArrayList();
         private int nivini;
-        VueTresors vuetresor;
+        private VueTresors vuetresor;
+        private VueJoueursAction vuejoueursaction;
+        private JPanel panelgvja = new JPanel();
 
         public Controleur() {
             window = new JFrame("Île Interdite");
@@ -347,6 +349,7 @@ public class Controleur {
             textepartie.setFont(new Font(textepartie.getFont().getFontName(), textepartie.getFont().getStyle(), (int)dim.getWidth()/140));
             textepartie.setForeground(new Color(30,30,30));
             textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, 0, 0, 0));
+            vuejoueursaction = new VueJoueursAction(joueurencours, joueurs, this);
             vuejcours = new VueAventurier(joueurencours,this);
             vuejcours.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
             vuejcours.verifboutons(tresors, grille);
@@ -354,9 +357,12 @@ public class Controleur {
             vuetourjoueurs.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/200, (int)dim.getWidth()/200, (int)dim.getWidth()/200, 0));
             vuetourjoueurs.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuetourjoueurs.getPreferredSize().getHeight()));
             textepartie.setPreferredSize(new Dimension((int)panelgauche.getPreferredSize().getWidth(),(int)vuejcours.getPreferredSize().getHeight()));
+            vuejoueursaction.setPreferredSize(new Dimension((int)(int)panelgauche.getPreferredSize().getWidth(),(int)dim.getHeight()/10));
             panelgauche.add(vuetourjoueurs);
             panelgauche.add(textepartie);
             panelgauche.add(vuejcours);
+            panelgvja.add(vuejoueursaction);
+            panelgauche.add(panelgvja);
             int r = vuejcours.getColor().getRed()-70;
             int g = vuejcours.getColor().getGreen()-70;
             int b = vuejcours.getColor().getBlue()-70;
@@ -370,6 +376,8 @@ public class Controleur {
             panelgauche.setBackground(c);
             textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
             vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
         }
 
     /**
@@ -520,6 +528,7 @@ public class Controleur {
         joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
         vuejcours.changerj(joueurencours);
         vuetourjoueurs.fintour();
+        vuejoueursaction.fintour();
         textepartie.setText("Au tour de " + joueurencours.getNom() + " de jouer");
         int r = vuejcours.getColor().getRed()-70;
         int g = vuejcours.getColor().getGreen()-70;
@@ -534,6 +543,8 @@ public class Controleur {
         panelgauche.setBackground(c);
         textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
         vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+        vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+        panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
     }
     
     public boolean perdu() {
