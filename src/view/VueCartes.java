@@ -43,9 +43,9 @@ public class VueCartes extends JPanel {
             this.add(panels.get(ac.get(i)));
         }
         //affiche les emplacements de carte vide
-        //for (int i = ac.size(); i < 7; i++) {
-        //    this.add(new PanelCarte(ac, null, c));
-        //}
+        for (int i = ac.size(); i < 7; i++) {
+            this.add(new PanelCarte(ac, null, c));
+        }
         repaint();
     }
     

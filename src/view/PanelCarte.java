@@ -52,7 +52,7 @@ public class PanelCarte extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (cliquable)
-                c.traiterMessage(new Message(Message.TypeMessage.CARTE,ac.indexOf(ca)-1));
+                c.traiterMessage(new Message(Message.TypeMessage.CARTE,ac.indexOf(ca)));
             }
         });
     }

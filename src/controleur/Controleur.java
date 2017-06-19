@@ -133,7 +133,7 @@ public class Controleur {
             ArrayList<Carte> ac = new ArrayList();
             ac.add(pilet.pop());
             ac.add(pilet.pop());
-            for (int i = 1; i > 0; i--) {
+            for (int i = 1; i > -1; i--) {
                 if (ac.get(i) instanceof CNiveauEau) {
                         vueniveau.nivplus();
                         nivEau.gradPlus();
@@ -516,6 +516,7 @@ public class Controleur {
                 tuilesacc.clear();
                 textepartie.setText(joueurencours.getNom() + " doit choisir la carte à donner");
                 vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
+                window.repaint();
             }
             
             if (action == Message.TypeMessage.DONNER && msg.getType() == Message.TypeMessage.CARTE) {
@@ -525,6 +526,8 @@ public class Controleur {
                 vuejoueursaction.setCliquable(JAcc, true);
                 textepartie.setText(joueurencours.getNom() + " doit choisir à qui donner sa carte");
                 vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
+                window.repaint();
+                
             }
             
             if (action == Message.TypeMessage.CARTE && msg.getType() == Message.TypeMessage.JOUEUR) {
@@ -532,6 +535,7 @@ public class Controleur {
                 joueurencours.getAventurier().donnerCarte(joueurs.get(msg.getIndice()),cartedon);
                 vuejoueursaction.setCliquable(JAcc, false);
                 vuecartesj.images();
+                window.repaint();
             }
 
             if (msg.getType() == Message.TypeMessage.TRESOR) {
@@ -583,7 +587,6 @@ public class Controleur {
         if (joueurencours.getAventurier() instanceof Pilote)
             joueurencours.getAventurier().setHelico(false);
         for (Carte c : joueurencours.getAventurier().getCartes())
-            System.err.println(c.getNom());
         joueurencours.getAventurier().setNbactions(0);
         joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
         vuejcours.changerj(joueurencours);

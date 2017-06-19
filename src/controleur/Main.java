@@ -5,10 +5,7 @@
  */
 package controleur;
 
-/**
- *
- * @author Vypz
- */
+
 public class Main {
 
     /**

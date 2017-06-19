@@ -5,10 +5,7 @@
  */
 package util;
 
-/**
- *
- * @author Vypz
- */
+
 public class Message {
     public enum TypeMessage {
         SAISIEFINIE,
@@ -40,7 +37,7 @@ public class Message {
     
     public Message(TypeMessage t, int n) {
         type = t;
-        niveauindice = n+1;
+        niveauindice = n;
     }
 
     /**
@@ -68,7 +65,7 @@ public class Message {
      * @return the niveau
      */
     public int getNiveau() {
-        return niveauindice;
+        return niveauindice+1;
     }
     
     public int getIndice() {

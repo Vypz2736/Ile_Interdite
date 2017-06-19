@@ -43,6 +43,7 @@ public class PanelJoueur extends JPanel {
     private int x1, l, y1, h;
     
     public PanelJoueur(ArrayList<Joueur> joueurs, Joueur joueur, Controleur controleur) {
+        aj = joueurs;
         j = joueur;
         c = controleur;
         addMouseListener(new MouseAdapter() {
