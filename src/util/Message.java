@@ -5,8 +5,17 @@
  */
 package util;
 
+import controleur.Controleur;
+
 
 public class Message {
+
+    /**
+     * @return the controleur
+     */
+    public Controleur getControleur() {
+        return controleur;
+    }
     public enum TypeMessage {
         SAISIEFINIE,
         CASECLIQUEE,
@@ -17,18 +26,25 @@ public class Message {
         DONNER,
         TRESOR,
         JOUEUR,
-        CARTE;
+        CARTE,
+        RELANCER,
+        DFORCE;
     }
     
     private TypeMessage type;
     private int colonne;
     private int ligne;
     private int niveauindice;
+    private Controleur controleur;
     
     public Message(TypeMessage t, int l, int c) {
         type = t;
         colonne = c;
         ligne = l;
+    }
+    
+    public Message(Controleur c) {
+        controleur = c;
     }
     
     public Message(TypeMessage t) {

@@ -6,11 +6,16 @@
 package view;
 
 import controleur.Controleur;
+import controleur.Main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import models.*;
 import util.Message;
@@ -24,10 +29,18 @@ public class VueTuile extends JPanel {
     private Tuile t;
     private boolean surbrillance = false;
     private Controleur c;
-    
-    public VueTuile(Tuile tuile, Controleur controleur) {
+    private ArrayList<BufferedImage> images = new ArrayList();
+    private String chemin = "/img/tuiles/";
+    public VueTuile(Tuile tuile, Controleur controleur) throws IOException {
         c = controleur;
         t = tuile;
+        images.add(ImageIO.read(Main.class.getResource(chemin + "morte.png")));
+        if (t != null) {
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + ".png")));
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "i.png")));
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "s.png")));
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "is.png")));
+        }
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -41,10 +54,9 @@ public class VueTuile extends JPanel {
     @Override
     public void paintComponent(Graphics g) {;
         int i = 1;
-        
-        g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/tuiles/morte.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, 0, getWidth(), getHeight(), this);
+        g.drawImage(images.get(0), 0, 0, getWidth(), getHeight(), this);
         if (getT() != null && !t.estMorte())
-            g.drawImage(img(getT()).getImage(), getWidth()*1/20, getHeight()*1/20, getWidth()*9/10, getHeight()*9/10, this);
+            g.drawImage(img(t), getWidth()*1/20, getHeight()*1/20, getWidth()*9/10, getHeight()*9/10, this);
         if (getT() != null) {
             Graphics2D g2 = (Graphics2D) g;
             for (Aventurier a : getT().getAventuriers()) {
@@ -60,31 +72,30 @@ public class VueTuile extends JPanel {
                     g.setColor(new Color(255, 0, 0));
                 if (a instanceof Messager)
                     g.setColor(new Color(255, 148, 0));
-                g2.setStroke(new BasicStroke(getWidth()/60));
                 g2.fillOval(((getWidth()/10)*4/5) + (i-1)*((getHeight()/10)*50/20), (getWidth()/10)*4/5, (getWidth()/10)*6/4, (getWidth()/10)*6/4);
-                g2.setColor(new Color(0, 0, 0));
+                g2.setStroke(new BasicStroke(getWidth()/60));
+                g2.setColor(Color.black);
                 g2.drawOval(((getWidth()/10)*4/5) + (i-1)*((getHeight()/10)*50/20), (getWidth()/10)*4/5, (getWidth()/10)*6/4, (getWidth()/10)*6/4);
                 i++;
             }
         }
     }
     
-    public ImageIcon img(Tuile t) {
-        String nmimg = "/img/tuiles/";
-        if (t != null && t.estSeche())
-            nmimg += t.getNom();
-        else if (t != null && t.estInonde())
-            nmimg += t.getNom() + "i";
-        else
-            nmimg += "morte";
-        if (getSurbrillance()) {
-            nmimg += "s.png";
+    public BufferedImage img(Tuile t) {
+        if (!surbrillance) {
+            if (t.estSeche())
+                return images.get(1);
+
+            else if (t.estInonde())
+                return images.get(2);
+            }
+        else {
+            if (t.estSeche())
+                return images.get(3);
+            else if (t.estInonde())
+                return images.get(4);
         }
-        else
-            nmimg += ".png";
-        ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource(nmimg)).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
-//                                                                                                                largeur          hauteur         adaptation
-        return img;
+        return null;
     }
     
     public void maj(Tuile t, boolean surbrillance) {

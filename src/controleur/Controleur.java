@@ -9,7 +9,8 @@ import view.*;
 import java.math.*;
 
 public class Controleur {
-
+        
+        private VueFin vuefin;
 	private NivEau nivEau;
 	private Grille grille;
 	private ArrayList<Joueur> joueurs = new ArrayList();
@@ -50,8 +51,12 @@ public class Controleur {
         private JPanel panelgvc = new JPanel();
         private ArrayList<Joueur> JAcc = new ArrayList();
         private Carte cartedon;
+        private Main main;
+        private JPanel paneljeu = new JPanel(new BorderLayout());
+        private Joueur joueurmort;
 
-        public Controleur() {
+        public Controleur(Main m) {
+            main = m;
             window = new JFrame("Île Interdite");
             window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
             window.setMaximumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));window.setMinimumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));
@@ -135,6 +140,7 @@ public class Controleur {
             ac.add(pilet.pop());
             for (int i = 1; i > -1; i--) {
                 if (ac.get(i) instanceof CNiveauEau) {
+                        textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " pioche une carte montée des eaux");
                         vueniveau.nivplus();
                         nivEau.gradPlus();
                         deft.add(ac.get(i));
@@ -202,7 +208,7 @@ public class Controleur {
             i = getAt().size()-1;
             cristal.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Cristal);
-            getAt().add(new Tuile("LaPortedefer",0));
+            getAt().add(new Tuile("LaPortedefer",2));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Plongeur) {
@@ -210,7 +216,7 @@ public class Controleur {
                     j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            getAt().add(new Tuile("LaPortedor",0));
+            getAt().add(new Tuile("LaPortedor",2));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Navigateur) {
@@ -223,7 +229,7 @@ public class Controleur {
             i = getAt().size()-1;
             calice.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Calice);
-            getAt().add(new Tuile("LaPortedargent",0));
+            getAt().add(new Tuile("LaPortedargent",2));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Messager) {
@@ -241,7 +247,7 @@ public class Controleur {
                 }
             }
             helico = getAt().get(i);
-            getAt().add(new Tuile("LaPortedecuivre",0));
+            getAt().add(new Tuile("LaPortedecuivre",2));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Explorateur) {
@@ -332,7 +338,8 @@ public class Controleur {
             window.setLayout(new BorderLayout());
             vuegrille = new VueGrille(getGrille(),this);
             vuegrille.setPreferredSize(new Dimension(dim.height,dim.height));
-            window.add(vuegrille,  BorderLayout.CENTER);
+            window.add(paneljeu);
+            paneljeu.add(vuegrille,  BorderLayout.CENTER);
             nivEau = new NivEau(nivini);
             vueniveau = new VueNiveau(nivini);
             paneldroit.setLayout(new BorderLayout());
@@ -340,13 +347,13 @@ public class Controleur {
             paneldroit.add(vuetresor, BorderLayout.NORTH);
             paneldroit.add(vueniveau, BorderLayout.SOUTH);
             vueniveau.setBackground(new Color(30,30,30));
-            window.add(panelgauche, BorderLayout.WEST);
-            window.add(paneldroit, BorderLayout.EAST);
+            paneljeu.add(panelgauche, BorderLayout.WEST);
+            paneljeu.add(paneldroit, BorderLayout.EAST);
             panelgauche.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
             paneldroit.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
             paneldroit.setBackground(new Color(30,30,30));
             vuetresor.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getWidth()*195/235));
-            vueniveau.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getHeight()-(int)paneldroit.getPreferredSize().getWidth()*205/235));
+            //vueniveau.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getHeight()-(int)paneldroit.getPreferredSize().getWidth()*205/235));
             window.setVisible(true);
             joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
             vuetourjoueurs = new VueTourJoueurs(joueurencours, joueurs);
@@ -474,11 +481,22 @@ public class Controleur {
                     tuilesaction.clear();
                     tuileav = null;
                 }
-                textepartie.setText(textepartie.getText() + "\nIl lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
-                if (joueurencours.getAventurier() instanceof Ingenieur && (joueurencours.getAventurier().getSeche() && ((joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty()))))
-                    textepartie.setText(textepartie.getText() + "\nMais il peut encore assécher une tuile sans utiliser d'action");
-                if (toustresors() && !gagne())
-                    textepartie.setText(textepartie.getText()+ "\nVous avez acquis tous les trésors, rendez vous à l'héliport");
+                
+                if (action == Message.TypeMessage.DFORCE) {
+                    tuileav = null;
+                    joueurmort.getAventurier().getPos().retirerAv(joueurmort.getAventurier());
+                    tuilesaction.get(0).ajouterAv(joueurmort.getAventurier());
+                    joueurmort.getAventurier().setPos(tuilesaction.get(0));
+                    tuilesaction.clear();
+                    fintour(true);
+                }
+                if (action != Message.TypeMessage.DFORCE) {
+                    textepartie.setText(textepartie.getText() + "\nIl lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
+                    if (joueurencours.getAventurier() instanceof Ingenieur && (joueurencours.getAventurier().getSeche() && ((joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty()))))
+                        textepartie.setText(textepartie.getText() + "\nMais il peut encore assécher une tuile sans utiliser d'action");
+                    if (toustresors() && !gagne())
+                        textepartie.setText(textepartie.getText()+ "\nVous avez acquis tous les trésors, rendez vous à l'héliport");
+                }
             }
 
             if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
@@ -561,57 +579,111 @@ public class Controleur {
             }
 
             if (msg.getType() == Message.TypeMessage.PASSER)
-                fintour();
+                fintour(false);
+            
+            System.err.println(msg.getType().name());
+            if (msg.getType() == Message.TypeMessage.RELANCER)
+                main.traiterMessage(msg);
+            
+            if(msg.getType() == Message.TypeMessage.CARTE && joueurencours.getAventurier().getCartes().size() > 5) {
+                deft.add(joueurencours.getAventurier().getCartes().get(msg.getIndice()));
+                joueurencours.getAventurier().getCartes().remove(joueurencours.getAventurier().getCartes().get(msg.getIndice()));
+                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
+                vuecartesj.images();
+                fintour(true);
+            }
+            
         }
         
         vuegrille.couleur(getGrille());
         
-        vuejcours.verifboutons(tresors, grille, joueurs);
-        if (perdu())
-            textepartie.setText("\nVous avez perdu !");
-        if (gagne())
-            textepartie.setText("\nVous avez gagné !");
-        
+        if (perdu() && vuefin == null) {
+            vuefin = new VueFin(false,this);
+            textepartie.setText("Vous avez perdu !");
+            vuegrille.setVisible(false);
+            panelgauche.setVisible(false);
+            paneldroit.setVisible(false);
+            window.setLayout(new GridBagLayout());
+            window.add(vuefin);
+            window.setVisible(true);
+        }
+        if (gagne()) {
+            vuefin = new VueFin(true,this);
+            textepartie.setText("Vous avez gagné !");
+            vuegrille.setVisible(false);
+            panelgauche.setVisible(false);
+            paneldroit.setVisible(false);
+            window.setLayout(new GridBagLayout());
+            window.add(vuefin);
+            window.setVisible(true);
+        }        
     }
     
     
-    public void fintour() {
-        tirerCI();
-        joueurencours.getAventurier().ajouterCarte(tirerCT());
-        if (joueurencours.getAventurier().getCartes().size() > 5)
-            for (int i = 4; i < joueurencours.getAventurier().getCartes().size(); i++) {
-                deft.add(joueurencours.getAventurier().getCartes().get(0));
-                joueurencours.getAventurier().getCartes().remove(joueurencours.getAventurier().getCartes().get(0));
-            }
-        vuegrille.couleur(grille);
-        if (joueurencours.getAventurier() instanceof Pilote)
-            joueurencours.getAventurier().setHelico(false);
-        for (Carte c : joueurencours.getAventurier().getCartes())
-        joueurencours.getAventurier().setNbactions(0);
-        joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
-        vuejcours.changerj(joueurencours);
-        vuetourjoueurs.fintour();
-        vuejoueursaction.fintour();
-        vuecartesj.fintour();
-        textepartie.setText(textepartie.getText() + "\nAu tour de " + joueurencours.getNom() + " de jouer");
-        int r = vuejcours.getColor().getRed()-70;
-        int g = vuejcours.getColor().getGreen()-70;
-        int b = vuejcours.getColor().getBlue()-70;
-        if (r < 0)
-            r = 0;
-        if (g < 0)
-            g = 0;
-        if (b < 0)
-            b = 0;
-        Color c = new Color(r, g, b);
-        panelgauche.setBackground(c);
-        textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-        vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-        vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-        panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-        panelgvc.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-        vuecartesj.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+    public void fintour(boolean bc) {
+        if (!bc) {
+            tirerCI();
+            joueurencours.getAventurier().ajouterCarte(tirerCT());
+        }
+        else
+            textepartie.setText("");
         vuecartesj.images();
+        if (joueursmorts().size() > 0) {
+            joueurmort  = joueursmorts().get(0);
+            action = Message.TypeMessage.DFORCE;
+            window.repaint();
+            vuejcours.changerj(joueursmorts().get(0));
+            vuejcours.setBoutons(false, tresors, grille, JAcc);
+            textepartie.setText(joueursmorts().get(0).getNom() + " doit choisir une tuile non coulée ou se déplacer");
+            tuilesacc.clear();
+            Messager a = new Messager();
+            a.setPos(joueurmort.getAventurier().getPos());
+            for (Tuile t : a.getTuilesAcc(getGrille(), 1).values())
+                tuilesacc.add(t);
+            vuegrille.setTuilesSurbrillance(tuilesacc, true);
+            textepartie.setBackground(vuejcours.getColor());
+        }  
+        /*else if (joueurencours.getAventurier().getCartes().size() > 5) {
+            window.repaint();
+                vuejcours.setBoutons(false, tresors, grille, JAcc);
+                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
+                window.repaint();
+                if (joueurencours.getAventurier().getCartes().size()-5 == 1)
+                    textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 1 carte à défausser");
+                else
+                    textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 2 carte à défausser");
+                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
+        }*/
+        else {
+            vuegrille.couleur(grille);
+            if (joueurencours.getAventurier() instanceof Pilote)
+                joueurencours.getAventurier().setHelico(false);
+            joueurencours.getAventurier().setNbactions(0);
+            joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
+            vuejcours.changerj(joueurencours);
+            vuejcours.verifboutons(tresors, grille, JAcc);
+            vuetourjoueurs.fintour();
+            vuejoueursaction.fintour();
+            vuecartesj.fintour();
+            textepartie.setText(textepartie.getText() + "\nAu tour de " + joueurencours.getNom() + " de jouer");
+            int r = vuejcours.getColor().getRed()-70;
+            int g = vuejcours.getColor().getGreen()-70;
+            int b = vuejcours.getColor().getBlue()-70;
+            if (r < 0)
+                r = 0;
+            if (g < 0)
+                g = 0;
+            if (b < 0)
+                b = 0;
+            Color c = new Color(r, g, b);
+            panelgauche.setBackground(c);
+            textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            panelgvc.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            vuecartesj.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+        }
     }
     
     public boolean perdu() {
@@ -625,6 +697,15 @@ public class Controleur {
     
     public boolean toustresors() {
         return tresors.size() == 4;
+    }
+    
+    public ArrayList<Joueur> joueursmorts() {
+        ArrayList<Joueur> aj = new ArrayList();
+        for (Joueur j : joueurs) {
+            if (j.getAventurier().getPos().estMorte())
+                aj.add(j);
+        }
+        return aj;
     }
 
 }

@@ -6,6 +6,7 @@
 package view;
 
 import controleur.Controleur;
+import controleur.Main;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,7 +16,11 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -69,38 +74,36 @@ public class PanelJoueur extends JPanel {
     
     @Override
     protected void paintComponent(Graphics g) {
-        x1 = (int) (getWidth()-(getHeight()))/2;
-        l = (int) getHeight();
-        y1 = (int) 0;
-        h = (int) getHeight();
-        if (!cliquable) {
-            g.setColor(new Color(150,150,150));
-            g.fillRect(x1, y1, l, h);
-        }
-        g.setColor(Color.black);
-        g.drawRect(x1, y1, l-1, h-1);
-        g.drawRect(x1+1, y1+1, l-3, h-3);
-        if (j.getAventurier() instanceof Pilote)
-            g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/personnages/pilote.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH))
-                                .getImage(), x1, y1, l, h, this);
-        if (j.getAventurier() instanceof Navigateur)
-            g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/personnages/navigateur.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH))
-                                .getImage(), x1, y1, l, h, this);
-        if (j.getAventurier() instanceof Plongeur)
-            g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/personnages/plongeur.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH))
-                                .getImage(), x1, y1, l, h, this);
-        if (j.getAventurier() instanceof Explorateur)
-            g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/personnages/explorateur.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH))
-                                .getImage(), x1, y1, l, h, this);
-        if (j.getAventurier() instanceof Ingenieur)
-            g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/personnages/ingenieur.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH))
-                                .getImage(), x1, y1, l, h, this);
-        if (j.getAventurier() instanceof Messager)
-            g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/personnages/messager.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH))
-                                .getImage(), x1, y1, l, h, this);
-        if (!cliquable) {
-            g.setColor(new Color(150,150,150,150));
-            g.fillRect(x1, y1, l, h);
+        try {
+            x1 = (int) (getWidth()-(getHeight()))/2;
+            l = (int) getHeight();
+            y1 = (int) 0;
+            h = (int) getHeight();
+            if (!cliquable) {
+                g.setColor(new Color(150,150,150));
+                g.fillRect(x1, y1, l, h);
+            }
+            g.setColor(Color.black);
+            g.drawRect(x1, y1, l-1, h-1);
+            g.drawRect(x1+1, y1+1, l-3, h-3);
+            if (j.getAventurier() instanceof Pilote)
+                g.drawImage( ImageIO.read(Main.class.getResource("/img/personnages/pilote.png")), x1, y1, l, h, this);
+            if (j.getAventurier() instanceof Navigateur)
+                g.drawImage( ImageIO.read(Main.class.getResource("/img/personnages/navigateur.png")), x1, y1, l, h, this);
+            if (j.getAventurier() instanceof Plongeur)
+                g.drawImage( ImageIO.read(Main.class.getResource("/img/personnages/plongeur.png")), x1, y1, l, h, this);
+            if (j.getAventurier() instanceof Explorateur)
+                g.drawImage( ImageIO.read(Main.class.getResource("/img/personnages/explorateur.png")), x1, y1, l, h, this);
+            if (j.getAventurier() instanceof Ingenieur)
+                g.drawImage( ImageIO.read(Main.class.getResource("/img/personnages/ingenieur.png")), x1, y1, l, h, this);
+            if (j.getAventurier() instanceof Messager)
+                g.drawImage( ImageIO.read(Main.class.getResource("/img/personnages/messager.png")), x1, y1, l, h, this);
+            if (!cliquable) {
+                g.setColor(new Color(150,150,150,150));
+                g.fillRect(x1, y1, l, h);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PanelJoueur.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

@@ -6,11 +6,20 @@
 package view;
 
 import controleur.Controleur;
+import controleur.Main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import models.*;
@@ -110,8 +119,10 @@ public class VueJoueurs extends JPanel {
                             a++;
                     }
                 }
-                if (a != 0)
+                if (a != 0) {
                     info.setText("Il ne peut pas y avoir 2 noms de joueur identiques");
+                    info.setForeground(new Color(255, 148, 0));
+                }
                 else if (z == 0) {
                     info.setText("Il faut au minimum 2 joueurs, vous avez entré 0 nom de joueur");
                     info.setForeground(new Color(255, 148, 0));
@@ -166,7 +177,11 @@ public class VueJoueurs extends JPanel {
     
     @Override
     public void paintComponent(Graphics g) {;
-        g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource(strimg)).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, 0, getWidth(), getHeight(), this);
+        try {
+            g.drawImage( ImageIO.read(Main.class.getResource(strimg)), 0, 0, getWidth(), getHeight(), this);
+        } catch (IOException ex) {
+            Logger.getLogger(VueJoueurs.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

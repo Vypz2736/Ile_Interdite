@@ -1,8 +1,13 @@
 package view;
 
 import controleur.Controleur;
+import controleur.Main;
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.*;
  
 public class VueNiveau extends JPanel {
@@ -41,8 +46,11 @@ public class VueNiveau extends JPanel {
                 protected void paintComponent(Graphics g) {
                     g.setColor(new Color(186, 33, 51));
                     g.fillRect(0, 0, getWidth(), getHeight());
-                    g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/tdm.png"))
-                    .getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, (getHeight()-getWidth())/2, getWidth(), getWidth(), this);
+                    try {
+                        g.drawImage( ImageIO.read(Main.class.getResource("/img/tdm.png")), 0, (getHeight()-getWidth())/2, getWidth(), getWidth(), this);
+                    } catch (IOException ex) {
+                        Logger.getLogger(VueNiveau.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 });
             for (int j = 0;j < nbpanels[i]; j++) {

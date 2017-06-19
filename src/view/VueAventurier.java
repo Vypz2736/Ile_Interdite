@@ -248,8 +248,22 @@ public class VueAventurier extends JPanel {
         donner(aj);
         assecher(g);
         deplacer();
+        btnTerminerTour.setEnabled(true);
     }
-
+    
+    public void setBoutons(boolean etat, ArrayList<Tresor> at, Grille g, ArrayList<Joueur> aj) {
+        if (!etat) {
+        btnAller.setEnabled(false);
+        btnAssecher.setEnabled(false);
+        btndonnercarte.setEnabled(false);
+        btnrecuptresor.setEnabled(false);
+        btndeplacer.setEnabled(false);
+        btnTerminerTour.setEnabled(false);
+        }
+        else
+            verifboutons(at, g, aj);
+    }
+    
     /**
      * @return the color
      */

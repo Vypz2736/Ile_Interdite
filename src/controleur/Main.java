@@ -5,14 +5,28 @@
  */
 package controleur;
 
+import util.Message;
+
 
 public class Main {
 
+    public Controleur c;
+    public Main() {
+        c = new Controleur(this);
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Controleur c = new Controleur();
+        new Main();
+    }
+    
+    public void traiterMessage(Message msg) {
+        System.err.println("zzzzzzzzzz");
+        c = null;
+        System.gc();
+        c = new Controleur(this);
     }
     
 }

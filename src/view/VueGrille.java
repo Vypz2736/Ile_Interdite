@@ -7,7 +7,10 @@ package view;
 
 import controleur.Controleur;
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import models.*;
 
@@ -34,7 +37,11 @@ public class VueGrille extends JPanel {
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
                 if (init) {
-                    tuiles[j][i] = new VueTuile(grille.getGrille()[j][i],c);
+                    try {
+                        tuiles[j][i] = new VueTuile(grille.getGrille()[j][i],c);
+                    } catch (IOException ex) {
+                        Logger.getLogger(VueGrille.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     this.add(tuiles[j][i]);
                 }
                 else
