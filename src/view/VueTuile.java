@@ -8,6 +8,7 @@ package view;
 import controleur.Controleur;
 import controleur.Main;
 import java.awt.*;
+import static java.awt.Image.SCALE_SMOOTH;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -29,17 +30,19 @@ public class VueTuile extends JPanel {
     private Tuile t;
     private boolean surbrillance = false;
     private Controleur c;
-    private ArrayList<BufferedImage> images = new ArrayList();
+    private ArrayList<Image> images = new ArrayList();
     private String chemin = "/img/tuiles/";
+    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    
     public VueTuile(Tuile tuile, Controleur controleur) throws IOException {
         c = controleur;
         t = tuile;
-        images.add(ImageIO.read(Main.class.getResource(chemin + "morte.png")));
+        images.add(ImageIO.read(Main.class.getResource(chemin + "morte.png")).getScaledInstance((int)dim.getWidth()/6, (int)dim.getHeight()/6, SCALE_SMOOTH));
         if (t != null) {
-            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + ".png")));
-            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "i.png")));
-            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "s.png")));
-            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "is.png")));
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + ".png")).getScaledInstance((int)dim.getHeight()/60*9, (int)dim.getHeight()/60*9, SCALE_SMOOTH));
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "i.png")).getScaledInstance((int)dim.getHeight()/60*9, (int)dim.getHeight()/60*9, SCALE_SMOOTH));
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "s.png")).getScaledInstance((int)dim.getHeight()/60*9, (int)dim.getHeight()/60*9, SCALE_SMOOTH));
+            images.add(ImageIO.read(Main.class.getResource(chemin + t.getNom() + "is.png")).getScaledInstance((int)dim.getHeight()/60*9, (int)dim.getHeight()/60*9, SCALE_SMOOTH));
         }
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -81,7 +84,7 @@ public class VueTuile extends JPanel {
         }
     }
     
-    public BufferedImage img(Tuile t) {
+    public Image img(Tuile t) {
         if (!surbrillance) {
             if (t.estSeche())
                 return images.get(1);
