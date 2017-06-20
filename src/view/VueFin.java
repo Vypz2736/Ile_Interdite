@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import models.Tuile;
 import util.Message;
 
 /**
@@ -42,41 +43,40 @@ public class VueFin extends JPanel {
     private boolean gagne = true;
     private JButton replay;
     private JButton finish;
-    private JPanel layout;
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Controleur c;
+    private JLabel rèson;
+    private JPanel layout = new JPanel(new GridBagLayout());
    
-    public VueFin(boolean g, Controleur controleur){
+    public VueFin(boolean g, Tuile t, Controleur controleur){
         c = controleur;
         gagne = g;
-        layout = new JPanel(new GridLayout(2,1));
-        setLayout(new GridLayout(2,1));
+        setLayout(new BorderLayout());
         setBackground(new Color(35,35,35));
-        JPanel titre = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                try {
-                    g.drawImage(ImageIO.read(Main.class.getResource("/img/titre.png")), (int) (getWidth()-getHeight()/350*154), 0, (int) ((getHeight()/350)*154), getHeight(), this);
-                } catch (IOException ex) {
-                    Logger.getLogger(VueFin.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        };
-        this.add(titre);
-        this.add(layout);
-        JPanel label = new JPanel(new GridBagLayout());
+        JPanel label = new JPanel(new GridLayout(2,1));
         label.setBackground(new Color(35,35,35));
-        if (gagne)
-            text = new JLabel("Bravo, vous avez gagné !!!");
-        else
-            text = new JLabel("Dommage, vous avez perdu...");
+        text = new JLabel();
         text.setFont(new Font(text.getFont().getFontName(), text.getFont().getStyle(), (int)dim.getWidth()/50));
         text.setForeground(new Color(0,192,255));
         label.add(text);
+        if (gagne)
+            text.setText("Bravo, vous avez gagné !!!");
+        else {
+            text.setText("Dommage, vous avez perdu,");
+            if (t.estMorte())
+                rèson = new JLabel("L'heliport est coulé...");
+            else
+                rèson = new JLabel("Un des trésors est perdu...");
+            label.add(rèson);
+            rèson.setFont(new Font(rèson.getFont().getFontName(), rèson.getFont().getStyle(), (int)dim.getWidth()/75));
+            rèson.setForeground(new Color(0,192,255));
+        }
         layout.add(label);
+        this.add(layout, BorderLayout.NORTH);
+        layout.setBackground(new Color(35,35,35));
         JPanel boutons = new JPanel(new GridLayout(1,5));
         boutons.setBackground(new Color(35,35,35));
-        layout.setBackground(new Color(35,35,35));
+        this.setBackground(new Color(35,35,35));
         replay = new JButton("Rejouer");
         boutons.add(new JLabel());
         boutons.add(replay);
@@ -96,9 +96,9 @@ public class VueFin extends JPanel {
                 System.exit(0);
             }
         });
-        layout.add(boutons);
-        boutons.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/100, 0, (int)dim.getWidth()/150, 0));
-        this.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300, (int)dim.getWidth()/300));
+        this.add(boutons,BorderLayout.SOUTH);
+        boutons.setBorder(BorderFactory.createEmptyBorder(0, 0, (int)dim.getWidth()/150, 0));
+        this.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/4, 0, (int)dim.getWidth()/4, 0));
         setVisible(true);
     }
    

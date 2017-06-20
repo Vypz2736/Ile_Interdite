@@ -39,7 +39,7 @@ public class VueTresors extends JPanel {
         try {
             label.setForeground(new Color(200,200,200,200));
             label.setFont(new Font(label.getFont().getFontName(), label.getFont().getStyle(), (int)dim.getWidth()/125));
-            label.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, 0, 0, (int)dim.getWidth()/7));
+            this.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, 0, 0, (int)dim.getWidth()/9));
             add(label);
             tresors = at;
             statue = ImageIO.read(Main.class.getResource("/img/tresors/Statue.png"));

@@ -208,7 +208,7 @@ public class Controleur {
             i = getAt().size()-1;
             cristal.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Cristal);
-            getAt().add(new Tuile("LaPortedefer",2));
+            getAt().add(new Tuile("LaPortedefer",0));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Plongeur) {
@@ -216,7 +216,7 @@ public class Controleur {
                     j.getAventurier().setPos(getAt().get(i));
                 }
             }
-            getAt().add(new Tuile("LaPortedor",2));
+            getAt().add(new Tuile("LaPortedor",0));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Navigateur) {
@@ -229,7 +229,7 @@ public class Controleur {
             i = getAt().size()-1;
             calice.add(getAt().get(i));
             getAt().get(i).setTresor(Tresor.Calice);
-            getAt().add(new Tuile("LaPortedargent",2));
+            getAt().add(new Tuile("LaPortedargent",0));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Messager) {
@@ -247,7 +247,7 @@ public class Controleur {
                 }
             }
             helico = getAt().get(i);
-            getAt().add(new Tuile("LaPortedecuivre",2));
+            getAt().add(new Tuile("LaPortedecuivre",0));
             i = getAt().size()-1;
             for (Joueur j : getJoueurs()) {
                 if (j.getAventurier() instanceof Explorateur) {
@@ -353,7 +353,7 @@ public class Controleur {
             paneldroit.setPreferredSize(new Dimension((dim.width-dim.height)/2,dim.height));
             paneldroit.setBackground(new Color(30,30,30));
             vuetresor.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getWidth()*195/235));
-            //vueniveau.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getHeight()-(int)paneldroit.getPreferredSize().getWidth()*205/235));
+            vueniveau.setPreferredSize(new Dimension((int)paneldroit.getPreferredSize().getWidth(),(int)paneldroit.getPreferredSize().getHeight()-(int)paneldroit.getPreferredSize().getWidth()*205/235));
             window.setVisible(true);
             joueurencours = joueurs.get((int)(Math.random()*joueurs.size()));
             vuetourjoueurs = new VueTourJoueurs(joueurencours, joueurs);
@@ -488,8 +488,10 @@ public class Controleur {
                     tuilesaction.get(0).ajouterAv(joueurmort.getAventurier());
                     joueurmort.getAventurier().setPos(tuilesaction.get(0));
                     tuilesaction.clear();
+                    window.repaint();
                     fintour(true);
                 }
+                
                 if (action != Message.TypeMessage.DFORCE) {
                     textepartie.setText(textepartie.getText() + "\nIl lui reste " + (3-joueurencours.getAventurier().getNbactions()) + " action(s) à faire");
                     if (joueurencours.getAventurier() instanceof Ingenieur && (joueurencours.getAventurier().getSeche() && ((joueurencours.getAventurier().getNbactions() < 3) || (!joueurencours.getAventurier().getTuilesAcc(grille, 2).isEmpty()))))
@@ -581,10 +583,6 @@ public class Controleur {
             if (msg.getType() == Message.TypeMessage.PASSER)
                 fintour(false);
             
-            System.err.println(msg.getType().name());
-            if (msg.getType() == Message.TypeMessage.RELANCER)
-                main.traiterMessage(msg);
-            
             if(msg.getType() == Message.TypeMessage.CARTE && joueurencours.getAventurier().getCartes().size() > 5) {
                 deft.add(joueurencours.getAventurier().getCartes().get(msg.getIndice()));
                 joueurencours.getAventurier().getCartes().remove(joueurencours.getAventurier().getCartes().get(msg.getIndice()));
@@ -594,28 +592,31 @@ public class Controleur {
             }
             
         }
+            
+        if (msg.getType() == Message.TypeMessage.RELANCER) {
+            main.traiterMessage(msg);
+            window.setVisible(false);
+        }
         
         vuegrille.couleur(getGrille());
         
         if (perdu() && vuefin == null) {
-            vuefin = new VueFin(false,this);
             textepartie.setText("Vous avez perdu !");
+            if (helico.estMorte())
+                textepartie.setText(textepartie.getText() + "\nL'heliport est coulé");
+            else
+                textepartie.setText(textepartie.getText() + "\nUn des trésors est perdu");
+            vuefin = new VueFin(false,helico,this);
             vuegrille.setVisible(false);
-            panelgauche.setVisible(false);
-            paneldroit.setVisible(false);
-            window.setLayout(new GridBagLayout());
-            window.add(vuefin);
-            window.setVisible(true);
+            paneljeu.add(vuefin, BorderLayout.CENTER);
+            window.repaint();
         }
         if (gagne()) {
-            vuefin = new VueFin(true,this);
             textepartie.setText("Vous avez gagné !");
+            vuefin = new VueFin(true,helico,this);
             vuegrille.setVisible(false);
-            panelgauche.setVisible(false);
-            paneldroit.setVisible(false);
-            window.setLayout(new GridBagLayout());
-            window.add(vuefin);
-            window.setVisible(true);
+            paneljeu.add(vuefin, BorderLayout.CENTER);
+            window.repaint();
         }        
     }
     
@@ -643,7 +644,7 @@ public class Controleur {
             vuegrille.setTuilesSurbrillance(tuilesacc, true);
             textepartie.setBackground(vuejcours.getColor());
         }  
-        /*else if (joueurencours.getAventurier().getCartes().size() > 5) {
+        else if (joueurencours.getAventurier().getCartes().size() > 5) {
             window.repaint();
                 vuejcours.setBoutons(false, tresors, grille, JAcc);
                 vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
@@ -653,7 +654,7 @@ public class Controleur {
                 else
                     textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 2 carte à défausser");
                 vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
-        }*/
+        }
         else {
             vuegrille.couleur(grille);
             if (joueurencours.getAventurier() instanceof Pilote)

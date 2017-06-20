@@ -23,7 +23,6 @@ public class Main {
     }
     
     public void traiterMessage(Message msg) {
-        System.err.println("zzzzzzzzzz");
         c = null;
         System.gc();
         c = new Controleur(this);
