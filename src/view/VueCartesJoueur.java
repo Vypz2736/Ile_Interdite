@@ -56,7 +56,7 @@ public class VueCartesJoueur extends JPanel {
             this.add(pvide.get(i));
             pvide.get(i).add(new JLabel("Cartes de " + aj.get((aj.indexOf(j)+i) % aj.size()).getNom()), BorderLayout.SOUTH);
             pvide.get(i).setBorder(BorderFactory.createEmptyBorder(0, (int)dim.getWidth()/150, (int)dim.getWidth()/200, 0));
-            panels.put(aj.get((aj.indexOf(j)+i) % aj.size()),new VueCartes(aj.get((aj.indexOf(j)+i) % aj.size()).getAventurier().getCartes(), c));
+            panels.put(aj.get((aj.indexOf(j)+i) % aj.size()),new VueCartes(aj,aj.get((aj.indexOf(j)+i) % aj.size()),aj.get((aj.indexOf(j)+i) % aj.size()).getAventurier().getCartes(), c));
             panels.get(aj.get((aj.indexOf(j)+i) % aj.size())).setBackground(couleur);
             this.add(panels.get(aj.get((aj.indexOf(j)+i) % aj.size())));
         }

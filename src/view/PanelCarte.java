@@ -43,13 +43,17 @@ import util.Tresor;
 public class PanelCarte extends JPanel {
 
     private ArrayList<Carte> ac = new ArrayList();
+    private ArrayList<Joueur> aj = new ArrayList();
+    private Joueur j;
     private Carte ca;
     private Controleur c;
     private boolean cliquable = false;
     private int x1, l, y1, h;
     private CTresor ct;
     
-    public PanelCarte(ArrayList<Carte> cartes, Carte carte, Controleur controleur) {
+    public PanelCarte(ArrayList<Joueur> joueurs, Joueur joueur, ArrayList<Carte> cartes, Carte carte, Controleur controleur) {
+        j = joueur;
+        aj = joueurs;
         ca = carte;
         ac = cartes;
         c = controleur;
@@ -57,7 +61,7 @@ public class PanelCarte extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (cliquable)
-                c.traiterMessage(new Message(Message.TypeMessage.CARTE,ac.indexOf(ca)));
+                c.traiterMessage(new Message(Message.TypeMessage.CARTE,ac.indexOf(ca),aj.indexOf(j)));
             }
         });
     }
@@ -65,7 +69,7 @@ public class PanelCarte extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(new Color(30,30,30));
-                    g.fillRect(0, 0, getWidth(), getHeight());
+        g.fillRect(0, 0, getWidth(), getHeight());
         h = (int) getHeight();
         l = (int) (h*49)/69;
         x1 = (int) (getWidth()-l)/2;

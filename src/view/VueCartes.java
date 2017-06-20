@@ -23,11 +23,15 @@ import models.*;
  */
 public class VueCartes extends JPanel {
     private ArrayList<Carte> ac;
+    private ArrayList<Joueur> aj = new ArrayList();
+    private Joueur j;
     private HashMap<Carte,PanelCarte> panels = new HashMap();
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Controleur c;
     
-    public VueCartes(ArrayList<Carte> cartes, Controleur controleur) {
+    public VueCartes(ArrayList<Joueur> joueurs, Joueur joueur, ArrayList<Carte> cartes, Controleur controleur) {
+        aj = joueurs;
+        j = joueur;
         ac = cartes;
         c = controleur;
         setLayout(new GridLayout(1,8));
@@ -38,13 +42,13 @@ public class VueCartes extends JPanel {
         this.removeAll();
         panels.clear();
         for (int i = 0; i < ac.size(); i++) {
-            panels.put(ac.get(i),new PanelCarte(ac, ac.get(i), c));
+            panels.put(ac.get(i),new PanelCarte(aj,j,ac, ac.get(i), c));
             panels.get(ac.get(i)).repaint();
             this.add(panels.get(ac.get(i)));
         }
         //affiche les emplacements de carte vide
         for (int i = ac.size(); i < 7; i++) {
-            this.add(new PanelCarte(ac, null, c));
+            this.add(new PanelCarte(aj,j,ac, null, c));
         }
         repaint();
     }

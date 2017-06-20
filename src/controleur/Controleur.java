@@ -49,11 +49,12 @@ public class Controleur {
         private VueJoueursAction vuejoueursaction;
         private JPanel panelgvja = new JPanel();
         private JPanel panelgvc = new JPanel();
-        private ArrayList<Joueur> JAcc = new ArrayList();
         private Carte cartedon;
         private Main main;
         private JPanel paneljeu = new JPanel(new BorderLayout());
         private Joueur joueurmort;
+        private Carte carteaction;
+        private Joueur joueuraction;
 
         public Controleur(Main m) {
             main = m;
@@ -426,6 +427,8 @@ public class Controleur {
     }
     
     public void traiterMessage(Message msg) {
+        for (Joueur j : joueurs)
+            vuecartesj.setCliquable(j, cartesaction(j.getAventurier().getCartes()), false);
         if (msg.getType() == Message.TypeMessage.SAISIEFINIE) {
             noms = vuejoueurs.recupsaisie();
             nivini = msg.getNiveau();
@@ -435,6 +438,7 @@ public class Controleur {
             vuegrille.setTuilesSurbrillance(tuilesacc, false);
         
         if (!gagne() && !perdu()) {
+            vuegrille.setTuilesSurbrillance(at, false);
             if (msg.getType() == Message.TypeMessage.CASECLIQUEE) {
                 if (!(action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur))
                     tuilesaction.clear();
@@ -499,6 +503,38 @@ public class Controleur {
                     if (toustresors() && !gagne())
                         textepartie.setText(textepartie.getText()+ "\nVous avez acquis tous les trésors, rendez vous à l'héliport");
                 }
+                
+                if (action == Message.TypeMessage.CARTE && carteaction instanceof CSacSable) {
+                    tuileav = null;
+                    tuilesaction.get(0).secher();
+                    textepartie.setText(joueuraction.getNom() + " assèche " + tuilesaction.get(0).getNom());
+                    tuilesaction.clear();
+                    deft.add(carteaction);
+                    joueuraction.getAventurier().getCartes().remove(carteaction);
+                    vuecartesj.images();
+                }
+                
+                if (action == Message.TypeMessage.CARTE && carteaction instanceof CHelico && tuileav != null) {
+                    Navigateur n = new Navigateur();
+                    n.deplacer(tuileav, grille.getTuile(msg.getLigne(),msg.getColonne()));
+                    textepartie.setText(joueuraction.getNom() + " déplace le(s) joueur(s) de " + tuileav.getNom() + " vers " + tuilesaction.get(0).getNom());
+                    tuilesaction.clear();
+                    tuileav = null;
+                    deft.add(carteaction);
+                    joueuraction.getAventurier().getCartes().remove(carteaction);
+                    vuecartesj.images();
+                }
+                else if (action == Message.TypeMessage.CARTE && carteaction instanceof CHelico && tuileav == null) {
+                    tuileav = grille.getTuile(msg.getLigne(),msg.getColonne());
+                    tuilesaction.clear();
+                    tuilesacc.clear();
+                    for (Tuile t : grille.getTuiles()) {
+                        if (!t.estMorte() && t != tuileav)
+                            tuilesacc.add(t);
+                    }
+                    textepartie.setText(joueuraction.getNom() + " doit choisir la tuile ou le(s) déplacer");
+                    vuegrille.setTuilesSurbrillance(tuilesacc, true);
+                }
             }
 
             if (msg.getType() == Message.TypeMessage.SEDEPLACER) {
@@ -512,15 +548,17 @@ public class Controleur {
                     textepartie.setText(textepartie.getText()+ "\nSon hélicoptère est disponible");
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
+            
             if (msg.getType() == Message.TypeMessage.ASSECHER) {
                 action = msg.getType();
                 tuilesacc.clear();
                 for (Tuile t : joueurencours.getAventurier().getTuilesAcc(getGrille(), 2).values()) {
                     tuilesacc.add(t);
                 }
-                textepartie.setText(joueurencours.getNom() + " doit choisir la tuile à assécher");
+                textepartie.setText(joueurencours.getNom() + " doit choisir la tuile à assécher avec sa carte");
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
+            
             if (msg.getType() == Message.TypeMessage.DEPLACER) {
                 action = msg.getType();
                 tuilesacc.clear();
@@ -528,7 +566,7 @@ public class Controleur {
                     tuilesacc.add(t);
                 }
                 vuegrille.setTuilesSurbrillance(tuilesacc, true);
-                textepartie.setText(joueurencours.getNom() + " doit choisir la tuile ou se trouve(nt) le(s) joueur(s) à déplacer");
+                textepartie.setText(joueurencours.getNom() + " doit choisir la tuile ou se trouve(nt) le(s) joueur(s) à déplacer avec sa carte");
             }
             
             if (msg.getType() == Message.TypeMessage.DONNER) {
@@ -542,8 +580,7 @@ public class Controleur {
             if (action == Message.TypeMessage.DONNER && msg.getType() == Message.TypeMessage.CARTE) {
                 action = msg.getType();
                 cartedon = joueurencours.getAventurier().getCartes().get(msg.getIndice());
-                JAcc = joueurencours.getAventurier().getJAcc(joueurs);
-                vuejoueursaction.setCliquable(JAcc, true);
+                vuejoueursaction.setCliquable(joueurencours.getAventurier().getJAcc(joueurs), true);
                 textepartie.setText(joueurencours.getNom() + " doit choisir à qui donner sa carte");
                 vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
                 window.repaint();
@@ -553,7 +590,7 @@ public class Controleur {
             if (action == Message.TypeMessage.CARTE && msg.getType() == Message.TypeMessage.JOUEUR) {
                 action = msg.getType();
                 joueurencours.getAventurier().donnerCarte(joueurs.get(msg.getIndice()),cartedon);
-                vuejoueursaction.setCliquable(JAcc, false);
+                vuejoueursaction.setCliquable(joueurencours.getAventurier().getJAcc(joueurs), false);
                 vuecartesj.images();
                 window.repaint();
             }
@@ -572,34 +609,54 @@ public class Controleur {
                 if (tresors.get(tresors.size()-1).equals(Tresor.Statue))
                     nmtresor = "la Statue du zéphyr";
                 textepartie.setText(textepartie.getText()+ "\nVous récupérez " + nmtresor + " !");
-                for (Carte c : pilet) {
-                    if (!(c instanceof CHelico) && !(c instanceof CSacSable)) {
-                        CTresor ct = (CTresor) c;
+                for (int i = 0; i < pilet.size();i++) {
+                    if (!(pilet.get(i) instanceof CHelico) && !(pilet.get(i) instanceof CSacSable) && !(pilet.get(i) instanceof CNiveauEau)) {
+                        CTresor ct = (CTresor) pilet.get(i);
                         if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
-                            pilet.remove(c);
+                            pilet.remove(pilet.get(i));
                     }
                 }
-                for (Carte c : deft) {
-                    if (!cartesaction(deft).contains(c)) {
-                        CTresor ct = (CTresor) c;
+                for (int i = 0; i < deft.size();i++) {
+                    if (!cartesaction(deft).contains(deft.get(i)) && !(deft.get(i) instanceof CNiveauEau)) {
+                        CTresor ct = (CTresor) deft.get(i);
                         if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
-                            deft.remove(c);
+                            deft.remove(deft.get(i));
                     }
                 }
                 for (Joueur j : joueurs)
-                    for (Carte c : j.getAventurier().getCartes()) {
-                        if (!cartesaction(j.getAventurier().getCartes()).contains(c)) {
-                            CTresor ct = (CTresor) c;
+                    for (int i = 0; i < j.getAventurier().getCartes().size();i++) {
+                        if (!cartesaction(j.getAventurier().getCartes()).contains(j.getAventurier().getCartes().get(i))) {
+                            CTresor ct = (CTresor) j.getAventurier().getCartes().get(i);
                             if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
-                                j.getAventurier().getCartes().remove(c);
+                                j.getAventurier().getCartes().remove(j.getAventurier().getCartes().get(i));
                         }
                     }
+                vuecartesj.images();
+            }
+            
+            if (msg.getType() == Message.TypeMessage.CARTE && action != Message.TypeMessage.DONNER && joueurs.get(msg.getJoueur()).getAventurier().getCartes().get(msg.getIndice()) instanceof CSacSable) {
+                tuilesacc.clear();
+                joueuraction = joueurs.get(msg.getJoueur());
+                carteaction = joueuraction.getAventurier().getCartes().get(msg.getIndice());
+                textepartie.setText(joueurs.get(msg.getJoueur()).getNom() + " doit choisir la tuile à assécher");
+                action = msg.getType();
+                vuegrille.setTuilesSurbrillance(getTuilesI(), true);
+            }
+            
+            if (msg.getType() == Message.TypeMessage.CARTE && action != Message.TypeMessage.DONNER && joueurs.get(msg.getJoueur()).getAventurier().getCartes().get(msg.getIndice()) instanceof CHelico) {
+                tuilesacc.clear();
+                joueuraction = joueurs.get(msg.getJoueur());
+                carteaction = joueuraction.getAventurier().getCartes().get(msg.getIndice());
+                textepartie.setText(joueurs.get(msg.getJoueur()).getNom() + " doit choisir la tuile ou se trouve(nt) le(s) joueur(s) à déplacer");
+                action = msg.getType();
+                Navigateur a = new Navigateur();
+                for (Tuile t : a.getTuilesAv(grille).values())
+                    tuilesacc.add(t);
+                vuegrille.setTuilesSurbrillance(tuilesacc, true);
             }
             
             if (msg.getType() != Message.TypeMessage.DONNER && msg.getType() != Message.TypeMessage.CARTE && msg.getType() != Message.TypeMessage.JOUEUR) {
-                vuejoueursaction.setCliquable(JAcc, false);
-                JAcc.clear();
-                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
+                vuejoueursaction.setCliquable(joueurencours.getAventurier().getJAcc(joueurs), false);
             }
 
             if (msg.getType() == Message.TypeMessage.PASSER)
@@ -608,7 +665,6 @@ public class Controleur {
             if(msg.getType() == Message.TypeMessage.CARTE && joueurencours.getAventurier().getCartes().size() > 5) {
                 deft.add(joueurencours.getAventurier().getCartes().get(msg.getIndice()));
                 joueurencours.getAventurier().getCartes().remove(joueurencours.getAventurier().getCartes().get(msg.getIndice()));
-                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
                 vuecartesj.images();
                 fintour(true);
             }
@@ -641,11 +697,12 @@ public class Controleur {
             window.repaint();
         }
         
-        if (joueurencours.getAventurier().getCartes().size() < 6 && joueursmorts().size() < 1) {
-            for (Joueur j : joueurs)
-                vuecartesj.setCliquable(j, cartesaction(j.getAventurier().getCartes()), true);
+        if (joueurencours.getAventurier().getCartes().size() < 6 && joueursmorts().size() == 0) {
+            vuejcours.verifboutons(tresors, grille, joueurencours.getAventurier().getJAcc(joueurs));
+            if (action != Message.TypeMessage.DONNER)
+                for (Joueur j : joueurs)
+                        vuecartesj.setCliquable(j, cartesaction(j.getAventurier().getCartes()), true);
         }
-        
     }
     
     
@@ -656,11 +713,10 @@ public class Controleur {
         }
         else
             textepartie.setText("");
-        vuecartesj.images();  
+        vuecartesj.images();
         if (joueurencours.getAventurier().getCartes().size() > 5) {
             window.repaint();
-            vuejcours.setBoutons(false, tresors, grille, JAcc);
-            vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
+            vuejcours.setBoutons(false, tresors, grille, joueurencours.getAventurier().getJAcc(joueurs));
             window.repaint();
             if (joueurencours.getAventurier().getCartes().size()-5 == 1)
                 textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 1 carte à défausser");
@@ -673,12 +729,11 @@ public class Controleur {
             action = Message.TypeMessage.DFORCE;
             window.repaint();
             vuejcours.changerj(joueursmorts().get(0));
-            vuejcours.setBoutons(false, tresors, grille, JAcc);
+            vuejcours.setBoutons(false, tresors, grille, joueurencours.getAventurier().getJAcc(joueurs));
             textepartie.setText(joueursmorts().get(0).getNom() + " doit choisir une tuile non coulée ou se déplacer");
             tuilesacc.clear();
             Messager a = new Messager();
-            a.setPos(joueurmort.getAventurier().getPos());
-            for (Tuile t : a.getTuilesAcc(getGrille(), 1).values())
+            for (Tuile t : joueurmort.getAventurier().getTuilesAcc(getGrille(), 1).values())
                 tuilesacc.add(t);
             vuegrille.setTuilesSurbrillance(tuilesacc, true);
             textepartie.setBackground(vuejcours.getColor());
@@ -690,7 +745,7 @@ public class Controleur {
             joueurencours.getAventurier().setNbactions(0);
             joueurencours = joueurs.get(((joueurs.indexOf(joueurencours)+1) % joueurs.size()));
             vuejcours.changerj(joueurencours);
-            vuejcours.verifboutons(tresors, grille, JAcc);
+            vuejcours.verifboutons(tresors, grille, joueurencours.getAventurier().getJAcc(joueurs));
             vuetourjoueurs.fintour();
             vuejoueursaction.fintour();
             vuecartesj.fintour();
@@ -717,7 +772,7 @@ public class Controleur {
     
     public boolean perdu() {
         return (calice.size() == 0 && !tresors.contains(Tresor.Calice)) || (statue.size() == 0 && !tresors.contains(Tresor.Statue)) ||
-               (cristal.size() == 0 && !tresors.contains(Tresor.Cristal)) || (pierre.size() == 0 && !tresors.contains(Tresor.Pierre)) || helico.estMorte();
+               (cristal.size() == 0 && !tresors.contains(Tresor.Cristal)) || (pierre.size() == 0 && !tresors.contains(Tresor.Pierre)) || helico.estMorte() || aventurierDansLaMer_de();
     }
     
     public boolean gagne() {
@@ -743,6 +798,13 @@ public class Controleur {
             if (c instanceof CHelico || c instanceof CSacSable)
                 ac.add(c);
         return ac;
+    }
+    
+    public boolean aventurierDansLaMer_de() {
+        for (Joueur j : joueurs)
+            if (j.getAventurier().getPos().estMorte() && j.getAventurier().getTuilesAcc(grille, 1).isEmpty())
+                return true;
+        return false;
     }
 
 }

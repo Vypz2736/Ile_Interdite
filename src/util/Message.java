@@ -10,12 +10,6 @@ import controleur.Controleur;
 
 public class Message {
 
-    /**
-     * @return the controleur
-     */
-    public Controleur getControleur() {
-        return controleur;
-    }
     public enum TypeMessage {
         SAISIEFINIE,
         CASECLIQUEE,
@@ -32,19 +26,14 @@ public class Message {
     }
     
     private TypeMessage type;
-    private int colonne;
-    private int ligne;
-    private int niveauindice;
-    private Controleur controleur;
+    private int colonne = -66;
+    private int ligne = - 66;
+    private int niveauindice = - 66;
     
     public Message(TypeMessage t, int l, int c) {
         type = t;
         colonne = c;
         ligne = l;
-    }
-    
-    public Message(Controleur c) {
-        controleur = c;
     }
     
     public Message(TypeMessage t) {
@@ -85,6 +74,13 @@ public class Message {
     }
     
     public int getIndice() {
-        return niveauindice;
+        if (niveauindice != -66)
+            return niveauindice;
+        else
+            return ligne;
+    }
+    
+    public int getJoueur() {
+        return colonne;
     }
 }
