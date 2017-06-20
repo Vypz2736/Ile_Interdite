@@ -68,8 +68,9 @@ public class PanelCarte extends JPanel {
     
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(new Color(30,30,30));
-        g.fillRect(0, 0, getWidth(), getHeight());
+        //g.setColor(new Color(30,30,30));
+        //g.fillRect(0, 0, getWidth(), getHeight());
+        setOpaque(true);
         h = (int) getHeight();
         l = (int) (h*49)/69;
         x1 = (int) (getWidth()-l)/2;

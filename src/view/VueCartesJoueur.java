@@ -31,7 +31,7 @@ public class VueCartesJoueur extends JPanel {
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private Controleur c;
     private ArrayList<JPanel> pvide = new ArrayList();
-    private Color couleur;
+    private ArrayList<JLabel> labels = new ArrayList();
     
     public VueCartesJoueur(Joueur joueur, ArrayList<Joueur> joueurs, Controleur controleur) {
         j = joueur;
@@ -46,26 +46,18 @@ public class VueCartesJoueur extends JPanel {
         panels.clear();
         pvide.clear();
         for (int i = 0; i < aj.size(); i++) {
-            pvide.add(new JPanel(new BorderLayout()) {
-                @Override
-                protected void paintComponent(Graphics g) {
-                    g.setColor(couleur);
-                    g.fillRect(0, 0, getWidth(), getHeight());
-                }
-            });
+            pvide.add(new JPanel(new BorderLayout()));
             this.add(pvide.get(i));
-            pvide.get(i).add(new JLabel("Cartes de " + aj.get((aj.indexOf(j)+i) % aj.size()).getNom()), BorderLayout.SOUTH);
-            pvide.get(i).setBorder(BorderFactory.createEmptyBorder(0, (int)dim.getWidth()/150, (int)dim.getWidth()/200, 0));
+            setForeground(Color.white);
+            labels.add(new JLabel("Cartes de " + aj.get((aj.indexOf(j)+i) % aj.size()).getNom()));
+            labels.get(i).setForeground(Color.white);
+            pvide.get(i).add(labels.get(i));
+            labels.get(i).setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/100, (int)dim.getWidth()/150, 0, 0));
+            pvide.get(i).setBackground(new Color(0,0,0,0));
             panels.put(aj.get((aj.indexOf(j)+i) % aj.size()),new VueCartes(aj,aj.get((aj.indexOf(j)+i) % aj.size()),aj.get((aj.indexOf(j)+i) % aj.size()).getAventurier().getCartes(), c));
-            panels.get(aj.get((aj.indexOf(j)+i) % aj.size())).setBackground(couleur);
+            panels.get(aj.get((aj.indexOf(j)+i) % aj.size())).setBackground(new Color(0,0,0,0));
             this.add(panels.get(aj.get((aj.indexOf(j)+i) % aj.size())));
         }
-    }
-
-    @Override
-    public void setBackground(Color bg) {
-        super.setBackground(bg);
-        couleur = bg;
     }
     
     public void fintour() {

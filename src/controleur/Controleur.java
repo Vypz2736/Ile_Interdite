@@ -1,12 +1,18 @@
 package controleur;
 
 import java.awt.*;
+import static java.awt.Image.SCALE_SMOOTH;
+import java.io.IOException;
 import java.util.*;
 import javax.swing.*;
 import models.*;
 import util.*;
 import view.*;
 import java.math.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.border.Border;
 
 public class Controleur {
         
@@ -34,7 +40,7 @@ public class Controleur {
         private Message.TypeMessage action;
         private ArrayList<Tuile> tuilesacc = new ArrayList();
         private Tuile tuileav = null;
-        private JPanel panelgauche = new JPanel(),paneldroit = new JPanel(new BorderLayout());
+        private JPanel panelgauche,paneldroit = new JPanel(new BorderLayout());
         private VueAventurier vuejcours;
         private VueTourJoueurs vuetourjoueurs;
         private JTextArea textepartie;
@@ -55,30 +61,68 @@ public class Controleur {
         private Joueur joueurmort;
         private Carte carteaction;
         private Joueur joueuraction;
+        private Color c = new Color(35,35,35,50);
 
         public Controleur(Main m) {
-            main = m;
-            window = new JFrame("Île Interdite");
-            window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-            window.setMaximumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));window.setMinimumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));
-            window.setLocation((int)(dim.getWidth()-dim.getWidth()/2)/2, (int)(dim.getHeight()-dim.getHeight()/2)/2);
-            window.setLayout(new BorderLayout());
-            mainpanel = new JPanel(new GridBagLayout());
-            mainpanel.setBackground(new Color(35,35,35));
-            mainpanel.setSize(window.getHeight(),window.getHeight());
-            saisiejoueurs = new JPanel(new GridLayout(2,1));
-            JPanel titre = new JPanel() {
-                @Override
-                public void paintComponent(Graphics g) {;
+            try {
+                this.panelgauche = new JPanel() {
+                    private int fond;
+                    private final Image[] images = {ImageIO.read(Main.class.getResource("/img/personnages/pilo.png")).getScaledInstance((int)dim.getHeight(), (int)(dim.width-dim.height)/2, Image.SCALE_SMOOTH),
+                        ImageIO.read(Main.class.getResource("/img/personnages/navi.png")).getScaledInstance((int)dim.getHeight(), (int)(dim.width-dim.height)/2, Image.SCALE_SMOOTH),
+                        ImageIO.read(Main.class.getResource("/img/personnages/plon.png")).getScaledInstance((int)dim.getHeight(), (int)(dim.width-dim.height)/2, Image.SCALE_SMOOTH),
+                        ImageIO.read(Main.class.getResource("/img/personnages/expl.png")).getScaledInstance((int)dim.getHeight(), (int)(dim.width-dim.height)/2, Image.SCALE_SMOOTH),
+                        ImageIO.read(Main.class.getResource("/img/personnages/inge.png")).getScaledInstance((int)dim.getHeight(), (int)(dim.width-dim.height)/2, Image.SCALE_SMOOTH),
+                        ImageIO.read(Main.class.getResource("/img/personnages/mess.png")).getScaledInstance((int)dim.getHeight(), (int)(dim.width-dim.height)/2, Image.SCALE_SMOOTH)};
+                    
+                    @Override
+                    public void setBackground(Color bg) {
+                        if (bg.equals(new Color(55,194,198)))
+                            fond = 0;
+                        if (bg.equals(new Color(255, 255, 0)))
+                            fond = 1;
+                        if (bg.equals(new Color(204, 94, 255)))
+                            fond = 2;
+                        if (bg.equals(new Color(0, 195, 0)))
+                            fond = 3;
+                        if (bg.equals(new Color(255, 0, 0)))
+                            fond = 4;
+                        if (bg.equals(new Color(255, 148, 0)))
+                            fond = 5;
+                        if (bg.equals(new Color(255, 148, 0)))
+                            repaint();
+                    }
+                    
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        g.clearRect(0, 0, getWidth(), getHeight());
+                        g.drawImage(images[fond], 0, 0, getWidth(), getHeight(), this);
+                    }
+                };
+                main = m;
+                window = new JFrame("Île Interdite");
+                window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+                window.setMaximumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));window.setMinimumSize(new Dimension((int)dim.getWidth()/2,(int)dim.getHeight()/2));
+                window.setLocation((int)(dim.getWidth()-dim.getWidth()/2)/2, (int)(dim.getHeight()-dim.getHeight()/2)/2);
+                window.setLayout(new BorderLayout());
+                mainpanel = new JPanel(new GridBagLayout());
+                mainpanel.setBackground(new Color(35,35,35));
+                mainpanel.setSize(window.getHeight(),window.getHeight());
+                saisiejoueurs = new JPanel(new GridLayout(2,1));
+                JPanel titre = new JPanel() {
+                    @Override
+                    public void paintComponent(Graphics g) {;
                     g.drawImage(new ImageIcon(new ImageIcon(getClass().getResource("/img/titre.png")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH)).getImage(), 0, 0, getWidth(), getHeight(), this);
-                }
-            };
-            saisiejoueurs.add(titre);
-            vuejoueurs = new VueJoueurs(this);
-            saisiejoueurs.add(vuejoueurs);
-            mainpanel.add(saisiejoueurs);
-            window.add(mainpanel,  BorderLayout.CENTER);
-            window.setVisible(true);
+                    }
+                };
+                saisiejoueurs.add(titre);
+                vuejoueurs = new VueJoueurs(this);
+                saisiejoueurs.add(vuejoueurs);
+                mainpanel.add(saisiejoueurs);
+                window.add(mainpanel,  BorderLayout.CENTER);
+                window.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         public void initCartes() {
@@ -339,6 +383,8 @@ public class Controleur {
             window.setLayout(new BorderLayout());
             vuegrille = new VueGrille(getGrille(),this);
             vuegrille.setPreferredSize(new Dimension(dim.height,dim.height));
+            vuegrille.setBackground(new Color(30,30,30));
+            vuegrille.setBorder(BorderFactory.createLineBorder(new Color(30,30,30), 1));
             window.add(paneljeu);
             paneljeu.add(vuegrille,  BorderLayout.CENTER);
             nivEau = new NivEau(nivini);
@@ -361,7 +407,7 @@ public class Controleur {
             textepartie = new JTextArea("Au tour de " + joueurencours.getNom() + " de jouer");
             textepartie.setEditable(false);
             textepartie.setFont(new Font(textepartie.getFont().getFontName(), textepartie.getFont().getStyle(), (int)dim.getWidth()/140));
-            textepartie.setForeground(new Color(30,30,30));
+            textepartie.setForeground(Color.WHITE);
             textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, 0, 0, 0));
             vuejoueursaction = new VueJoueursAction(joueurencours, joueurs, this);
             vuejcours = new VueAventurier(joueurencours,this);
@@ -384,20 +430,15 @@ public class Controleur {
             int r = vuejcours.getColor().getRed()-70;
             int g = vuejcours.getColor().getGreen()-70;
             int b = vuejcours.getColor().getBlue()-70;
-            if (r < 0)
-                r = 0;
-            if (g < 0)
-                g = 0;
-            if (b < 0)
-                b = 0;
-            Color c = new Color(r, g, b);
-            panelgauche.setBackground(c);
-            textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            panelgvc.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            vuecartesj.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            panelgauche.setBackground(vuejcours.getColor());
+            panelgauche.repaint();
+            textepartie.setBackground(c);
+            panelgauche.setBackground(vuejcours.getColor());
+            vuetourjoueurs.setBackground(c);
+            vuejoueursaction.setBackground(new Color(0,0,0,0));
+            panelgvja.setBackground(c);
+            panelgvc.setBackground(c);
+            vuecartesj.setBackground(new Color(0,0,0,0));
             vuecartesj.images();
         }
 
@@ -754,6 +795,7 @@ public class Controleur {
             for (Tuile t : joueurmort.getAventurier().getTuilesAcc(getGrille(), 1).values())
                 tuilesacc.add(t);
             vuegrille.setTuilesSurbrillance(tuilesacc, true);
+            textepartie.setForeground(new Color(35,35,35));
             textepartie.setBackground(vuejcours.getColor());
         }
         else {
@@ -768,23 +810,15 @@ public class Controleur {
             vuejoueursaction.fintour();
             vuecartesj.fintour();
             textepartie.setText(textepartie.getText() + "\nAu tour de " + joueurencours.getNom() + " de jouer");
-            int r = vuejcours.getColor().getRed()-70;
-            int g = vuejcours.getColor().getGreen()-70;
-            int b = vuejcours.getColor().getBlue()-70;
-            if (r < 0)
-                r = 0;
-            if (g < 0)
-                g = 0;
-            if (b < 0)
-                b = 0;
-            Color c = new Color(r, g, b);
-            panelgauche.setBackground(c);
-            textepartie.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            vuetourjoueurs.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            vuejoueursaction.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            panelgvja.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            panelgvc.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
-            vuecartesj.setBackground(new Color(vuejcours.getColor().getRed(),vuejcours.getColor().getGreen(),vuejcours.getColor().getBlue()));
+            panelgauche.setBackground(vuejcours.getColor());
+            panelgauche.repaint();
+            textepartie.setBackground(c);
+            vuetourjoueurs.setBackground(c);
+            vuejoueursaction.setBackground(new Color(0,0,0,0));
+            panelgvja.setBackground(c);
+            panelgvc.setBackground(c);
+            vuecartesj.setBackground(new Color(0,0,0,0));
+            textepartie.setForeground(Color.WHITE);
         }
     }
     

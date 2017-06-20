@@ -31,7 +31,7 @@ public class VueTourJoueurs extends JPanel {
                 labels.add(new JLabel());
             add(labels.get(i));
         }
-        labels.get(0).setForeground(new Color(30,30,30));
+        labels.get(0).setForeground(Color.WHITE);
         labels.get(0).setFont(new Font(labels.get(0).getFont().getFontName(), labels.get(0).getFont().getStyle(), (int)dim.getWidth()/125));
         texte();
     }

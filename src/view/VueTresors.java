@@ -37,7 +37,7 @@ public class VueTresors extends JPanel {
     
     public VueTresors(ArrayList<Tresor> at) {
         try {
-            label.setForeground(new Color(200,200,200,200));
+            label.setForeground(Color.WHITE);
             label.setFont(new Font(label.getFont().getFontName(), label.getFont().getStyle(), (int)dim.getWidth()/125));
             this.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, 0, 0, (int)dim.getWidth()/9));
             add(label);

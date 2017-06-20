@@ -75,21 +75,22 @@ public class PanelJoueur extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         try {
-            g.setColor(new Color(30,30,30));
-            g.fillRect(0, 0, getWidth(), getHeight());
+            setOpaque(true);
+            //g.setColor(new Color(30,30,30));
+            //g.fillRect(0, 0, getWidth(), getHeight());
             x1 = (int) (getWidth()-(getHeight()))/2;
             l = (int) getHeight();
             y1 = (int) 0;
             h = (int) getHeight();
-            if (!cliquable) {
-                g.setColor(new Color(150,150,150));
-                g.fillRect(x1, y1, l, h);
-            }
+            //if (!cliquable) {
+                //g.setColor(new Color(150,150,150));
+                //g.fillRect(x1, y1, l, h);
+            //}
             g.setColor(Color.black);
             g.drawRect(x1, y1, l-1, h-1);
             g.drawRect(x1+1, y1+1, l-3, h-3);
-            g.setColor(new Color(150,150,150));
-            g.fillRect(x1, y1, l, h);
+            //g.setColor(new Color(150,150,150));
+            //g.fillRect(x1, y1, l, h);
             if (j.getAventurier() instanceof Pilote)
                 g.drawImage( ImageIO.read(Main.class.getResource("/img/personnages/pilote.png")), x1, y1, l, h, this);
             if (j.getAventurier() instanceof Navigateur)
