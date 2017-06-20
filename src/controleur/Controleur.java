@@ -572,6 +572,28 @@ public class Controleur {
                 if (tresors.get(tresors.size()-1).equals(Tresor.Statue))
                     nmtresor = "la Statue du zéphyr";
                 textepartie.setText(textepartie.getText()+ "\nVous récupérez " + nmtresor + " !");
+                for (Carte c : pilet) {
+                    if (!(c instanceof CHelico) && !(c instanceof CSacSable)) {
+                        CTresor ct = (CTresor) c;
+                        if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
+                            pilet.remove(c);
+                    }
+                }
+                for (Carte c : deft) {
+                    if (!cartesaction(deft).contains(c)) {
+                        CTresor ct = (CTresor) c;
+                        if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
+                            deft.remove(c);
+                    }
+                }
+                for (Joueur j : joueurs)
+                    for (Carte c : j.getAventurier().getCartes()) {
+                        if (!cartesaction(j.getAventurier().getCartes()).contains(c)) {
+                            CTresor ct = (CTresor) c;
+                            if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
+                                j.getAventurier().getCartes().remove(c);
+                        }
+                    }
             }
             
             if (msg.getType() != Message.TypeMessage.DONNER && msg.getType() != Message.TypeMessage.CARTE && msg.getType() != Message.TypeMessage.JOUEUR) {
@@ -617,7 +639,13 @@ public class Controleur {
             vuegrille.setVisible(false);
             paneljeu.add(vuefin, BorderLayout.CENTER);
             window.repaint();
-        }        
+        }
+        
+        if (joueurencours.getAventurier().getCartes().size() < 6 && joueursmorts().size() < 1) {
+            for (Joueur j : joueurs)
+                vuecartesj.setCliquable(j, cartesaction(j.getAventurier().getCartes()), true);
+        }
+        
     }
     
     
@@ -707,6 +735,14 @@ public class Controleur {
                 aj.add(j);
         }
         return aj;
+    }
+    
+    public ArrayList<Carte> cartesaction(ArrayList<Carte> ca) {
+        ArrayList<Carte> ac = new ArrayList();
+        for (Carte c : ca)
+            if (c instanceof CHelico || c instanceof CSacSable)
+                ac.add(c);
+        return ac;
     }
 
 }
