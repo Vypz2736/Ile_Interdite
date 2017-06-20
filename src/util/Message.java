@@ -22,7 +22,8 @@ public class Message {
         JOUEUR,
         CARTE,
         RELANCER,
-        DFORCE;
+        DFORCE,
+        DEF;
     }
     
     private TypeMessage type;

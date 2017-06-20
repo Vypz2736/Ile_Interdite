@@ -8,7 +8,7 @@ public class Messager extends Aventurier {
         public ArrayList<Joueur> getJAcc(ArrayList<Joueur> joueurs) {
             ArrayList<Joueur> aj = new ArrayList();
             for (Joueur j : joueurs)
-                if (!j.getAventurier().equals(this) && j.getAventurier().getCartes().size() < 5)
+                if (!j.getAventurier().equals(this))
                     aj.add(j);
             return aj;
         }

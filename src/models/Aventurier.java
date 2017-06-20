@@ -173,7 +173,7 @@ public abstract class Aventurier {
     public ArrayList<Joueur> getJAcc(ArrayList<Joueur> joueurs) {
         ArrayList<Joueur> aj = new ArrayList();
         for (Joueur j : joueurs)
-            if (!j.getAventurier().equals(this) && j.getAventurier().getCartes().size() < 5 && getPos().getAventuriers().contains(j.getAventurier()))
+            if (!j.getAventurier().equals(this) && getPos().getAventuriers().contains(j.getAventurier()))
                 aj.add(j);
         return aj;
     }

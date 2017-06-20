@@ -593,6 +593,18 @@ public class Controleur {
                 vuejoueursaction.setCliquable(joueurencours.getAventurier().getJAcc(joueurs), false);
                 vuecartesj.images();
                 window.repaint();
+                if (joueurs.get(msg.getIndice()).getAventurier().getCartes().size() > 5) {
+                    action = Message.TypeMessage.DEF;
+                    joueuraction = joueurs.get(msg.getIndice());
+                    window.repaint();
+                    vuejcours.setBoutons(false, tresors, grille, joueurencours.getAventurier().getJAcc(joueurs));
+                    window.repaint();
+                    if (joueurs.get(msg.getIndice()).getAventurier().getCartes().size()-5 == 1)
+                        textepartie.setText(textepartie.getText() + "\n" + joueurs.get(msg.getIndice()).getNom() + " doit choisir 1 carte à défausser");
+                    else
+                        textepartie.setText(textepartie.getText() + "\n" + joueurs.get(msg.getIndice()).getNom() + " doit choisir 2 carte à défausser");
+                    vuecartesj.setCliquable(joueurs.get(msg.getIndice()), joueurs.get(msg.getIndice()).getAventurier().getCartes(), true);
+                }
             }
 
             if (msg.getType() == Message.TypeMessage.TRESOR) {
@@ -667,6 +679,12 @@ public class Controleur {
                 joueurencours.getAventurier().getCartes().remove(joueurencours.getAventurier().getCartes().get(msg.getIndice()));
                 vuecartesj.images();
                 fintour(true);
+            }
+            
+            if(action == Message.TypeMessage.DEF && msg.getType() == Message.TypeMessage.CARTE) {
+                deft.add(joueuraction.getAventurier().getCartes().get(msg.getIndice()));
+                joueuraction.getAventurier().getCartes().remove(joueuraction.getAventurier().getCartes().get(msg.getIndice()));
+                vuecartesj.images();
             }
             
         }
