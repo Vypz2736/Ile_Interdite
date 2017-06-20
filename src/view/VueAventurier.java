@@ -200,7 +200,7 @@ public class VueAventurier extends JPanel {
     }
     
     public void tresor(ArrayList<Tresor> at) {
-        if (j.getAventurier().getPos().getTresor() != null && !at.contains(j.getAventurier().getPos().getTresor()) && j.getAventurier().getNbactions() > 3 && cartestresor(j.getAventurier().getPos().getTresor()))
+        if (j.getAventurier().getPos().getTresor() != null && !at.contains(j.getAventurier().getPos().getTresor()) && j.getAventurier().getNbactions() < 3 && cartestresor(j.getAventurier().getPos().getTresor()))
             btnrecuptresor.setEnabled(true);
         else
             btnrecuptresor.setEnabled(false);
@@ -214,7 +214,7 @@ public class VueAventurier extends JPanel {
                 if (ct.getTresor().equals(t))
                     nb++;
             }
-        return nb < 3;
+        return nb > 3;
     }
     
     public void donner(ArrayList<Joueur> aj) {
