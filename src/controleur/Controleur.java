@@ -628,8 +628,19 @@ public class Controleur {
         }
         else
             textepartie.setText("");
-        vuecartesj.images();
-        if (joueursmorts().size() > 0) {
+        vuecartesj.images();  
+        if (joueurencours.getAventurier().getCartes().size() > 5) {
+            window.repaint();
+            vuejcours.setBoutons(false, tresors, grille, JAcc);
+            vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
+            window.repaint();
+            if (joueurencours.getAventurier().getCartes().size()-5 == 1)
+                textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 1 carte à défausser");
+            else
+                textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 2 carte à défausser");
+            vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
+        }
+        else if (joueursmorts().size() > 0) {
             joueurmort  = joueursmorts().get(0);
             action = Message.TypeMessage.DFORCE;
             window.repaint();
@@ -643,17 +654,6 @@ public class Controleur {
                 tuilesacc.add(t);
             vuegrille.setTuilesSurbrillance(tuilesacc, true);
             textepartie.setBackground(vuejcours.getColor());
-        }  
-        else if (joueurencours.getAventurier().getCartes().size() > 5) {
-            window.repaint();
-                vuejcours.setBoutons(false, tresors, grille, JAcc);
-                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
-                window.repaint();
-                if (joueurencours.getAventurier().getCartes().size()-5 == 1)
-                    textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 1 carte à défausser");
-                else
-                    textepartie.setText(textepartie.getText() + "\n" + joueurencours.getNom() + " doit choisir 2 carte à défausser");
-                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), true);
         }
         else {
             vuegrille.couleur(grille);
