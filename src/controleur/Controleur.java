@@ -665,23 +665,23 @@ public class Controleur {
                     nmtresor = "la Statue du zéphyr";
                 textepartie.setText(textepartie.getText()+ "\nVous récupérez " + nmtresor + " !");
                 textepartie.setWrapStyleWord(true);
-                for (int i = 0; i < pilet.size();i++) {
-                    if (!(pilet.get(i) instanceof CHelico) && !(pilet.get(i) instanceof CSacSable) && !(pilet.get(i) instanceof CNiveauEau)) {
+                for (int i = pilet.size()-1; i >= 0; i--) {
+                    if (pilet.get(i) instanceof CTresor) {
                         CTresor ct = (CTresor) pilet.get(i);
                         if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
                             pilet.remove(pilet.get(i));
                     }
                 }
-                for (int i = 0; i < deft.size();i++) {
-                    if (!(pilet.get(i) instanceof CHelico) && !(pilet.get(i) instanceof CSacSable) && !(pilet.get(i) instanceof CNiveauEau)) {
+                for (int i = deft.size()-1; i >= 0; i--) {
+                    if (deft.get(i) instanceof CTresor) {
                         CTresor ct = (CTresor) deft.get(i);
                         if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
                             deft.remove(deft.get(i));
                     }
                 }
                 for (Joueur j : joueurs)
-                    for (int i = 0; i < j.getAventurier().getCartes().size();i++) {
-                        if (!(pilet.get(i) instanceof CHelico) && !(pilet.get(i) instanceof CSacSable) && !(pilet.get(i) instanceof CNiveauEau)) {
+                    for (int i = j.getAventurier().getCartes().size()-1; i >= 0; i--) {
+                        if (j.getAventurier().getCartes().get(i) instanceof CTresor) {
                             CTresor ct = (CTresor) j.getAventurier().getCartes().get(i);
                             if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
                                 j.getAventurier().getCartes().remove(j.getAventurier().getCartes().get(i));
