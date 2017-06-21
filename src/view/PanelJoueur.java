@@ -58,18 +58,7 @@ public class PanelJoueur extends JPanel {
                 c.traiterMessage(new Message(Message.TypeMessage.JOUEUR,aj.indexOf(j)));
             }
         });
-        if (j.getAventurier() instanceof Pilote)
-            add(new JLabel("Pilote"));
-        if (j.getAventurier() instanceof Navigateur)
-            add(new JLabel("Navigateur"));
-        if (j.getAventurier() instanceof Plongeur)
-            add(new JLabel("Plongeur"));           
-        if (j.getAventurier() instanceof Explorateur)
-            add(new JLabel("Explorateur"));            
-        if (j.getAventurier() instanceof Ingenieur)
-            add(new JLabel("Ingénieur"));
-        if (j.getAventurier() instanceof Messager)
-            add(new JLabel("Messager"));
+        add(new JLabel(j.getNom()));
     }
     
     @Override
