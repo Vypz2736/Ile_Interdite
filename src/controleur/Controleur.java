@@ -407,7 +407,6 @@ public class Controleur {
             textepartie = new JTextArea("Au tour de " + joueurencours.getNom() + " de jouer");
             textepartie.setEditable(false);
             textepartie.setFont(new Font(textepartie.getFont().getFontName(), textepartie.getFont().getStyle(), (int)dim.getWidth()/140));
-            textepartie.setForeground(Color.WHITE);
             textepartie.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/75, 0, 0, 0));
             vuejoueursaction = new VueJoueursAction(joueurencours, joueurs, this);
             vuejcours = new VueAventurier(joueurencours,this);
@@ -432,7 +431,7 @@ public class Controleur {
             int b = vuejcours.getColor().getBlue()-70;
             panelgauche.setBackground(vuejcours.getColor());
             panelgauche.repaint();
-            textepartie.setBackground(c);
+            textepartie.setBackground(vuejcours.getColor());
             panelgauche.setBackground(vuejcours.getColor());
             vuetourjoueurs.setBackground(c);
             vuejoueursaction.setBackground(new Color(0,0,0,0));
@@ -480,6 +479,9 @@ public class Controleur {
         
         if (!gagne() && !perdu()) {
             vuegrille.setTuilesSurbrillance(at, false);
+            if (msg.getType() != Message.TypeMessage.CARTE) {
+                vuecartesj.setCliquable(joueurencours, joueurencours.getAventurier().getCartes(), false);
+            }
             if (msg.getType() == Message.TypeMessage.CASECLIQUEE) {
                 if (!(action == Message.TypeMessage.ASSECHER && joueurencours.getAventurier() instanceof Ingenieur))
                     tuilesaction.clear();
@@ -555,7 +557,7 @@ public class Controleur {
                     vuecartesj.images();
                 }
                 
-                if (action == Message.TypeMessage.CARTE && carteaction instanceof CHelico && tuileav != null) {
+                if (action != Message.TypeMessage.DONNER && action == Message.TypeMessage.CARTE && carteaction instanceof CHelico && tuileav != null) {
                     Navigateur n = new Navigateur();
                     n.deplacer(tuileav, grille.getTuile(msg.getLigne(),msg.getColonne()));
                     textepartie.setText(joueuraction.getNom() + " déplace le(s) joueur(s) de " + tuileav.getNom() + " vers " + tuilesaction.get(0).getNom());
@@ -565,7 +567,7 @@ public class Controleur {
                     joueuraction.getAventurier().getCartes().remove(carteaction);
                     vuecartesj.images();
                 }
-                else if (action == Message.TypeMessage.CARTE && carteaction instanceof CHelico && tuileav == null) {
+                else if (action != Message.TypeMessage.DONNER && action == Message.TypeMessage.CARTE && carteaction instanceof CHelico && tuileav == null) {
                     tuileav = grille.getTuile(msg.getLigne(),msg.getColonne());
                     tuilesaction.clear();
                     tuilesacc.clear();
@@ -662,6 +664,7 @@ public class Controleur {
                 if (tresors.get(tresors.size()-1).equals(Tresor.Statue))
                     nmtresor = "la Statue du zéphyr";
                 textepartie.setText(textepartie.getText()+ "\nVous récupérez " + nmtresor + " !");
+                textepartie.setWrapStyleWord(true);
                 for (int i = 0; i < pilet.size();i++) {
                     if (!(pilet.get(i) instanceof CHelico) && !(pilet.get(i) instanceof CSacSable) && !(pilet.get(i) instanceof CNiveauEau)) {
                         CTresor ct = (CTresor) pilet.get(i);
@@ -670,7 +673,7 @@ public class Controleur {
                     }
                 }
                 for (int i = 0; i < deft.size();i++) {
-                    if (!cartesaction(deft).contains(deft.get(i)) && !(deft.get(i) instanceof CNiveauEau)) {
+                    if (!(pilet.get(i) instanceof CHelico) && !(pilet.get(i) instanceof CSacSable) && !(pilet.get(i) instanceof CNiveauEau)) {
                         CTresor ct = (CTresor) deft.get(i);
                         if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
                             deft.remove(deft.get(i));
@@ -678,12 +681,13 @@ public class Controleur {
                 }
                 for (Joueur j : joueurs)
                     for (int i = 0; i < j.getAventurier().getCartes().size();i++) {
-                        if (!cartesaction(j.getAventurier().getCartes()).contains(j.getAventurier().getCartes().get(i))) {
+                        if (!(pilet.get(i) instanceof CHelico) && !(pilet.get(i) instanceof CSacSable) && !(pilet.get(i) instanceof CNiveauEau)) {
                             CTresor ct = (CTresor) j.getAventurier().getCartes().get(i);
                             if (ct.getTresor().equals(tresors.get(tresors.size()-1)))
                                 j.getAventurier().getCartes().remove(j.getAventurier().getCartes().get(i));
                         }
                     }
+                vuegrille.couleur(grille);
                 vuecartesj.images();
             }
             
@@ -743,14 +747,14 @@ public class Controleur {
                 textepartie.setText(textepartie.getText() + "\nL'heliport est coulé");
             else
                 textepartie.setText(textepartie.getText() + "\nUn des trésors est perdu");
-            vuefin = new VueFin(false,helico,this);
+            vuefin = new VueFin(false,helico, aventurierDansLaMer_de(),this);
             vuegrille.setVisible(false);
             paneljeu.add(vuefin, BorderLayout.CENTER);
             window.repaint();
         }
         if (gagne()) {
             textepartie.setText("Vous avez gagné !");
-            vuefin = new VueFin(true,helico,this);
+            vuefin = new VueFin(true,helico, aventurierDansLaMer_de(),this);
             vuegrille.setVisible(false);
             paneljeu.add(vuefin, BorderLayout.CENTER);
             window.repaint();
@@ -812,13 +816,12 @@ public class Controleur {
             textepartie.setText(textepartie.getText() + "\nAu tour de " + joueurencours.getNom() + " de jouer");
             panelgauche.setBackground(vuejcours.getColor());
             panelgauche.repaint();
-            textepartie.setBackground(c);
+            textepartie.setBackground(vuejcours.getColor());
             vuetourjoueurs.setBackground(c);
             vuejoueursaction.setBackground(new Color(0,0,0,0));
             panelgvja.setBackground(c);
             panelgvc.setBackground(c);
             vuecartesj.setBackground(new Color(0,0,0,0));
-            textepartie.setForeground(Color.WHITE);
         }
     }
     

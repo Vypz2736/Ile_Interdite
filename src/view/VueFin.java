@@ -48,7 +48,7 @@ public class VueFin extends JPanel {
     private JLabel rèson;
     private JPanel layout = new JPanel(new GridBagLayout());
    
-    public VueFin(boolean g, Tuile t, Controleur controleur){
+    public VueFin(boolean g, Tuile t, boolean joueur, Controleur controleur){
         c = controleur;
         gagne = g;
         setLayout(new BorderLayout());
@@ -65,6 +65,8 @@ public class VueFin extends JPanel {
             text.setText("Dommage, vous avez perdu,");
             if (t.estMorte())
                 rèson = new JLabel("L'heliport est coulé...");
+            else if (joueur)
+                rèson = new JLabel("Un des aventuriers s'est noyé...");
             else
                 rèson = new JLabel("Un des trésors est perdu...");
             label.add(rèson);

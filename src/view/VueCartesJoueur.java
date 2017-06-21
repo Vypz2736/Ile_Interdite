@@ -45,6 +45,7 @@ public class VueCartesJoueur extends JPanel {
         this.removeAll();
         panels.clear();
         pvide.clear();
+        labels.clear();
         for (int i = 0; i < aj.size(); i++) {
             pvide.add(new JPanel(new BorderLayout()));
             this.add(pvide.get(i));
