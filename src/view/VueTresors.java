@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,8 @@ public class VueTresors extends JPanel {
     private JLabel label = new JLabel("Trésors acquis");
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private JButton regles = new JButton("Regles");
-    private JPanel layout = new JPanel();
+    private JPanel layout = new JPanel(new GridLayout());
+    private JPanel lb = new JPanel(new BorderLayout());
     
     public VueTresors(ArrayList<Tresor> at) {
         try {
@@ -46,18 +48,25 @@ public class VueTresors extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        Desktop.getDesktop().open(new File("/tmp/OSPDC/src/regles.pdf"));
+                        try {
+                            Desktop.getDesktop().open(new File(Main.class.getResource("/regles.pdf").toURI()));
+                        } catch (URISyntaxException ex) {
+                            Logger.getLogger(VueTresors.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } catch (IOException ex) {
                         Logger.getLogger(VueTresors.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
             layout.setBackground(new Color(35,35,35));
+            lb.setBackground(new Color(35,35,35));
             label.setForeground(Color.WHITE);
             label.setFont(new Font(label.getFont().getFontName(), label.getFont().getStyle(), (int)dim.getWidth()/125));
-            add(label, BorderLayout.WEST);
-            label.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/90, 0, 0));
-            add(regles, BorderLayout.EAST);
+            layout.add(label);
+            label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, (int)dim.getWidth()/50));
+            layout.add(lb);
+            lb.add(regles, BorderLayout.EAST);
+            add(layout);
             tresors = at;
             statue = ImageIO.read(Main.class.getResource("/img/tresors/Statue.png"));
             cristal = ImageIO.read(Main.class.getResource("/img/tresors/Cristal.png"));
