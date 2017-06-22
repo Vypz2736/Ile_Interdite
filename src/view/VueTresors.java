@@ -7,7 +7,10 @@ package view;
 
 import controleur.Main;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -34,13 +37,27 @@ public class VueTresors extends JPanel {
     private BufferedImage caliceg;
     private JLabel label = new JLabel("Trésors acquis");
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    private JButton regles = new JButton("Regles");
+    private JPanel layout = new JPanel();
     
     public VueTresors(ArrayList<Tresor> at) {
         try {
+            regles.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        Desktop.getDesktop().open(new File("/tmp/OSPDC/src/regles.pdf"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(VueTresors.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            layout.setBackground(new Color(35,35,35));
             label.setForeground(Color.WHITE);
             label.setFont(new Font(label.getFont().getFontName(), label.getFont().getStyle(), (int)dim.getWidth()/125));
-            this.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, 0, 0, (int)dim.getWidth()/9));
-            add(label);
+            add(label, BorderLayout.WEST);
+            label.setBorder(BorderFactory.createEmptyBorder((int)dim.getWidth()/300, (int)dim.getWidth()/90, 0, 0));
+            add(regles, BorderLayout.EAST);
             tresors = at;
             statue = ImageIO.read(Main.class.getResource("/img/tresors/Statue.png"));
             cristal = ImageIO.read(Main.class.getResource("/img/tresors/Cristal.png"));
